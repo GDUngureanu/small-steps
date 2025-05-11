@@ -4,4 +4,7 @@ function loadSnippet(divId, path) {
         .then(html => {
             document.getElementById(divId).innerHTML = html;
         })
+        .catch(error => {
+            console.error(`Error loading Snippet from ${path}:`, error);
+        });
 }

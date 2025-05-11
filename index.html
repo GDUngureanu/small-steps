@@ -1,8 +1,11 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="styles/main-tabs.css" />
     <script src="scripts/load-snippet.js"></script>
+    <script src="scripts/load-list.js"></script>
+
+    <link rel="stylesheet" href="styles/main-tabs.css" />
+
     <style>
         .title {
             font-size: 2em;
@@ -17,10 +20,10 @@
 
 <body>
     <h1>My Small Steps</h1>
+
     <div id="affirmation-content"></div>
-    <script>
-        loadSnippet('affirmation-content', 'affirmation/content.html');
-    </script>
+    <script> loadSnippet('affirmation-content', 'affirmation/content.html'); </script>
+
     <div class="tabs">
         <button class="tab-button active" data-tab="small-steps" type="button">
             Small Steps
@@ -34,7 +37,7 @@
     </div>
     <div id="small-steps" class="tab-content active">
         <ul id="small-steps-list"></ul>
-        <script src="/scripts/small-steps.js"></script>
+        <script> loadList('small-steps-list', '/content/small-steps.json'); </script>
     </div>
     <div id="content2" class="tab-content">
         <ul>
@@ -49,6 +52,9 @@
         </ul>
     </div>
     <script src="/scripts/main-tabs.js"></script>
+
+    <ul id="notes-list"></ul>
+    <script> loadList('notes-list', 'content/notes.json'); </script>
 </body>
 
 </html>
