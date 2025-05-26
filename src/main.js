@@ -9,6 +9,7 @@ import App from './application.vue'
 import Home from './components/home/template.vue'
 import Anime from './components/anime/template.vue'
 import Poems from './components/poems/template.vue'
+import Random from './components/random/template.vue'
 
 // Import our custom CSS
 import './scss/styles.scss'
@@ -18,6 +19,7 @@ const routes = [
   { path: '/', component: Home },
   { path: '/anime', component: Anime },
   { path: '/poems', component: Poems },
+  { path: '/random', component: Random },
 ]
 
 const router = createRouter({

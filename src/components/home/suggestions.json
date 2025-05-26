@@ -1,7 +1,19 @@
 [
     {
         "status": false,
+        "action": "Consider updating the Bootstrap breakpoints to allow for a wider screen."
+    },
+    {
+        "status": false,
         "action": "Consider buying and official domain and linking it to GitHub."
+    },
+    {
+        "status": false,
+        "action": "Consider creating a Random page (a place where to dump ideas, notes and lists that don't fit anywhere else (for now))."
+    },
+    {
+        "status": false,
+        "action": "Consider creating a page for Cocking (cooking tips, recipes, etc.)."
     },
     {
         "status": false,

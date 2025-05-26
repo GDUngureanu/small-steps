@@ -13,6 +13,7 @@
           <li class="nav-item px-2"><RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/poems" class="nav-link fw-medium" active-class="active">Poems</RouterLink></li>
+          <li class="nav-item px-2"><RouterLink to="/random" class="nav-link fw-medium" active-class="active">Random</RouterLink></li>
         </ul>
       </div>
     </div>
