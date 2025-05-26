@@ -1,16 +1,16 @@
 <script setup>
 import articleTemp from '../../templates/article.vue';
-import todoTemp from '../../templates/todo.vue';
+import suggestionsTemp from '../../templates/suggestions.vue';
 </script>
 
 <script>
-import toDoList from './todo.json';
+import suggestions from './suggestions.json';
 
 export default {
     name: 'PoemsTemplate',
     data() {
         return {
-            toDoList: toDoList
+            suggestions: suggestions
         };
     }
 };
@@ -21,7 +21,7 @@ export default {
     <articleTemp title="Poems" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm working on compiling a list of Poems.</p>
 
-        <todoTemp :toDoList="toDoList" />
+        <suggestionsTemp :suggestions="suggestions" />
     </articleTemp>
 
     <articleTemp title="Memento Mori" meta="1872 by Mihai Eminescu">

@@ -1,0 +1,18 @@
+[
+    {
+        "status": false,
+        "action": "Look into using custom fonts."
+    },
+    {
+        "status": false,
+        "action": "Find a cleaner way of separating articles."
+    },
+    {
+        "status": false,
+        "action": "Investigate an easier way of transforming poems into an article."
+    },
+    {
+        "status": false,
+        "action": "Consider making the initial length of an article smaller, and allowing the option to expand."
+    }
+]

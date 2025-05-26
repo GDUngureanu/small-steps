@@ -20,18 +20,18 @@
 
 <script setup>
 import articleTemp from '../../templates/article.vue';
-import todoTemp from '../../templates/todo.vue';
+import suggestionsTemp from '../../templates/suggestions.vue';
 </script>
 
 <script>
 import animeList from './data.json';
-import toDoList from './todo.json';
+import suggestions from './suggestions.json';
 
 export default {
     name: 'AnimeTemplate',
     data() {
         return {
-            toDoList: toDoList,
+            suggestions: suggestions,
             animeList: animeList
         };
     }
@@ -47,7 +47,7 @@ export default {
         <p>I'm using <a href="https://myanimelist.net/" class="text-decoration-none">MyAnimeList.net</a> as my
             main source of reference.</p>
 
-        <todoTemp :toDoList="toDoList" />
+        <suggestionsTemp :suggestions="suggestions" />
         
         <p></p>
 
