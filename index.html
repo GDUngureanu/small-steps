@@ -1,60 +1,15 @@
-<html>
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <title>Memento Mori</title>
 
-<head>
-    <script src="scripts/load-snippet.js"></script>
-    <script src="scripts/load-list.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
 
-    <link rel="stylesheet" href="styles/main-tabs.css" />
-
-    <style>
-        .title {
-            font-size: 2em;
-            text-align: center;
-            margin: 1em 0;
-            color: #333;
-            font-family: "Segoe UI", "Arial", sans-serif;
-        }
-    </style>
-    <title>Small Steps</title>
-</head>
-
-<body>
-    <h1>My Small Steps</h1>
-
-    <div id="affirmation-content"></div>
-    <script> loadSnippet('affirmation-content', 'affirmation/content.html'); </script>
-
-    <div class="tabs">
-        <button class="tab-button active" data-tab="small-steps" type="button">
-            Small Steps
-        </button>
-        <button class="tab-button" data-tab="content2" type="button">
-            Tab 2
-        </button>
-        <button class="tab-button" data-tab="content3" type="button">
-            Tab 3
-        </button>
-    </div>
-    <div id="small-steps" class="tab-content active">
-        <ul id="small-steps-list"></ul>
-        <script> loadList('small-steps-list', 'content/small-steps.json'); </script>
-    </div>
-    <div id="content2" class="tab-content">
-        <ul>
-            <li>Tab 2 - Step 1</li>
-            <li>Tab 2 - Step 2</li>
-        </ul>
-    </div>
-    <div id="content3" class="tab-content">
-        <ul>
-            <li>Tab 3 - Step 1</li>
-            <li>Tab 3 - Step 2</li>
-        </ul>
-    </div>
-    <script src="scripts/main-tabs.js"></script>
-
-    <ul id="notes-list"></ul>
-    <script> loadList('notes-list', 'content/notes.json'); </script>
-</body>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 
 </html>
