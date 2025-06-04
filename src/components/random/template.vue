@@ -4,7 +4,9 @@ import articleTemp from '../../templates/article.vue';
 
 <template>
 
-    <articleTemp title="Time Balance - Play the most magnificent game that you can" meta="Jun 4, 2025 by G. D. Ungureanu">
+    <articleTemp title="Time Balance - Play the most magnificent game that you can"
+        meta="Jun 4, 2025 by G. D. Ungureanu">
+        <a href="https://www.youtube.com/watch?v=QuqiSL3nDNg">YouTube</a>
         <p>
             Prioritize With Intention: The 3-Bucket Method
             Divide your energy into 3 life buckets:
@@ -14,6 +16,16 @@ import articleTemp from '../../templates/article.vue';
             Relationships (Family, Friends)
 
             Self (Health, Hobbies, Rest)
+        </p>
+
+        <p>1. An intimate relationship
+            2. Some family interaction
+            3. A friend or two
+            4. A job or a career
+            5. Engage in something creatively
+            6. Take care of yourself physically and mentally
+            7. Adopt some civic responsibility
+            8. Protect ourselves against major sources of hedonistic and impulsive temptations.
         </p>
 
 
