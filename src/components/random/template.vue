@@ -4,68 +4,6 @@ import articleTemp from '../../templates/article.vue';
 
 <template>
 
-    <articleTemp title="Time Balance - Play the most magnificent game that you can"
-        meta="Jun 4, 2025 by G. D. Ungureanu">
-        <a href="https://www.youtube.com/watch?v=QuqiSL3nDNg">YouTube</a>
-        <p>
-            Prioritize With Intention: The 3-Bucket Method
-            Divide your energy into 3 life buckets:
-
-            Work / Career
-
-            Relationships (Family, Friends)
-
-            Self (Health, Hobbies, Rest)
-        </p>
-
-        <p>1. An intimate relationship
-            2. Some family interaction
-            3. A friend or two
-            4. A job or a career
-            5. Engage in something creatively
-            6. Take care of yourself physically and mentally
-            7. Adopt some civic responsibility
-            8. Protect ourselves against major sources of hedonistic and impulsive temptations.
-        </p>
-
-
-        <p>The 1-3-5 rule is simple: in order to stay productive at work every day, you just need to commit to
-            accomplishing 1 Major Task, 3 Medium Tasks and 5 Small Tasks.
-
-            <a href="https://www.timedoctor.com/blog/1-3-5-rule/" class="text-decoration-none">What is the 1-3-5
-                Rule?</a>
-            <a href="https://www.developgoodhabits.com/1-3-5-rule/" class="text-decoration-none">How to Use the 1-3-5
-                Rule?</a>
-
-        </p>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <p class="fw-bold">1 Major Task</p> - 2-3 hours
-            </li>
-            <li class="list-group-item">
-                <p class="fw-bold">3 Medium Tasks</p> - 35-60 min
-            </li>
-            <li class="list-group-item">
-                <p class="fw-bold">5 Small Tasks</p> - 10-20 min
-            </li>
-        </ul>
-
-        <p>
-            Choose Hobbies That Energize, Not Deplete
-            You don't need 5 hobbies. Just pick 1-2 that deeply satisfy you and fit your schedule:
-
-            Creative: writing, music, cooking
-
-            Physical: sports, dance, hiking
-
-            Relaxing: reading, gardening, drawing
-
-            Social: games, group classes, clubs
-
-            Even 30 minutes a day is enough to feel restored and connected.
-        </p>
-
-    </articleTemp>
 
     <articleTemp title="Daily Routine" meta="May 27, 2025 by G. D. Ungureanu">
         <p>Taking small steps towards building a healthy life!</p>

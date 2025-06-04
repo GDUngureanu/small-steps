@@ -7,7 +7,7 @@ import suggestionsTemp from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
 export default {
-    name: 'IppoTemplate',
+    name: 'BooksTemplate',
     data() {
         return {
             suggestions: suggestions
@@ -18,8 +18,8 @@ export default {
 
 <template>
 
-    <articleTemp title="Steps that I would like to take" meta="May 26, 2025 by G. D. Ungureanu">
-        <p>So many things To do/To learn.</p>
+    <articleTemp title="Books" meta="Jav 4, 2025 by G. D. Ungureanu">
+        <p>Work work work.</p>
 
         <suggestionsTemp :suggestions="suggestions" />
     </articleTemp>

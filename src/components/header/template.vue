@@ -5,12 +5,12 @@
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4 fst-italic">As a Man among Men <br />
         I want to create a world of Growth and Playfulness <br />
-        By being playful. <br />
-        By being present. <br />
+        By striving to be the best that I can. <br />
         By being thoughtful. <br />
         By being truthful. <br />
-        By hunting knowledge. <br />
-        And by striving to the best that I can.</p>
+        By being present. <br />
+        By being playful. <br />
+        By hunting knowledge. </p>
     </div>
   </div>
 
