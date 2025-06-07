@@ -2,5 +2,9 @@
     {
         "status": false,
         "action": "Write an article about Atomic Habits."
+    },
+    {
+        "status": false,
+        "action": "Write an article about Ikigai."
     }
 ]

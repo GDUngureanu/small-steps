@@ -11,6 +11,7 @@
       <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item px-2"><RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink></li>
+          <li class="nav-item px-2"><RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/books" class="nav-link fw-medium" active-class="active">Books</RouterLink></li>
