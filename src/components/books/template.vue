@@ -33,6 +33,7 @@ export default {
         <p><em>
             <input type="checkbox" class="form-check-input"> TODO: Add notes about <strong>Outcome-Based Habits</strong> <br>
             <input type="checkbox" class="form-check-input"> TODO: Add notes about <strong>Identity-Based Habits</strong> <br>
+            Inspired from the following article: https://medium.com/@gargsourabh/atomic-habits-chapter-2-461990874c9c <br>
             <input type="checkbox" class="form-check-input"> TODO: Refine this and express it in your own words: <br>
             Change in outcomes: It is result-oriented change, like publishing a book or winning a championship. <br>
             Change in the process: It means a change in the system or procedure, like implementing a new gym routine or following a diet plan. <br>
