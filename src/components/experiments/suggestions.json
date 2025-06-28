@@ -1,62 +1,14 @@
 [
     {
         "status": false,
-        "action": "Learn to play the guitar."
+        "action": "Make a list of culinary experiments that you would like to try :)."
     },
     {
         "status": false,
-        "action": "Paint."
+        "action": "Add a post where you mention tips (example tip, blend the sugar and fruit together)."
     },
     {
         "status": false,
-        "action": "Have a map with the places that you visited."
-    },
-    {
-        "status": false,
-        "action": "Code."
-    },
-    {
-        "status": false,
-        "action": "Finish my apartment."
-    },
-    {
-        "status": false,
-        "action": "Rent a house."
-    },
-    {
-        "status": false,
-        "action": "Something related to cooking?"
-    },
-    {
-        "status": false,
-        "action": "Barista"
-    },
-    {
-        "status": false,
-        "action": "Massage"
-    },
-    {
-        "status": false,
-        "action": "Reiki"
-    },
-    {
-        "status": false,
-        "action": "Read/audiobook - add sublist of things that you would like to read/listen to"
-    },
-    {
-        "status": false,
-        "action": "Anime - add sublist of things that you would like to read/listen to"
-    },
-    {
-        "status": false,
-        "action": "Movies - add sublist of things that you would like to read/listen to"
-    },
-    {
-        "status": false,
-        "action": "Games? - add sublist of things that you would like to read/listen to"
-    },
-    {
-        "status": false,
-        "action": "Consider moving the last 4/5 in another category called 'Entertainment' or 'Leisure'."
+        "action": "Buy some bigger glass bottles (2L/2.5L)."
     }
 ]
