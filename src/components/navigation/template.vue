@@ -16,6 +16,7 @@
           <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/books" class="nav-link fw-medium" active-class="active">Books</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/poems" class="nav-link fw-medium" active-class="active">Poems</RouterLink></li>
+          <li class="nav-item px-2"><RouterLink to="/experiments" class="nav-link fw-medium" active-class="active">Experiments</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/random" class="nav-link fw-medium" active-class="active">Random</RouterLink></li>
         </ul>
       </div>
