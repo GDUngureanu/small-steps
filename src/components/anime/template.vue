@@ -19,35 +19,26 @@
 -->
 
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import animeList from './data.json';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'AnimeTemplate',
-    data() {
-        return {
-            suggestions: suggestions,
-            animeList: animeList
-        };
-    }
-};
+defineOptions({
+    name: 'AnimeTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Anime List" meta="May 13, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Anime List" meta="May 13, 2025 by G. D. Ungureanu">
         <p>I'm working on compiling a list of all the Anime that I've watched (or plan on watching).</p>
         <p>The list includes the anime's name, alias (if any), reference. airing status, my view status, the
             year I watched it, and my personal rating.</p>
         <p>I'm using <a href="https://myanimelist.net/" class="text-decoration-none">MyAnimeList.net</a> as my
             main source of reference.</p>
 
-        <suggestionsTemp :suggestions="suggestions" />
+        <SuggestionsTemplate :suggestions="suggestions" />
         
         <p></p>
 
@@ -73,6 +64,6 @@ export default {
                 </tr>
             </tbody>
         </table>
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>

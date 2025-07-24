@@ -1,34 +1,26 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'AnimeTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'HomeTemplate'
+});
 </script>
 
 
 <template>
 
-    <articleTemp title="Coding my passions" meta="May 26, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Coding my passions" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm coding because I like to.</p>
 
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
 
-    <articleTemp title="Play the most Magnificent Game that you can!" meta="Jun 4, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Play the most Magnificent Game that you can!" meta="Jun 4, 2025 by G. D. Ungureanu">
 
         <div class="row mb-4 embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/5xbADDvciko" allowfullscreen></iframe>
+            <iframe class="embed-responsive-item" title="The Gift of Life" src="https://www.youtube.com/embed/5xbADDvciko" allowfullscreen></iframe>
         </div>
 
         <h4>Prioritize With Intention</h4>
@@ -74,6 +66,6 @@ export default {
             <li><strong>Social</strong>: games, group classes, clubs</li>
         </ul>
 
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>

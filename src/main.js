@@ -1,11 +1,12 @@
+// Vue imports
 import { createApp } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 
-// Import only the Bootstrap components we need
+// Third-party library imports
 import { Popover } from 'bootstrap';
 
+// Local component imports
 import App from './application.vue'
-
 import Home from './components/home/template.vue'
 import Anime from './components/anime/template.vue'
 import Books from './components/books/template.vue'
@@ -15,8 +16,9 @@ import Poems from './components/poems/template.vue'
 import Experiments from './components/experiments/template.vue'
 import Random from './components/random/template.vue'
 
-// Import our custom CSS
+// Styles
 import './scss/styles.scss'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 // Define the routes for the application
 const routes = [

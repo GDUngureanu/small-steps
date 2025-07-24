@@ -1,30 +1,22 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'PoemsTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'PoemsTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Poems" meta="May 26, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Poems" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm working on compiling a list of Poems.</p>
 
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
 
-    <articleTemp title="Memento Mori" meta="1872 by Mihai Eminescu">
+    <ArticleTemplate title="Memento Mori" meta="1872 by Mihai Eminescu">
         <blockquote class="blockquote text-center">
             <p class="mb-0 fst-italic">Turma visurilor mele eu le pasc ca oi de aur,</p>
             <p class="mb-0 fst-italic">Când a nopții întunerec înstelatul rege maur</p>
@@ -1984,6 +1976,6 @@ export default {
             <p class="mb-0 fst-italic">În zădar o măsurăm noi cu-a gândirilor măsură,</p>
             <p class="mb-0 fst-italic">Căci gândirile-s fantome, când viața este vis.</p>
         </blockquote>
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>

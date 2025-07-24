@@ -1,29 +1,21 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'IkigaiTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'IkigaiTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Notes" meta="Jav 7, 2025 by G. D. Ungureanu">
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+    <ArticleTemplate title="Notes" meta="Jav 7, 2025 by G. D. Ungureanu">
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
 
 
-    <articleTemp title="Career / Work" meta="Jun 7, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Career / Work" meta="Jun 7, 2025 by G. D. Ungureanu">
         
         <p class="mb-0"><strong>Would you like to spend the rest of your life solving other peoples problems/puzzles while getting payed for it?</strong></p>
         <p>For the rest of my life, no; But for the next couple of years, yes. I love solving puzzles, and if I can be paid handsomely for it, that's a bonus.</p>
@@ -44,6 +36,6 @@ export default {
             <li>(?) <s>Land Lord</s></li>
         </ul>
 
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>

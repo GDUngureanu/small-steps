@@ -1,32 +1,27 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
+import ActionsTemplate from '../../templates/actions.vue';
 import suggestions from './suggestions.json';
-
 import experiment1 from './assets/Visinata_Experient_1_2025-06-28.jpeg'
 import experiment2 from './assets/Visinata_Experient_2_2025-06-28.jpeg'
 
-
-export default {
-    name: 'ExperimentTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'ExperimentTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Working on Experiments" meta="June 28, 2025 by G. D. Ungureanu">
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+    <ArticleTemplate title="Actions Experiments" meta="July 24, 2025 by G. D. Ungureanu">
+        <ActionsTemplate list-id="4fe4c03f-ada9-4a08-b222-04842e2a8e12" />
+    </ArticleTemplate>
 
-    <articleTemp title="Vișinată" meta="June 28, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Working on Experiments" meta="June 28, 2025 by G. D. Ungureanu">
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
+
+    <ArticleTemplate title="Vișinată" meta="June 28, 2025 by G. D. Ungureanu">
 
         <div class="card mb-3">
             <div class="row g-0">
@@ -61,6 +56,6 @@ export default {
                 </div>
             </div>
         </div>
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>

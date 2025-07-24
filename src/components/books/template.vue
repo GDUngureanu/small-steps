@@ -1,30 +1,22 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'BooksTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'BooksTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Books" meta="Jav 4, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Books" meta="Jav 4, 2025 by G. D. Ungureanu">
         <p>Work work work.</p>
 
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
 
-    <articleTemp title="Atomic Habits" meta="Jun 7, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Atomic Habits" meta="Jun 7, 2025 by G. D. Ungureanu">
 
         <a href="https://jamesclear.com/atomic-habits" class="text-decoration-none">
             Atomic Habits by James Clear
@@ -132,5 +124,5 @@ export default {
             When we treat him as if he already were what he potentially could be, we make him what he should be.</em> <br>
              - Johann Wolfgang von Goethe</p>
 
-    </articleTemp>
+    </ArticleTemplate>
 </template>

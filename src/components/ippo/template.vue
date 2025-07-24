@@ -1,27 +1,19 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
-import suggestionsTemp from '../../templates/suggestions.vue';
-</script>
-
-<script>
+import ArticleTemplate from '../../templates/article.vue';
+import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
-export default {
-    name: 'IppoTemplate',
-    data() {
-        return {
-            suggestions: suggestions
-        };
-    }
-};
+defineOptions({
+    name: 'IppoTemplate'
+});
 </script>
 
 <template>
 
-    <articleTemp title="Steps that I would like to take" meta="May 26, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Steps that I would like to take" meta="May 26, 2025 by G. D. Ungureanu">
         <p>So many things To do/To learn.</p>
 
-        <suggestionsTemp :suggestions="suggestions" />
-    </articleTemp>
+        <SuggestionsTemplate :suggestions="suggestions" />
+    </ArticleTemplate>
 
 </template>

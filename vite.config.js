@@ -20,4 +20,8 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    // Ensure environment variables are available
+    'process.env': process.env
+  }
 })

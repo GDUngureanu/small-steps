@@ -1,11 +1,15 @@
 <script setup>
-import articleTemp from '../../templates/article.vue';
+import ArticleTemplate from '../../templates/article.vue';
+
+defineOptions({
+    name: 'RandomTemplate'
+});
 </script>
 
 <template>
 
 
-    <articleTemp title="Daily Routine" meta="May 27, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Daily Routine" meta="May 27, 2025 by G. D. Ungureanu">
         <p>Taking small steps towards building a healthy life!</p>
 
         <h5>Daily</h5>
@@ -53,9 +57,9 @@ import articleTemp from '../../templates/article.vue';
                 TBD.
             </li>
         </ul>
-    </articleTemp>
+    </ArticleTemplate>
 
-    <articleTemp title="Useful Links" meta="May 27, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Useful Links" meta="May 27, 2025 by G. D. Ungureanu">
         <p>Here are some useful links that helped me while working on this site:</p>
 
         <ul class="list-group list-group-flush">
@@ -73,6 +77,6 @@ import articleTemp from '../../templates/article.vue';
                 <a href="https://html5up.net/" class="text-decoration-none">HTML5 UP!</a> - HTML Templates.
             </li>
         </ul>
-    </articleTemp>
+    </ArticleTemplate>
 
 </template>
