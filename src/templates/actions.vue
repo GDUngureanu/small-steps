@@ -86,6 +86,14 @@ const addAction = async (parentId = null) => {
         console.error('Exception thrown while creating actions:', exception);
     } finally {
         loading.value = false;
+        
+        if (parentId) {
+            await nextTick();
+            document.getElementById(`template-create-sub-action-input-${parentId}`)?.focus();
+        } else {
+            await nextTick();
+            document.getElementById('template-create-action-input')?.focus();
+        }
     }
 };
 
@@ -203,7 +211,7 @@ const startEditing = async (action) => {
     editingActionText.value = action.description;
 
     await nextTick();
-    const input = document.querySelector(`#edit-input-${action.id}`);
+    const input = document.getElementById(`template-edit-action-input-${action.id}`);
     input?.focus();
     input?.select();
 };
@@ -217,9 +225,11 @@ const saveEdit = (action) => {
     updateActionDescription(action, editingActionText.value);
 };
 
-const toggleSubActionForm = (actionId) => {
+const toggleSubActionForm = async (actionId) => {
     if (!newSubActionText.value[actionId]) {
         newSubActionText.value[actionId] = '';
+        await nextTick();
+        document.getElementById(`template-create-sub-action-input-${actionId}`)?.focus();
     }
 };
 
@@ -269,19 +279,6 @@ watch(() => props.listId, () => {
         <div v-else-if="rootActions.length === 0 && !loading" class="text-center py-5">
             <i class="bi bi-list-task display-1 text-muted"></i>
             <p class="text-muted mt-3 mb-4">No actions yet. Add your first action below!</p>
-
-            <!-- Add action input for empty state -->
-            <div class="d-flex align-items-center gap-2 justify-content-center max-width-400 mx-auto">
-                <div class="text-muted">
-                    <i class="bi bi-plus-circle fs-5"></i>
-                </div>
-                <input type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add your first action..." v-model="newActionText"
-                    @keyup.enter="addAction()" @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
-                    style="background: transparent; outline: none;">
-                <button class="btn btn-primary btn-sm px-3" type="button" @click="addAction()" :disabled="loading || !newActionText.trim()" v-if="newActionText.trim()">
-                    <i class="bi bi-arrow-return-left"></i>
-                </button>
-            </div>
         </div>
 
         <!-- Add new action - Sleek design -->
@@ -290,12 +287,9 @@ watch(() => props.listId, () => {
                 <div class="text-muted">
                     <i class="bi bi-plus-circle fs-5"></i>
                 </div>
-                <input type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
+                <input id="template-create-action-input" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
                     @keyup.enter="addAction()" @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
                     style="background: transparent; outline: none;">
-                <button class="btn btn-primary btn-sm px-3" type="button" @click="addAction()" :disabled="loading || !newActionText.trim()" v-if="newActionText.trim()">
-                    <i class="bi bi-arrow-return-left"></i>
-                </button>
             </div>
         </div>
 
@@ -311,12 +305,12 @@ watch(() => props.listId, () => {
                         <div class="flex-grow-1">
                             <!-- Action Description -->
                             <div v-if="editingActionId === action.id">
-                                <input :id="`edit-input-${action.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText" @keyup.enter="saveEdit(action)"
+                                <input :id="`template-edit-action-input-${action.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText" @keyup.enter="saveEdit(action)"
                                     @keyup.escape="cancelEditing" @blur="saveEdit(action)" placeholder="Press Enter to save, Esc to cancel">
                             </div>
                             <div v-else>
-                                <div class="fw-semibold user-select-none mb-1" :class="{ 'text-decoration-line-through text-muted': action.status }" @dblclick="startEditing(action)"
-                                    :title="'Double-click to edit'" style="cursor: pointer;">
+                                <div class="fw-semibold user-select-none mb-1" :class="{ 'text-decoration-line-through text-muted': action.status }"
+                                    @dblclick="startEditing(action)" :title="'Double-click to edit'" style="cursor: pointer;">
                                     {{ action.description }}
                                 </div>
                                 <div class="small text-muted">
@@ -330,81 +324,15 @@ watch(() => props.listId, () => {
                             </div>
 
                             <!-- Add Sub-action Form -->
-                            <div v-if="newSubActionText.hasOwnProperty(action.id)">
-                                <div class="input-group input-group-sm mt-2">
-                                    <span class="input-group-text">
+                            <div v-if="newSubActionText.hasOwnProperty(action.id)" class="mt-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="text-muted">
                                         <i class="bi bi-arrow-return-right text-primary"></i>
-                                    </span>
-                                    <input type="text" class="form-control" placeholder="Add a sub-action..." v-model="newSubActionText[action.id]" @keyup.enter="addAction(action.id)"
-                                        @keyup.escape="delete newSubActionText[action.id]">
-                                </div>
-                            </div>
-
-                            <!-- Sub-actions -->
-                            <div v-if="getSubActions(action.id).length > 0">
-                                <div v-for="subAction in getSubActions(action.id)" :key="subAction.id" class="form-check hover-group mt-2">
-                                    <div class="d-flex align-items-start">
-                                        <input type="checkbox" class="form-check-input actions-checkbox" :id="`subaction-${subAction.id}`" v-model="subAction.status"
-                                            @change="updateActionStatus(subAction)">
-
-                                        <div class="flex-grow-1">
-                                            <!-- Sub-action Description -->
-                                            <div v-if="editingActionId === subAction.id">
-                                                <input :id="`edit-input-${subAction.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText"
-                                                    @keyup.enter="saveEdit(subAction)" @keyup.escape="cancelEditing" @blur="saveEdit(subAction)"
-                                                    placeholder="Press Enter to save, Esc to cancel">
-                                            </div>
-                                            <div v-else>
-                                                <div class="user-select-none" :class="{ 'text-decoration-line-through text-muted': subAction.status }" @dblclick="startEditing(subAction)"
-                                                    :title="'Double-click to edit'" style="cursor: pointer;">
-                                                    {{ subAction.description }}
-                                                </div>
-                                                <div class="small text-muted">
-                                                    <i class="bi bi-calendar3 me-1"></i>
-                                                    {{ formatDate(subAction.created_at) }}
-                                                    <span class="ms-2" :class="getPriorityClass(subAction.priority)">
-                                                        <i class="bi bi-flag-fill me-1"></i>
-                                                        {{ getPriorityText(subAction.priority) }}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Sub-action Buttons -->
-                                        <div class="btn-group btn-group-sm row-actions" role="group">
-                                            <div class="btn-group btn-group-sm" role="group">
-                                                <button type="button" class="btn btn-sm dropdown-toggle border-0" data-bs-toggle="dropdown" title="Set Priority">
-                                                    <i class="bi bi-flag-fill" :class="getPriorityClass(subAction.priority)"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 0)"
-                                                            :class="{ 'active': subAction.priority === 0 }">
-                                                            <i class="bi bi-flag text-secondary me-2"></i>
-                                                            Low Priority
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 1)"
-                                                            :class="{ 'active': subAction.priority === 1 }">
-                                                            <i class="bi bi-flag-fill text-warning me-2"></i>
-                                                            Medium Priority
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 2)"
-                                                            :class="{ 'active': subAction.priority === 2 }">
-                                                            <i class="bi bi-flag-fill text-danger me-2"></i>
-                                                            High Priority
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <button type="button" class="btn btn-sm border-0" @click="deleteAction(subAction.id)" title="Delete Sub-action">
-                                                <i class="bi bi-trash text-danger"></i>
-                                            </button>
-                                        </div>
                                     </div>
+                                    <input :id="`template-create-sub-action-input-${action.id}`" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a sub-action..."
+                                        v-model="newSubActionText[action.id]" @keyup.enter="addAction(action.id)" @keyup.escape="delete newSubActionText[action.id]"
+                                        @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
+                                        style="background: transparent; outline: none;">
                                 </div>
                             </div>
                         </div>
@@ -418,19 +346,22 @@ watch(() => props.listId, () => {
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 0)" :class="{ 'active': action.priority === 0 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 0)"
+                                            :class="{ 'active': action.priority === 0 }">
                                             <i class="bi bi-flag text-secondary"></i>
                                             Low Priority
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 1)" :class="{ 'active': action.priority === 1 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 1)"
+                                            :class="{ 'active': action.priority === 1 }">
                                             <i class="bi bi-flag-fill text-warning"></i>
                                             Medium Priority
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 2)" :class="{ 'active': action.priority === 2 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 2)"
+                                            :class="{ 'active': action.priority === 2 }">
                                             <i class="bi bi-flag-fill text-danger"></i>
                                             High Priority
                                         </button>
@@ -447,6 +378,74 @@ watch(() => props.listId, () => {
                             <button type="button" class="btn border-0" @click="deleteAction(action.id)" title="Delete Action">
                                 <i class="bi bi-trash text-danger"></i>
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Sub-actions -->
+                    <div v-if="getSubActions(action.id).length > 0">
+                        <div v-for="subAction in getSubActions(action.id)" :key="subAction.id" class="form-check hover-group mt-2">
+                            <div class="d-flex align-items-start ">
+                                <input type="checkbox" class="form-check-input actions-checkbox" :id="`subaction-${subAction.id}`" v-model="subAction.status"
+                                    @change="updateActionStatus(subAction)">
+
+                                <div class="flex-grow-1">
+                                    <!-- Sub-action Description -->
+                                    <div v-if="editingActionId === subAction.id">
+                                        <input :id="`template-edit-action-input-${subAction.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText"
+                                            @keyup.enter="saveEdit(subAction)" @keyup.escape="cancelEditing" @blur="saveEdit(subAction)"
+                                            placeholder="Press Enter to save, Esc to cancel">
+                                    </div>
+                                    <div v-else>
+                                        <div class="user-select-none" :class="{ 'text-decoration-line-through text-muted': subAction.status }" @dblclick="startEditing(subAction)"
+                                            :title="'Double-click to edit'" style="cursor: pointer;">
+                                            {{ subAction.description }}
+                                        </div>
+                                        <div class="small text-muted">
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            {{ formatDate(subAction.created_at) }}
+                                            <span class="ms-2" :class="getPriorityClass(subAction.priority)">
+                                                <i class="bi bi-flag-fill me-1"></i>
+                                                {{ getPriorityText(subAction.priority) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sub-action Buttons -->
+                                <div class="btn-group btn-group-sm row-actions" role="group">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-sm dropdown-toggle border-0" data-bs-toggle="dropdown" title="Set Priority">
+                                            <i class="bi bi-flag-fill" :class="getPriorityClass(subAction.priority)"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 0)"
+                                                    :class="{ 'active': subAction.priority === 0 }">
+                                                    <i class="bi bi-flag text-secondary me-2"></i>
+                                                    Low Priority
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 1)"
+                                                    :class="{ 'active': subAction.priority === 1 }">
+                                                    <i class="bi bi-flag-fill text-warning me-2"></i>
+                                                    Medium Priority
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 2)"
+                                                    :class="{ 'active': subAction.priority === 2 }">
+                                                    <i class="bi bi-flag-fill text-danger me-2"></i>
+                                                    High Priority
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button type="button" class="btn btn-sm border-0" @click="deleteAction(subAction.id)" title="Delete Sub-action">
+                                        <i class="bi bi-trash text-danger"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -505,15 +504,6 @@ watch(() => props.listId, () => {
     max-width: 400px;
 }
 
-/* Smooth transitions for the input */
-.form-control.border-bottom {
-    transition: border-width 0.2s ease;
-}
-
-.form-control.border-bottom:focus {
-    border-bottom-width: 2px !important;
-}
-
 /* Make the container the positioning context */
 .hover-group {
     position: relative;
@@ -544,8 +534,8 @@ watch(() => props.listId, () => {
 
 
 .actions-checkbox {
-    margin-top:0.3rem!important;
-    margin-right:0.5rem!important
+    margin-top: 0.3rem !important;
+    margin-right: 0.5rem !important
 }
 
 /* For touch devices (no hover): always show */

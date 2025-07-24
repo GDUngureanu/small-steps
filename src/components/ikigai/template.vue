@@ -1,5 +1,6 @@
 <script setup>
 import ArticleTemplate from '../../templates/article.vue';
+import ActionsTemplate from '../../templates/actions.vue';
 import SuggestionsTemplate from '../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
 
@@ -9,6 +10,10 @@ defineOptions({
 </script>
 
 <template>
+
+    <ArticleTemplate title="Actions" meta="July 24, 2025 by G. D. Ungureanu">
+        <ActionsTemplate list-id="15558a7c-1af5-4c35-9207-488c8742b99b" />
+    </ArticleTemplate>
 
     <ArticleTemplate title="Notes" meta="Jav 7, 2025 by G. D. Ungureanu">
         <SuggestionsTemplate :suggestions="suggestions" />
