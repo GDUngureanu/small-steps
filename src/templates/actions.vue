@@ -95,9 +95,16 @@ const PRIORITY_CONFIG = {
 };
 
 // Computed properties for better performance
-const rootActions = computed(() =>
-    actions.value.filter(action => !action.parent_id)
-);
+const rootActions = computed(() => {
+    const filtered = actions.value.filter(action => !action.parent_id);
+    // Sort by status (incomplete first), then by creation date (newest first)
+    return filtered.sort((a, b) => {
+        if (a.status !== b.status) {
+            return a.status ? 1 : -1; // Incomplete (false) first, completed (true) last
+        }
+        return new Date(b.created_at) - new Date(a.created_at); // Newest first within each group
+    });
+});
 
 const subActionsByParent = computed(() => {
     const map = new Map();
@@ -109,6 +116,17 @@ const subActionsByParent = computed(() => {
             map.get(action.parent_id).push(action);
         }
     });
+    
+    // Sort sub-actions within each parent group
+    map.forEach((subActions, parentId) => {
+        subActions.sort((a, b) => {
+            if (a.status !== b.status) {
+                return a.status ? 1 : -1; // Incomplete first, completed last
+            }
+            return new Date(b.created_at) - new Date(a.created_at); // Newest first within each group
+        });
+    });
+    
     return map;
 });
 
@@ -229,6 +247,9 @@ const updateActionStatus = async (action) => {
         // Clear optimistic update on success
         optimisticUpdates.value.delete(action.id);
         
+        // Update cache after successful API call
+        setCachedActions(props.listId, actions.value);
+        
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while updating action status:', exception);
@@ -332,6 +353,9 @@ const updateActionPriority = async (action, newPriority) => {
         
         // Clear optimistic update on success
         optimisticUpdates.value.delete(action.id);
+        
+        // Update cache after successful API call
+        setCachedActions(props.listId, actions.value);
         
     } catch (exception) {
         error.value = exception.message;
