@@ -2,6 +2,47 @@
 import { ref, onMounted, watch, computed, nextTick } from 'vue';
 import { supabase } from '../config/supabase.js';
 
+// Cache utilities using sessionStorage to persist across module reloads
+const getCachedActions = (listId) => {
+    try {
+        const cached = sessionStorage.getItem(`actions_${listId}`);
+        if (!cached) return null;
+        
+        const cacheData = JSON.parse(cached);
+        
+        // Check if cache has expired (1 hour = 3600000ms)
+        if (cacheData.timestamp && (Date.now() - cacheData.timestamp) > 3600000) {
+            sessionStorage.removeItem(`actions_${listId}`);
+            return null;
+        }
+        
+        // Return data if cache structure exists, otherwise treat as legacy cache
+        return cacheData.data || cacheData;
+    } catch {
+        return null;
+    }
+};
+
+const setCachedActions = (listId, actions) => {
+    try {
+        const cacheData = {
+            data: actions,
+            timestamp: Date.now()
+        };
+        sessionStorage.setItem(`actions_${listId}`, JSON.stringify(cacheData));
+    } catch {
+        // Ignore storage errors
+    }
+};
+
+const clearCachedActions = (listId) => {
+    try {
+        sessionStorage.removeItem(`actions_${listId}`);
+    } catch {
+        // Ignore storage errors
+    }
+};
+
 const props = defineProps({
     listId: {
         type: String,
@@ -17,17 +58,72 @@ const loading = ref(false);
 const error = ref(null);
 const editingActionId = ref(null);
 const editingActionText = ref('');
+const deleteModalAction = ref(null);
+const showDeleteModal = ref(false);
+
+// Optimistic updates state
+const optimisticUpdates = ref(new Map());
+
+// Vue refs for DOM elements
+const createActionInput = ref(null);
+const editActionInputs = ref({});
+const createSubActionInputs = ref({});
+
+// Priority level constants
+const PRIORITY_LEVELS = {
+    LOW: 0,
+    MEDIUM: 1,
+    HIGH: 2
+};
+
+const PRIORITY_CONFIG = {
+    [PRIORITY_LEVELS.LOW]: {
+        text: 'Low',
+        class: 'text-secondary',
+        icon: 'bi-flag'
+    },
+    [PRIORITY_LEVELS.MEDIUM]: {
+        text: 'Medium', 
+        class: 'text-warning',
+        icon: 'bi-flag-fill'
+    },
+    [PRIORITY_LEVELS.HIGH]: {
+        text: 'High',
+        class: 'text-danger', 
+        icon: 'bi-flag-fill'
+    }
+};
 
 // Computed properties for better performance
 const rootActions = computed(() =>
     actions.value.filter(action => !action.parent_id)
 );
 
-const getSubActions = (parentId) =>
-    actions.value.filter(action => action.parent_id === parentId);
+const subActionsByParent = computed(() => {
+    const map = new Map();
+    actions.value.forEach(action => {
+        if (action.parent_id) {
+            if (!map.has(action.parent_id)) {
+                map.set(action.parent_id, []);
+            }
+            map.get(action.parent_id).push(action);
+        }
+    });
+    return map;
+});
+
+const getSubActions = (parentId) => 
+    subActionsByParent.value.get(parentId) || [];
 
 // API Functions
 const fetchActions = async () => {
+    // Check cache first
+    const cachedData = getCachedActions(props.listId);
+    if (cachedData) {
+        actions.value = cachedData;
+        return;
+    }
+
     try {
         loading.value = true;
         error.value = null;
@@ -36,11 +132,13 @@ const fetchActions = async () => {
             .from('actions')
             .select('*')
             .eq('list_id', props.listId)
+            .is('deleted_at', null)
             .order('created_at', { ascending: false });
 
         if (fetchError) throw fetchError;
 
         actions.value = data || [];
+        setCachedActions(props.listId, actions.value);
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while fetching actions:', exception);
@@ -62,7 +160,7 @@ const addAction = async (parentId = null) => {
             list_id: props.listId,
             parent_id: parentId,
             status: false,
-            priority: 0
+            priority: PRIORITY_LEVELS.LOW
         };
 
         const { data, error: insertError } = await supabase
@@ -74,6 +172,8 @@ const addAction = async (parentId = null) => {
 
         if (data?.[0]) {
             actions.value.unshift(data[0]);
+            // Update cache
+            setCachedActions(props.listId, actions.value);
         }
 
         if (parentId) {
@@ -89,15 +189,24 @@ const addAction = async (parentId = null) => {
         
         if (parentId) {
             await nextTick();
-            document.getElementById(`template-create-sub-action-input-${parentId}`)?.focus();
+            createSubActionInputs.value[parentId]?.focus();
         } else {
             await nextTick();
-            document.getElementById('template-create-action-input')?.focus();
+            createActionInput.value?.focus();
         }
     }
 };
 
 const updateActionStatus = async (action) => {
+    // Store original status for rollback
+    const originalStatus = action.status;
+    
+    // Track optimistic update
+    optimisticUpdates.value.set(action.id, { 
+        type: 'status', 
+        originalValue: originalStatus 
+    });
+
     try {
         const { error: updateError } = await supabase
             .from('actions')
@@ -116,11 +225,16 @@ const updateActionStatus = async (action) => {
                 }
             }
         }
+        
+        // Clear optimistic update on success
+        optimisticUpdates.value.delete(action.id);
+        
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while updating action status:', exception);
         // Revert status on error
-        action.status = !action.status;
+        action.status = originalStatus;
+        optimisticUpdates.value.delete(action.id);
     }
 };
 
@@ -140,6 +254,8 @@ const updateActionDescription = async (action, newDescription) => {
 
         action.description = newDescription.trim();
         editingActionId.value = null;
+        // Update cache
+        setCachedActions(props.listId, actions.value);
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while updating action description:', exception);
@@ -147,25 +263,39 @@ const updateActionDescription = async (action, newDescription) => {
     }
 };
 
+const confirmDeleteAction = (actionId) => {
+    const action = actions.value.find(a => a.id === actionId);
+    deleteModalAction.value = action;
+    showDeleteModal.value = true;
+};
+
 const deleteAction = async (actionId) => {
     try {
         loading.value = true;
         error.value = null;
 
-        // Delete child actions first
+        // Soft delete child actions first
         const childActions = getSubActions(actionId);
         for (const child of childActions) {
             await deleteAction(child.id);
         }
 
+        // Soft delete: update deleted_at instead of actual deletion
         const { error: deleteError } = await supabase
             .from('actions')
-            .delete()
+            .update({ deleted_at: new Date().toISOString() })
             .eq('id', actionId);
 
         if (deleteError) throw deleteError;
 
+        // Remove from local state
         actions.value = actions.value.filter(action => action.id !== actionId);
+        // Update cache
+        setCachedActions(props.listId, actions.value);
+        
+        // Close modal
+        showDeleteModal.value = false;
+        deleteModalAction.value = null;
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while deleting action:', exception);
@@ -174,7 +304,24 @@ const deleteAction = async (actionId) => {
     }
 };
 
+const cancelDelete = () => {
+    showDeleteModal.value = false;
+    deleteModalAction.value = null;
+};
+
 const updateActionPriority = async (action, newPriority) => {
+    // Store original priority for rollback
+    const originalPriority = action.priority;
+    
+    // Immediately update UI
+    action.priority = newPriority;
+    
+    // Track optimistic update
+    optimisticUpdates.value.set(action.id, { 
+        type: 'priority', 
+        originalValue: originalPriority 
+    });
+
     try {
         const { error: updateError } = await supabase
             .from('actions')
@@ -182,12 +329,16 @@ const updateActionPriority = async (action, newPriority) => {
             .eq('id', action.id);
 
         if (updateError) throw updateError;
-
-        action.priority = newPriority;
-        await fetchActions();
+        
+        // Clear optimistic update on success
+        optimisticUpdates.value.delete(action.id);
+        
     } catch (exception) {
         error.value = exception.message;
         console.error('Exception thrown while updating priority:', exception);
+        // Revert priority on error
+        action.priority = originalPriority;
+        optimisticUpdates.value.delete(action.id);
     }
 };
 
@@ -196,22 +347,23 @@ const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
 };
 
-const getPriorityText = (priority) => {
-    const priorities = { 0: 'Low', 1: 'Medium', 2: 'High' };
-    return priorities[priority] || 'Low';
-};
+const getPriorityText = (priority) => 
+    PRIORITY_CONFIG[priority]?.text || 'Low';
 
-const getPriorityClass = (priority) => {
-    const classes = { 0: 'text-secondary', 1: 'text-warning', 2: 'text-danger' };
-    return classes[priority] || 'text-secondary';
-};
+const getPriorityClass = (priority) => 
+    PRIORITY_CONFIG[priority]?.class || 'text-secondary';
+
+const getActionClasses = (action) => ({
+    'text-decoration-line-through text-muted': action.status,
+    'opacity-75': optimisticUpdates.value.has(action.id)
+});
 
 const startEditing = async (action) => {
     editingActionId.value = action.id;
     editingActionText.value = action.description;
 
     await nextTick();
-    const input = document.getElementById(`template-edit-action-input-${action.id}`);
+    const input = editActionInputs.value[action.id];
     input?.focus();
     input?.select();
 };
@@ -229,20 +381,19 @@ const toggleSubActionForm = async (actionId) => {
     if (!newSubActionText.value[actionId]) {
         newSubActionText.value[actionId] = '';
         await nextTick();
-        document.getElementById(`template-create-sub-action-input-${actionId}`)?.focus();
+        createSubActionInputs.value[actionId]?.focus();
     }
 };
 
 // Lifecycle hooks
-onMounted(() => {
-    fetchActions();
-});
-
-watch(() => props.listId, () => {
-    if (props.listId) {
-        fetchActions();
-    }
-}, { immediate: true });
+watch(
+    () => props.listId,
+    async (newId, oldId) => {
+        if (!newId || newId === oldId) return;
+        await fetchActions();
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
@@ -253,7 +404,7 @@ watch(() => props.listId, () => {
                 <i class="bi bi-list-task me-2"></i>
                 Actions
             </h5>
-            <button class="btn btn-outline-primary btn-sm" @click="fetchActions" :disabled="loading" type="button">
+            <button class="btn btn-outline-primary btn-sm" @click="() => { clearCachedActions(props.listId); fetchActions(); }" :disabled="loading" type="button">
                 <span v-if="loading" class="spinner-border spinner-border-sm me-1" role="status"></span>
                 <i v-else class="bi bi-arrow-clockwise me-1"></i>
                 Refresh
@@ -287,7 +438,7 @@ watch(() => props.listId, () => {
                 <div class="text-muted">
                     <i class="bi bi-plus-circle fs-5"></i>
                 </div>
-                <input id="template-create-action-input" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
+                <input ref="createActionInput" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
                     @keyup.enter="addAction()" @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
                     style="background: transparent; outline: none;">
             </div>
@@ -305,11 +456,11 @@ watch(() => props.listId, () => {
                         <div class="flex-grow-1">
                             <!-- Action Description -->
                             <div v-if="editingActionId === action.id">
-                                <input :id="`template-edit-action-input-${action.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText" @keyup.enter="saveEdit(action)"
+                                <input :ref="el => editActionInputs[action.id] = el" type="text" class="form-control form-control-sm" v-model="editingActionText" @keyup.enter="saveEdit(action)"
                                     @keyup.escape="cancelEditing" @blur="saveEdit(action)" placeholder="Press Enter to save, Esc to cancel">
                             </div>
                             <div v-else>
-                                <div class="fw-semibold user-select-none mb-1" :class="{ 'text-decoration-line-through text-muted': action.status }"
+                                <div class="fw-semibold user-select-none mb-1" :class="getActionClasses(action)"
                                     @dblclick="startEditing(action)" :title="'Double-click to edit'" style="cursor: pointer;">
                                     {{ action.description }}
                                 </div>
@@ -329,7 +480,7 @@ watch(() => props.listId, () => {
                                     <div class="text-muted">
                                         <i class="bi bi-arrow-return-right text-primary"></i>
                                     </div>
-                                    <input :id="`template-create-sub-action-input-${action.id}`" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a sub-action..."
+                                    <input :ref="el => createSubActionInputs[action.id] = el" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a sub-action..."
                                         v-model="newSubActionText[action.id]" @keyup.enter="addAction(action.id)" @keyup.escape="delete newSubActionText[action.id]"
                                         @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
                                         style="background: transparent; outline: none;">
@@ -346,22 +497,22 @@ watch(() => props.listId, () => {
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 0)"
-                                            :class="{ 'active': action.priority === 0 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, PRIORITY_LEVELS.LOW)"
+                                            :class="{ 'active': action.priority === PRIORITY_LEVELS.LOW }">
                                             <i class="bi bi-flag text-secondary"></i>
                                             Low Priority
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 1)"
-                                            :class="{ 'active': action.priority === 1 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, PRIORITY_LEVELS.MEDIUM)"
+                                            :class="{ 'active': action.priority === PRIORITY_LEVELS.MEDIUM }">
                                             <i class="bi bi-flag-fill text-warning"></i>
                                             Medium Priority
                                         </button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, 2)"
-                                            :class="{ 'active': action.priority === 2 }">
+                                        <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(action, PRIORITY_LEVELS.HIGH)"
+                                            :class="{ 'active': action.priority === PRIORITY_LEVELS.HIGH }">
                                             <i class="bi bi-flag-fill text-danger"></i>
                                             High Priority
                                         </button>
@@ -375,7 +526,7 @@ watch(() => props.listId, () => {
                             </button>
 
                             <!-- Delete Button -->
-                            <button type="button" class="btn border-0" @click="deleteAction(action.id)" title="Delete Action">
+                            <button type="button" class="btn border-0" @click="confirmDeleteAction(action.id)" title="Delete Action">
                                 <i class="bi bi-trash text-danger"></i>
                             </button>
                         </div>
@@ -391,12 +542,12 @@ watch(() => props.listId, () => {
                                 <div class="flex-grow-1">
                                     <!-- Sub-action Description -->
                                     <div v-if="editingActionId === subAction.id">
-                                        <input :id="`template-edit-action-input-${subAction.id}`" type="text" class="form-control form-control-sm" v-model="editingActionText"
+                                        <input :ref="el => editActionInputs[subAction.id] = el" type="text" class="form-control form-control-sm" v-model="editingActionText"
                                             @keyup.enter="saveEdit(subAction)" @keyup.escape="cancelEditing" @blur="saveEdit(subAction)"
                                             placeholder="Press Enter to save, Esc to cancel">
                                     </div>
                                     <div v-else>
-                                        <div class="user-select-none" :class="{ 'text-decoration-line-through text-muted': subAction.status }" @dblclick="startEditing(subAction)"
+                                        <div class="user-select-none" :class="getActionClasses(subAction)" @dblclick="startEditing(subAction)"
                                             :title="'Double-click to edit'" style="cursor: pointer;">
                                             {{ subAction.description }}
                                         </div>
@@ -419,29 +570,29 @@ watch(() => props.listId, () => {
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 0)"
-                                                    :class="{ 'active': subAction.priority === 0 }">
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, PRIORITY_LEVELS.LOW)"
+                                                    :class="{ 'active': subAction.priority === PRIORITY_LEVELS.LOW }">
                                                     <i class="bi bi-flag text-secondary me-2"></i>
                                                     Low Priority
                                                 </button>
                                             </li>
                                             <li>
-                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 1)"
-                                                    :class="{ 'active': subAction.priority === 1 }">
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, PRIORITY_LEVELS.MEDIUM)"
+                                                    :class="{ 'active': subAction.priority === PRIORITY_LEVELS.MEDIUM }">
                                                     <i class="bi bi-flag-fill text-warning me-2"></i>
                                                     Medium Priority
                                                 </button>
                                             </li>
                                             <li>
-                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, 2)"
-                                                    :class="{ 'active': subAction.priority === 2 }">
+                                                <button class="dropdown-item d-flex align-items-center" @click="updateActionPriority(subAction, PRIORITY_LEVELS.HIGH)"
+                                                    :class="{ 'active': subAction.priority === PRIORITY_LEVELS.HIGH }">
                                                     <i class="bi bi-flag-fill text-danger me-2"></i>
                                                     High Priority
                                                 </button>
                                             </li>
                                         </ul>
                                     </div>
-                                    <button type="button" class="btn btn-sm border-0" @click="deleteAction(subAction.id)" title="Delete Sub-action">
+                                    <button type="button" class="btn btn-sm border-0" @click="confirmDeleteAction(subAction.id)" title="Delete Sub-action">
                                         <i class="bi bi-trash text-danger"></i>
                                     </button>
                                 </div>
@@ -479,6 +630,36 @@ watch(() => props.listId, () => {
                 </div>
             </div>
         </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" :class="{ show: showDeleteModal }" :style="{ display: showDeleteModal ? 'block' : 'none' }" tabindex="-1" v-if="showDeleteModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">
+                            Are you sure you want to delete this action?
+                        </h5>
+                        <button type="button" class="btn-close" @click="cancelDelete" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" v-if="deleteModalAction">
+                        <div class="bg-gray rounded">
+                            <strong>{{ deleteModalAction.description }}</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-secondary" @click="cancelDelete">Cancel</button>
+                        <button type="button" class="btn btn-danger" @click="deleteAction(deleteModalAction?.id)" :disabled="loading">
+                            <span v-if="loading" class="spinner-border spinner-border-sm me-1" role="status"></span>
+                            <i v-else class="bi bi-trash me-1"></i>
+                            Delete Action
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Backdrop -->
+        <div class="modal-backdrop fade" :class="{ show: showDeleteModal }" v-if="showDeleteModal" @click="cancelDelete"></div>
     </div>
 </template>
 

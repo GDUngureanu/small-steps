@@ -19,9 +19,9 @@ defineOptions({
 
     <ArticleTemplate title="Play the most Magnificent Game that you can!" meta="Jun 4, 2025 by G. D. Ungureanu">
 
-        <div class="row mb-4 embed-responsive embed-responsive-16by9">
+        <!-- <div class="row mb-4 embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" title="The Gift of Life" src="https://www.youtube.com/embed/5xbADDvciko" allowfullscreen></iframe>
-        </div>
+        </div> -->
 
         <h4>Prioritize With Intention</h4>
         <ul>
