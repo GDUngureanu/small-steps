@@ -1,46 +1,34 @@
 <script setup>
-import { ref, onMounted, watch, computed, nextTick } from 'vue';
+import { ref, watch, computed, nextTick } from 'vue';
 import { supabase } from '../config/supabase.js';
 
 // Cache utilities using sessionStorage to persist across module reloads
 const getCachedActions = (listId) => {
-    try {
-        const cached = sessionStorage.getItem(`actions_${listId}`);
-        if (!cached) return null;
-        
-        const cacheData = JSON.parse(cached);
-        
-        // Check if cache has expired (1 hour = 3600000ms)
-        if (cacheData.timestamp && (Date.now() - cacheData.timestamp) > 3600000) {
-            sessionStorage.removeItem(`actions_${listId}`);
-            return null;
-        }
-        
-        // Return data if cache structure exists, otherwise treat as legacy cache
-        return cacheData.data || cacheData;
-    } catch {
+    const cached = sessionStorage.getItem(`actions_${listId}`);
+    if (!cached) return null;
+    
+    const cacheData = JSON.parse(cached);
+    
+    // Check if cache has expired (1 hour = 3600000ms)
+    if (cacheData.timestamp && (Date.now() - cacheData.timestamp) > 3600000) {
+        sessionStorage.removeItem(`actions_${listId}`);
         return null;
     }
+    
+    // Return data if cache structure exists, otherwise treat as legacy cache
+    return cacheData.data || cacheData;
 };
 
 const setCachedActions = (listId, actions) => {
-    try {
-        const cacheData = {
-            data: actions,
-            timestamp: Date.now()
-        };
-        sessionStorage.setItem(`actions_${listId}`, JSON.stringify(cacheData));
-    } catch {
-        // Ignore storage errors
-    }
+    const cacheData = {
+        data: actions,
+        timestamp: Date.now()
+    };
+    sessionStorage.setItem(`actions_${listId}`, JSON.stringify(cacheData));
 };
 
 const clearCachedActions = (listId) => {
-    try {
-        sessionStorage.removeItem(`actions_${listId}`);
-    } catch {
-        // Ignore storage errors
-    }
+    sessionStorage.removeItem(`actions_${listId}`);
 };
 
 const props = defineProps({
