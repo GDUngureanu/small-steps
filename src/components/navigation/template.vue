@@ -13,6 +13,7 @@
           <li class="nav-item px-2"><RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink></li>
+          <li class="nav-item px-2"><RouterLink to="/nutrition" class="nav-link fw-medium" active-class="active">Nutrition</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/books" class="nav-link fw-medium" active-class="active">Books</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/poems" class="nav-link fw-medium" active-class="active">Poems</RouterLink></li>

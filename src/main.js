@@ -15,6 +15,7 @@ import Ippo from './components/ippo/template.vue'
 import Poems from './components/poems/template.vue'
 import Experiments from './components/experiments/template.vue'
 import Random from './components/random/template.vue'
+import Nutrition from './components/nutrition/template.vue'
 
 // Styles
 import './scss/styles.scss'
@@ -30,6 +31,7 @@ const routes = [
   { path: '/poems', component: Poems },
   { path: '/experiments', component: Experiments },
   { path: '/random', component: Random },
+  { path: '/nutrition', component: Nutrition },
 ]
 
 const router = createRouter({

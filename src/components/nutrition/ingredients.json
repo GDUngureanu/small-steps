@@ -1,0 +1,1690 @@
+[
+  {
+    "ingredient": "Zahăr alb (1 lț)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Zahăr brun (1 lț)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Miere (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Melasă/blackstrap (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Ridicat (Fe,Ca,K)"
+  },
+  {
+    "ingredient": "Sirop de arțar (2 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Ridicat (Mn)"
+  },
+  {
+    "ingredient": "Sirop de agave (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Magiun de prune – fără zahăr (1 Lg ≈20 g)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.4±)",
+    "fibra_insolubila": "Limitat (0.6±)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (K)"
+  },
+  {
+    "ingredient": "Dulceață/Gem (1 Lg ≈20 g)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.1±)",
+    "fibra_insolubila": "Limitat (0.2±)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Oțet de mere (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Oțet alb (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Oțet balsamic (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Borș de putină (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Zeamă de lămâie (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Muștar clasic (1 lț)",
+    "proteine_hq": "Limitat (0.3)",
+    "fibra_solubila": "Limitat (0.1)",
+    "fibra_insolubila": "Limitat (0.2)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Muștar Dijon (1 lț)",
+    "proteine_hq": "Limitat (0.3)",
+    "fibra_solubila": "Limitat (0.1)",
+    "fibra_insolubila": "Limitat (0.2)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Sos de soia (shoyu/tamari, 1 Lg)",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Sos de pește (1 Lg)",
+    "proteine_hq": "Limitat (1.0)",
+    "fibra_solubila": "Limitat (0.0)",
+    "fibra_insolubila": "Limitat (0.0)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Fasole albă (cannellini)",
+    "proteine_hq": "Mediu (11.8)",
+    "fibra_solubila": "Mediu (1.6)",
+    "fibra_insolubila": "Superior (9.4)",
+    "grasimi_sanatoase": "Limitat (0.4)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mg)"
+  },
+  {
+    "ingredient": "Fasole albă mică (navy)",
+    "proteine_hq": "Mediu (12.5)",
+    "fibra_solubila": "Ridicat (2.0)",
+    "fibra_insolubila": "Superior (10.0)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mg,P)"
+  },
+  {
+    "ingredient": "Fasole pestriță (pinto)",
+    "proteine_hq": "Limitat (11.0; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.6)",
+    "fibra_insolubila": "Ridicat (7.5)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mg)"
+  },
+  {
+    "ingredient": "Fasole roșie (kidney)",
+    "proteine_hq": "Limitat (11.3; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.3)",
+    "fibra_insolubila": "Ridicat (7.0)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mn,K)"
+  },
+  {
+    "ingredient": "Fasole neagră",
+    "proteine_hq": "Mediu (11.6)",
+    "fibra_solubila": "Mediu (1.7)",
+    "fibra_insolubila": "Superior (9.6)",
+    "grasimi_sanatoase": "Limitat (0.4)",
+    "vitamine_minerale": "Superior (Folat,Mg,Mn)"
+  },
+  {
+    "ingredient": "Mazăre verde",
+    "proteine_hq": "Limitat (4.6)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Mediu (3.5)",
+    "grasimi_sanatoase": "Limitat (0.4)",
+    "vitamine_minerale": "Mediu (Vit C,Vit K,Folat)"
+  },
+  {
+    "ingredient": "Mazăre uscată galbenă (split)",
+    "proteine_hq": "Mediu (11.0)",
+    "fibra_solubila": "Ridicat (2.0)",
+    "fibra_insolubila": "Superior (9.0)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Superior (Folat,Tiamină,Mn)"
+  },
+  {
+    "ingredient": "Linte verde/maro",
+    "proteine_hq": "Mediu (11.7)",
+    "fibra_solubila": "Mediu (1.3)",
+    "fibra_insolubila": "Superior (8.6)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mn)"
+  },
+  {
+    "ingredient": "Linte roșie (decorticată)",
+    "proteine_hq": "Mediu (10.2)",
+    "fibra_solubila": "Mediu (1.1)",
+    "fibra_insolubila": "Ridicat (6.5)",
+    "grasimi_sanatoase": "Limitat (0.4)",
+    "vitamine_minerale": "Superior (Folat,Fe)"
+  },
+  {
+    "ingredient": "Linte neagră (beluga)",
+    "proteine_hq": "Mediu (12.0)",
+    "fibra_solubila": "Mediu (1.5)",
+    "fibra_insolubila": "Superior (9.0)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mn)"
+  },
+  {
+    "ingredient": "Năut",
+    "proteine_hq": "Mediu (10.5)",
+    "fibra_solubila": "Ridicat (2.0)",
+    "fibra_insolubila": "Superior (10.0)",
+    "grasimi_sanatoase": "Limitat (5.0; ω6>ω3)",
+    "vitamine_minerale": "Superior (Folat,Fe,Mg)"
+  },
+  {
+    "ingredient": "Bob (fava)",
+    "proteine_hq": "Mediu (9.5)",
+    "fibra_solubila": "Mediu (1.5)",
+    "fibra_insolubila": "Ridicat (6.0)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Ridicat (Folat,Fe,K)"
+  },
+  {
+    "ingredient": "Soia – boabe fierte",
+    "proteine_hq": "Ridicat (18.0; complet)",
+    "fibra_solubila": "Mediu (1.5)",
+    "fibra_insolubila": "Ridicat (6.0)",
+    "grasimi_sanatoase": "Ridicat (10.0)",
+    "vitamine_minerale": "Superior (Fe,Mg,K,Vit K)"
+  },
+  {
+    "ingredient": "Edamame",
+    "proteine_hq": "Mediu (10.0; complet)",
+    "fibra_solubila": "Mediu (1.5)",
+    "fibra_insolubila": "Mediu (4.5)",
+    "grasimi_sanatoase": "Mediu (0.3 ω-3)",
+    "vitamine_minerale": "Superior (Folat,Fe,Vit K)"
+  },
+  {
+    "ingredient": "Tofu (simplu)",
+    "proteine_hq": "Mediu (13.0; complet)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Mediu (6.5)",
+    "vitamine_minerale": "Ridicat (Ca,Fe,Mg)"
+  },
+  {
+    "ingredient": "Tofu afumat",
+    "proteine_hq": "Mediu (13.0; complet)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Mediu (7.0)",
+    "vitamine_minerale": "Ridicat (Ca,Fe)"
+  },
+  {
+    "ingredient": "Tofu „silken”",
+    "proteine_hq": "Mediu (8.0; complet)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Limitat (3.5)",
+    "vitamine_minerale": "Mediu (Ca)"
+  },
+  {
+    "ingredient": "Tempeh",
+    "proteine_hq": "Ridicat (16.0; complet)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (1.1)",
+    "grasimi_sanatoase": "Mediu (8.0)",
+    "vitamine_minerale": "Superior (Fe,Mg,Cu,Mn)"
+  },
+  {
+    "ingredient": "Soia texturată (TVP)",
+    "proteine_hq": "Ridicat (18.0; complet; P)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Mediu (4.2)",
+    "grasimi_sanatoase": "Limitat (1.0)",
+    "vitamine_minerale": "Ridicat (Fe,K)"
+  },
+  {
+    "ingredient": "Făină de năut (30 g)",
+    "proteine_hq": "Limitat (6.3; P)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Mediu (4.2)",
+    "grasimi_sanatoase": "Limitat (3.0)",
+    "vitamine_minerale": "Ridicat (Folat,Fe,Mg)"
+  },
+  {
+    "ingredient": "Făină de linte (30 g)",
+    "proteine_hq": "Mediu (7.6; P)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Mediu (3.4)",
+    "grasimi_sanatoase": "Limitat (2.5)",
+    "vitamine_minerale": "Ridicat (Folat,Fe)"
+  },
+  {
+    "ingredient": "Făină de soia (30 g)",
+    "proteine_hq": "Mediu (13.0; complet; P)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Mediu (4.2)",
+    "grasimi_sanatoase": "Limitat (4.0)",
+    "vitamine_minerale": "Superior (Fe,K)"
+  },
+  {
+    "ingredient": "Făină de mazăre (30 g)",
+    "proteine_hq": "Limitat (7.5; PDCAAS<0.70; P)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Mediu (3.0)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Mediu (Fe,K)"
+  },
+  {
+    "ingredient": "Paste din linte (uscate 55 g)",
+    "proteine_hq": "Ridicat (24.0; P)",
+    "fibra_solubila": "Mediu (1.2)",
+    "fibra_insolubila": "Ridicat (6.8)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Ridicat (Fe,Mg)"
+  },
+  {
+    "ingredient": "Paste din năut (uscate 55 g)",
+    "proteine_hq": "Ridicat (20.0; P)",
+    "fibra_solubila": "Mediu (1.2)",
+    "fibra_insolubila": "Ridicat (6.8)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Ridicat (Fe,Mg)"
+  },
+  {
+    "ingredient": "Paste din mazăre (uscate 55 g)",
+    "proteine_hq": "Mediu (20.0→Mediu; PDCAAS<0.70; P)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Ridicat (6.0)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Ridicat (Fe,K)"
+  },
+  {
+    "ingredient": "Miso (pastă)",
+    "proteine_hq": "Limitat (2.3)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (0.7)",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Mediu (Mn,Zn)"
+  },
+  {
+    "ingredient": "Sos de soia (shoyu/tamari)",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Humus (hummus",
+    "proteine_hq": " 30 g)",
+    "fibra_solubila": "Limitat (2.4)",
+    "fibra_insolubila": "Limitat (0.5)",
+    "grasimi_sanatoase": "Limitat (2.2)",
+    "vitamine_minerale": "Limitat (5.0→Limitat; ω6>ω3),Mediu (Folat,Mn)"
+  },
+  {
+    "ingredient": "Falafel (≈85 g)",
+    "proteine_hq": "Limitat (8.0; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Mediu (3.5)",
+    "grasimi_sanatoase": "Mediu (10.0→Mediu; ω6>ω3)",
+    "vitamine_minerale": "Mediu (Folat,Fe)"
+  },
+  {
+    "ingredient": "Fulgi de ovăz (uscat 40 g)",
+    "proteine_hq": "Limitat (5.3; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.7; V)",
+    "fibra_insolubila": "Mediu (2.6)",
+    "grasimi_sanatoase": "Limitat (3.2)",
+    "vitamine_minerale": "Mediu (Mn,Mg,Vit B1)"
+  },
+  {
+    "ingredient": "Orz decorticat (45 g)",
+    "proteine_hq": "Limitat (4.5; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.7; V)",
+    "fibra_insolubila": "Ridicat (5.4; C)",
+    "grasimi_sanatoase": "Limitat (1.9)",
+    "vitamine_minerale": "Mediu (Se,Mg)"
+  },
+  {
+    "ingredient": "Tărâțe de grâu – cereal (30 g; P)",
+    "proteine_hq": "Limitat (4.7; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.3)",
+    "fibra_insolubila": "Superior (11.6; C)",
+    "grasimi_sanatoase": "Limitat (2.3)",
+    "vitamine_minerale": "Superior (Mn,Mg,Fe,P)"
+  },
+  {
+    "ingredient": "Făină integrală de grâu (45 g; P)",
+    "proteine_hq": "Limitat (5.9; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (1.0)",
+    "fibra_insolubila": "Mediu (4.0; C)",
+    "grasimi_sanatoase": "Limitat (1.8)",
+    "vitamine_minerale": "Ridicat (Fe,Mg,Zn)"
+  },
+  {
+    "ingredient": "Pâine integrală (50 g; P)",
+    "proteine_hq": "Limitat (5.0; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.0±0.2)",
+    "fibra_insolubila": "Mediu (3.2; C)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Mediu (Fe,Mg)"
+  },
+  {
+    "ingredient": "Pâine albă (50 g; P)",
+    "proteine_hq": "Limitat (4.5; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (1.5)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Secară boabe (45 g)",
+    "proteine_hq": "Limitat (4.6; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.4)",
+    "fibra_insolubila": "Ridicat (5.4; C)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Ridicat (Mn,Mg,Fe)"
+  },
+  {
+    "ingredient": "Pâine de secară (50 g; P)",
+    "proteine_hq": "Limitat (4.8; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (0.9)",
+    "fibra_insolubila": "Mediu (3.1; C)",
+    "grasimi_sanatoase": "Limitat (1.6)",
+    "vitamine_minerale": "Ridicat (Mn,Mg)"
+  },
+  {
+    "ingredient": "Orez brun (45 g)",
+    "proteine_hq": "Limitat (3.6; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (1.4; C)",
+    "grasimi_sanatoase": "Limitat (2.2)",
+    "vitamine_minerale": "Mediu (Mn,Mg)"
+  },
+  {
+    "ingredient": "Orez alb (45 g)",
+    "proteine_hq": "Limitat (3.4; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.1)",
+    "fibra_insolubila": "Limitat (0.5)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Mălai galben / făină de porumb (45 g; P)",
+    "proteine_hq": "Limitat (4.2; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Mediu (2.7)",
+    "grasimi_sanatoase": "Limitat (1.5)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Popcorn aeropop (8 g)",
+    "proteine_hq": "Limitat (1.0; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Mediu (1.1; C)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (P,Mg)"
+  },
+  {
+    "ingredient": "Quinoa (45 g)",
+    "proteine_hq": "Limitat (6.3; complet)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Limitat (2.5)",
+    "grasimi_sanatoase": "Limitat (2.7)",
+    "vitamine_minerale": "Ridicat (Mg,Fe,Mn,Folat)"
+  },
+  {
+    "ingredient": "Hrișcă (45 g)",
+    "proteine_hq": "Limitat (6.0; complet)",
+    "fibra_solubila": "Limitat (0.9)",
+    "fibra_insolubila": "Mediu (3.6)",
+    "grasimi_sanatoase": "Limitat (1.3)",
+    "vitamine_minerale": "Ridicat (Mn,Mg,Cu)"
+  },
+  {
+    "ingredient": "Mei (45 g)",
+    "proteine_hq": "Limitat (5.0; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Mediu (3.2)",
+    "grasimi_sanatoase": "Limitat (1.8)",
+    "vitamine_minerale": "Mediu (Mg,P)"
+  },
+  {
+    "ingredient": "Bulgur (45 g; P)",
+    "proteine_hq": "Limitat (4.2; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Mediu (2.8)",
+    "grasimi_sanatoase": "Limitat (0.6)",
+    "vitamine_minerale": "Mediu (Mn)"
+  },
+  {
+    "ingredient": "Couscous (45 g; P)",
+    "proteine_hq": "Limitat (4.3; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.8)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Spelta (alac) boabe (45 g)",
+    "proteine_hq": "Limitat (6.0; PDCAAS<0.70)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Mediu (3.6; C)",
+    "grasimi_sanatoase": "Limitat (1.5)",
+    "vitamine_minerale": "Ridicat (Mn,Mg)"
+  },
+  {
+    "ingredient": "Arpacaș de grâu (45 g; P)",
+    "proteine_hq": "Limitat (4.7; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Mediu (2.5; C)",
+    "grasimi_sanatoase": "Limitat (0.7)",
+    "vitamine_minerale": "Mediu (Mn)"
+  },
+  {
+    "ingredient": "Paste din grâu dur – albe (uscate 55 g; P)",
+    "proteine_hq": "Limitat (7.0; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Mediu (2.0)",
+    "grasimi_sanatoase": "Limitat (1.2)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Paste din grâu integral (uscate 55 g; P)",
+    "proteine_hq": "Limitat (7.3; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Mediu (4.4; C)",
+    "grasimi_sanatoase": "Limitat (2.2)",
+    "vitamine_minerale": "Ridicat (Fe,Mg)"
+  },
+  {
+    "ingredient": "Lipi(e)/Tortilla din grâu (50 g; P)",
+    "proteine_hq": "Limitat (4.7; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Fulgii de porumb simpli (40 g; P)",
+    "proteine_hq": "Limitat (3.6; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (0.6)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Orez pentru risotto – arborio (45 g)",
+    "proteine_hq": "Limitat (3.4; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.1)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Migdale",
+    "proteine_hq": "Limitat (6.4)",
+    "fibra_solubila": "Limitat (0.6±)",
+    "fibra_insolubila": "Mediu (3.2)",
+    "grasimi_sanatoase": "Mediu (13.4; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Vit E,Mg)"
+  },
+  {
+    "ingredient": "Nuci (walnuts)",
+    "proteine_hq": "Limitat (4.6)",
+    "fibra_solubila": "Limitat (0.5±)",
+    "fibra_insolubila": "Mediu (1.9)",
+    "grasimi_sanatoase": "Superior (16.9; ω-3=2.7)",
+    "vitamine_minerale": "Superior (Cu,Mn)"
+  },
+  {
+    "ingredient": "Alune de pădure",
+    "proteine_hq": "Limitat (4.5)",
+    "fibra_solubila": "Limitat (0.5±)",
+    "fibra_insolubila": "Mediu (2.6)",
+    "grasimi_sanatoase": "Ridicat (16.1; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Vit E,Mn)"
+  },
+  {
+    "ingredient": "Arahide prăjite",
+    "proteine_hq": "Limitat (7.7; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.5±)",
+    "fibra_insolubila": "Mediu (2.0)",
+    "grasimi_sanatoase": "Mediu (12.0; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Niacin,Mg)"
+  },
+  {
+    "ingredient": "Fistic",
+    "proteine_hq": "Limitat (6.2)",
+    "fibra_solubila": "Limitat (0.5±)",
+    "fibra_insolubila": "Mediu (2.5)",
+    "grasimi_sanatoase": "Mediu (11.3; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Vit B6,K)"
+  },
+  {
+    "ingredient": "Caju",
+    "proteine_hq": "Limitat (5.5)",
+    "fibra_solubila": "Limitat (0.4±)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Mediu (9.5; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Fe,Zn,Cu)"
+  },
+  {
+    "ingredient": "Nuci pecan",
+    "proteine_hq": "Limitat (2.6)",
+    "fibra_solubila": "Limitat (0.3±)",
+    "fibra_insolubila": "Mediu (2.0)",
+    "grasimi_sanatoase": "Ridicat (18.3; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Mn,Cu)"
+  },
+  {
+    "ingredient": "Nuci braziliene",
+    "proteine_hq": "Limitat (4.3)",
+    "fibra_solubila": "Limitat (0.3±)",
+    "fibra_insolubila": "Mediu (1.9)",
+    "grasimi_sanatoase": "Mediu (13.2; –ω6:ω3)",
+    "vitamine_minerale": "Superior (Se)"
+  },
+  {
+    "ingredient": "Sâmburi de pin",
+    "proteine_hq": "Limitat (3.9)",
+    "fibra_solubila": "Limitat (0.3±)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Ridicat (15.9; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Mg,Fe)"
+  },
+  {
+    "ingredient": "Semințe de floarea-soarelui",
+    "proteine_hq": "Limitat (6.2)",
+    "fibra_solubila": "Limitat (0.5±)",
+    "fibra_insolubila": "Mediu (3.0)",
+    "grasimi_sanatoase": "Ridicat (16.8; –ω6:ω3)",
+    "vitamine_minerale": "Superior (Vit E,Se)"
+  },
+  {
+    "ingredient": "Semințe de dovleac",
+    "proteine_hq": "Limitat (8.9; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.3±)",
+    "fibra_insolubila": "Limitat (1.7)",
+    "grasimi_sanatoase": "Mediu (10.5; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Mg,Zn)"
+  },
+  {
+    "ingredient": "Semințe de susan",
+    "proteine_hq": "Limitat (5.3)",
+    "fibra_solubila": "Limitat (0.4±)",
+    "fibra_insolubila": "Mediu (3.1)",
+    "grasimi_sanatoase": "Mediu (12.1; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Cu,Ca)"
+  },
+  {
+    "ingredient": "Semințe de in",
+    "proteine_hq": "Limitat (5.5)",
+    "fibra_solubila": "Ridicat (2.0±)",
+    "fibra_insolubila": "Ridicat (6.2)",
+    "grasimi_sanatoase": "Superior (10.8; ω-3=6.8)",
+    "vitamine_minerale": "Ridicat (Mn,Vit B1)"
+  },
+  {
+    "ingredient": "Semințe de chia",
+    "proteine_hq": "Limitat (5.0)",
+    "fibra_solubila": "Ridicat (2.4±)",
+    "fibra_insolubila": "Ridicat (7.9)",
+    "grasimi_sanatoase": "Superior (10.8; ω-3=5.3)",
+    "vitamine_minerale": "Ridicat (Ca,Mg)"
+  },
+  {
+    "ingredient": "Semințe de cânepă decorticate",
+    "proteine_hq": "Limitat (9.5; PDCAAS<0.70)",
+    "fibra_solubila": "Limitat (0.4±)",
+    "fibra_insolubila": "Limitat (1.1)",
+    "grasimi_sanatoase": "Superior (14.6; ω-3=2.6)",
+    "vitamine_minerale": "Ridicat (Mg,Zn)"
+  },
+  {
+    "ingredient": "Semințe de mac",
+    "proteine_hq": "Limitat (5.3)",
+    "fibra_solubila": "Limitat (0.6±)",
+    "fibra_insolubila": "Ridicat (5.0)",
+    "grasimi_sanatoase": "Mediu (12.8; –ω6:ω3)",
+    "vitamine_minerale": "Ridicat (Ca,Mn)"
+  },
+  {
+    "ingredient": "Ulei de măsline (EVOO 1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (12.5)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de rapiță (canola 1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (13.9)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de floarea-soarelui (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (12.8; –ω6:ω3)",
+    "vitamine_minerale": "Superior (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de in (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Superior (13.5; ω-3≈8.0)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de sâmburi de struguri (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (13.5; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de susan (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (12.0; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de porumb (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (13.0; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de soia (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (12.8; ω-3≈1.1)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de dovleac (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (13.5; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de avocado (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (12.5)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de nucă (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (13.0; ω-3≈1.4)",
+    "vitamine_minerale": "Ridicat (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de alune de pădure (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (12.0; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Ulei de pecan (1 Lg)",
+    "proteine_hq": "",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (12.5; –ω6:ω3)",
+    "vitamine_minerale": "Mediu (Vit E)"
+  },
+  {
+    "ingredient": "Unt de arahide (2 Lg)",
+    "proteine_hq": "Limitat (8.0; PDCAAS<0.70; P)",
+    "fibra_solubila": "Limitat (0.3±)",
+    "fibra_insolubila": "Limitat (1.7)",
+    "grasimi_sanatoase": "Mediu (12.0; –ω6:ω3; P)",
+    "vitamine_minerale": "Ridicat (Niacin,Mg,Vit E)"
+  },
+  {
+    "ingredient": "Piept de pui (gătit 85 g)",
+    "proteine_hq": "Superior (31.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.9)",
+    "vitamine_minerale": "Ridicat (Niacina,Vit B6,Se)"
+  },
+  {
+    "ingredient": "Pulpe de pui fără piele (85 g)",
+    "proteine_hq": "Ridicat (20.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (5.5)",
+    "vitamine_minerale": "Mediu (Se,Vit B6)"
+  },
+  {
+    "ingredient": "Piept de curcan (85 g)",
+    "proteine_hq": "Superior (29.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.5)",
+    "vitamine_minerale": "Ridicat (Niacina,Vit B6,Se)"
+  },
+  {
+    "ingredient": "Cotlet de porc slab (85 g)",
+    "proteine_hq": "Superior (21.5)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (7.3)",
+    "vitamine_minerale": "Ridicat (Tiamină,Se,Fe)"
+  },
+  {
+    "ingredient": "Ceafă de porc (85 g)",
+    "proteine_hq": "Ridicat (18.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (7.5)",
+    "vitamine_minerale": "Mediu (Se)"
+  },
+  {
+    "ingredient": "Mușchi de vită slab (85 g)",
+    "proteine_hq": "Superior (21.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (7.0)",
+    "vitamine_minerale": "Ridicat (Fe,Zn,Vit B12)"
+  },
+  {
+    "ingredient": "Antricot de vită (85 g)",
+    "proteine_hq": "Ridicat (19.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (8.5)",
+    "vitamine_minerale": "Ridicat (Fe,Zn)"
+  },
+  {
+    "ingredient": "Pulpa de miel (85 g)",
+    "proteine_hq": "Superior (20.2)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (7.9)",
+    "vitamine_minerale": "Ridicat (Fe,Vit B12,Zn)"
+  },
+  {
+    "ingredient": "Ficat de pui (85 g)",
+    "proteine_hq": "Ridicat (17.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.7)",
+    "vitamine_minerale": "Superior (Vit A,Fe,Vit B12)"
+  },
+  {
+    "ingredient": "Ficat de vită (85 g)",
+    "proteine_hq": "Superior (20.4)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (2.2)",
+    "vitamine_minerale": "Superior (Vit A,Fe,Cu,Vit B12)"
+  },
+  {
+    "ingredient": "Ficat de porc (85 g)",
+    "proteine_hq": "Ridicat (18.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (2.5)",
+    "vitamine_minerale": "Superior (Vit A,Fe,Vit B12)"
+  },
+  {
+    "ingredient": "Ou de găină (1 mare ≈50 g)",
+    "proteine_hq": "Mediu (6.3; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (5.0)",
+    "vitamine_minerale": "Ridicat (Vit B12,Se,Vit D)"
+  },
+  {
+    "ingredient": "Somon atlantic (85 g)",
+    "proteine_hq": "Ridicat (20.4)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Superior (11.8; ω-3≈2.2)",
+    "vitamine_minerale": "Superior (Vit D,Se,Vit B12,ω-3)"
+  },
+  {
+    "ingredient": "Macrou (85 g)",
+    "proteine_hq": "Ridicat (19.7)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Superior (11.6; ω-3≈2.1)",
+    "vitamine_minerale": "Superior (Vit D,Se,Vit B12,ω-3)"
+  },
+  {
+    "ingredient": "Hering (85 g)",
+    "proteine_hq": "Ridicat (20.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Superior (11.0; ω-3≈1.8)",
+    "vitamine_minerale": "Superior (Vit D,Se,ω-3)"
+  },
+  {
+    "ingredient": "Sardine la conservă",
+    "proteine_hq": " cu os (85 g",
+    "fibra_solubila": " P)",
+    "fibra_insolubila": "Superior (24.6)",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": ",Superior (9.8; ω-3≈2.0),Superior (Ca,Vit D,Vit B12,ω-3)"
+  },
+  {
+    "ingredient": "Ton la conservă în apă (85 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Superior (23.6)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Mediu (2.0; ω-3≈0.8),Ridicat (Vit B12,Se)"
+  },
+  {
+    "ingredient": "Păstrăv (85 g)",
+    "proteine_hq": "Ridicat (20.5)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Ridicat (7.5; ω-3≈1.0)",
+    "vitamine_minerale": "Ridicat (Se,Vit B12)"
+  },
+  {
+    "ingredient": "Cod (85 g)",
+    "proteine_hq": "Mediu (17.9)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Mediu (Se,Vit B12)"
+  },
+  {
+    "ingredient": "Crap (85 g)",
+    "proteine_hq": "Ridicat (18.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (5.0; ω-3≈0.7)",
+    "vitamine_minerale": "Mediu (Se)"
+  },
+  {
+    "ingredient": "Șalău (85 g)",
+    "proteine_hq": "Mediu (19.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.2)",
+    "vitamine_minerale": "Mediu (Se)"
+  },
+  {
+    "ingredient": "Știucă (85 g)",
+    "proteine_hq": "Mediu (19.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.0)",
+    "vitamine_minerale": "Mediu (Se)"
+  },
+  {
+    "ingredient": "Dorada (85 g)",
+    "proteine_hq": "Ridicat (20.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (6.0)",
+    "vitamine_minerale": "Ridicat (Se)"
+  },
+  {
+    "ingredient": "Biban de mare (85 g)",
+    "proteine_hq": "Ridicat (19.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (5.5)",
+    "vitamine_minerale": "Ridicat (Se)"
+  },
+  {
+    "ingredient": "Creveți (85 g)",
+    "proteine_hq": "Superior (20.3)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (0.8; ω-3≈0.3)",
+    "vitamine_minerale": "Mediu (Se,Vit B12,Cu)"
+  },
+  {
+    "ingredient": "Midii (85 g)",
+    "proteine_hq": "Ridicat (14.6)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Mediu (1.0; ω-3≈0.6)",
+    "vitamine_minerale": "Superior (Fe,Vit B12,Se)"
+  },
+  {
+    "ingredient": "Calamari (85 g)",
+    "proteine_hq": "Mediu (15.0)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.0)",
+    "vitamine_minerale": "Mediu (Cu,Se)"
+  },
+  {
+    "ingredient": "Somon afumat (56 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Mediu (13.0)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Ridicat (7.5; ω-3≈1.4),Ridicat (Se,ω-3)"
+  },
+  {
+    "ingredient": "Macrou afumat (56 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Mediu (12.0)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Ridicat (8.0; ω-3≈1.3),Ridicat (Vit D,ω-3)"
+  },
+  {
+    "ingredient": "Șuncă crud-uscată / prosciutto (30 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Limitat (8.0)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Mediu (6.0; nesaturate<70%→–1),Limitat"
+  },
+  {
+    "ingredient": "Șunculiță afumată / bacon (30 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Limitat (5.0)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Limitat (3.5; nesaturate<70%→–1),Limitat"
+  },
+  {
+    "ingredient": "Icre crude sărate (roe) (30 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Limitat (4.0)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Mediu (6.0; ω-3≈1.0),Ridicat (Vit B12,Se,ω-3)"
+  },
+  {
+    "ingredient": "Lapte integral (240 ml)",
+    "proteine_hq": "Mediu (7.7; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.1)",
+    "vitamine_minerale": "Ridicat (Ca,Vit B12)"
+  },
+  {
+    "ingredient": "Lapte degresat (240 ml)",
+    "proteine_hq": "Mediu (8.4; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Ca,Vit B12)"
+  },
+  {
+    "ingredient": "Iaurt simplu (170 g)",
+    "proteine_hq": "Mediu (7.3; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Ridicat (Ca,Vit B12)"
+  },
+  {
+    "ingredient": "Iaurt grecesc (170 g)",
+    "proteine_hq": "Ridicat (17.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.0)",
+    "vitamine_minerale": "Ridicat (Ca,Vit B12,Se)"
+  },
+  {
+    "ingredient": "Chefir (240 ml)",
+    "proteine_hq": "Mediu (7.9; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.5)",
+    "vitamine_minerale": "Ridicat (Ca,Vit B12)"
+  },
+  {
+    "ingredient": "Telemea (vacă/oaie) (40 g)",
+    "proteine_hq": "Mediu (7.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.2)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Cașcaval (42 g)",
+    "proteine_hq": "Mediu (10.5; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (4.3)",
+    "vitamine_minerale": "Ridicat (Ca,Vit A)"
+  },
+  {
+    "ingredient": "Brânză de vacă (cottage) (110 g)",
+    "proteine_hq": "Ridicat (12.2; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (0.9)",
+    "vitamine_minerale": "Ridicat (Ca,P,Se)"
+  },
+  {
+    "ingredient": "Brânză de burduf (40 g)",
+    "proteine_hq": "Mediu (8.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.0)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Mozzarella proaspătă (55 g)",
+    "proteine_hq": "Mediu (10.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.0)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Feta (40 g)",
+    "proteine_hq": "Mediu (8.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.2)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Parmezan (30 g)",
+    "proteine_hq": "Mediu (10.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (2.5)",
+    "vitamine_minerale": "Ridicat (Ca,Vit A)"
+  },
+  {
+    "ingredient": "Brie/Camembert (40 g)",
+    "proteine_hq": "Mediu (8.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.3)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Ricotta (110 g)",
+    "proteine_hq": "Mediu (9.0; complet)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.7)",
+    "vitamine_minerale": "Ridicat (Ca)"
+  },
+  {
+    "ingredient": "Smântână 20% (30 g)",
+    "proteine_hq": "Limitat (0.6)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (1.8; nesaturate<70%→–1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Unt (14 g)",
+    "proteine_hq": "Limitat (0.1)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (3.4; nesaturate<70%→–1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Ghee (14 g)",
+    "proteine_hq": "Limitat (0.1)",
+    "fibra_solubila": "",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "Limitat (4.0; nesaturate<70%→–1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Izolat proteic de zer (30 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Superior (27.0; complet)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Limitat (0.5),Mediu (Ca,Riboflavină)"
+  },
+  {
+    "ingredient": "Cazeină micelară (30 g",
+    "proteine_hq": " P)",
+    "fibra_solubila": "Superior (26.4; complet)",
+    "fibra_insolubila": "",
+    "grasimi_sanatoase": "",
+    "vitamine_minerale": "Limitat (0.5),Mediu (Ca,Riboflavină)"
+  },
+  {
+    "ingredient": "Lapte de soia neîndulcit (240 ml; nefortificat)",
+    "proteine_hq": "Mediu (8.0; complet)",
+    "fibra_solubila": "Mediu (0.5)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (2.2)",
+    "vitamine_minerale": "Mediu (Fe,K)"
+  },
+  {
+    "ingredient": "Iaurt de soia neîndulcit (170 g; nefortificat)",
+    "proteine_hq": "Mediu (6.0; complet)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (2.5)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Lapte de migdale neîndulcit (240 ml; nefortificat)",
+    "proteine_hq": "Limitat (1.2)",
+    "fibra_solubila": "Limitat (0.1)",
+    "fibra_insolubila": "Limitat (0.3)",
+    "grasimi_sanatoase": "Limitat (3.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Lapte de ovăz neîndulcit (240 ml; nefortificat)",
+    "proteine_hq": "Limitat (3.0)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (2.0)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Ceapă",
+    "proteine_hq": "Limitat (1.0)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Usturoi",
+    "proteine_hq": "Limitat (5.4)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.3)",
+    "grasimi_sanatoase": "Limitat (0.6)",
+    "vitamine_minerale": "Ridicat (Vit B6,Mn)"
+  },
+  {
+    "ingredient": "Praz",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Limitat (1.3)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Folat,K)"
+  },
+  {
+    "ingredient": "Ceapă verde",
+    "proteine_hq": "Limitat (1.8)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.1)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit K,Vit C)"
+  },
+  {
+    "ingredient": "Morcov",
+    "proteine_hq": "Limitat (0.8)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Limitat (1.4)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit A,Vit K)"
+  },
+  {
+    "ingredient": "Păstârnac",
+    "proteine_hq": "Limitat (1.6)",
+    "fibra_solubila": "Mediu (1.2)",
+    "fibra_insolubila": "Mediu (2.8)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Pătrunjel rădăcină",
+    "proteine_hq": "Limitat (1.4)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Limitat (2.3)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Vit C,Folat)"
+  },
+  {
+    "ingredient": "Țelină rădăcină (celeriac)",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (2.0)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Vit K)"
+  },
+  {
+    "ingredient": "Sfeclă roșie",
+    "proteine_hq": "Limitat (1.4)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (1.5)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Folat,Mn)"
+  },
+  {
+    "ingredient": "Ridiche",
+    "proteine_hq": "Limitat (0.7)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C)"
+  },
+  {
+    "ingredient": "Nap (turnip)",
+    "proteine_hq": "Limitat (0.8)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Limitat (0.0)",
+    "vitamine_minerale": "Mediu (Vit C)"
+  },
+  {
+    "ingredient": "Gulie (kohlrabi)",
+    "proteine_hq": "Limitat (1.8)",
+    "fibra_solubila": "Mediu (1.2)",
+    "fibra_insolubila": "Limitat (1.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C)"
+  },
+  {
+    "ingredient": "Cartof alb cu coajă (110 g)",
+    "proteine_hq": "Limitat (2.4)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Limitat (1.8; C)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit C,K,Vit B6)"
+  },
+  {
+    "ingredient": "Cartof dulce (110 g)",
+    "proteine_hq": "Limitat (2.0)",
+    "fibra_solubila": "Mediu (1.1)",
+    "fibra_insolubila": "Limitat (2.2)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit A,Vit C)"
+  },
+  {
+    "ingredient": "Topinambur (110 g)",
+    "proteine_hq": "Limitat (2.4)",
+    "fibra_solubila": "Ridicat (2.8)",
+    "fibra_insolubila": "Limitat (1.5)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (K,Fe)"
+  },
+  {
+    "ingredient": "Scorzonera",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Mediu (1.5)",
+    "fibra_insolubila": "Limitat (1.8)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (K)"
+  },
+  {
+    "ingredient": "Țelină apio (tulpini)",
+    "proteine_hq": "Limitat (0.7)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (1.2)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit K)"
+  },
+  {
+    "ingredient": "Varză albă",
+    "proteine_hq": "Limitat (1.3)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.2)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Varză roșie",
+    "proteine_hq": "Limitat (1.4)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Limitat (1.3)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Varză creață (savoy)",
+    "proteine_hq": "Limitat (1.7)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Varză de Bruxelles",
+    "proteine_hq": "Limitat (2.9)",
+    "fibra_solubila": "Mediu (1.4)",
+    "fibra_insolubila": "Limitat (1.9)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K,Folat)"
+  },
+  {
+    "ingredient": "Conopidă",
+    "proteine_hq": "Limitat (1.6)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Broccoli",
+    "proteine_hq": "Limitat (2.4)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (1.4)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Bok choy (pak choi)",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Limitat (0.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit A,Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Broccolini",
+    "proteine_hq": "Limitat (2.8)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Limitat (1.5)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Roșii",
+    "proteine_hq": "Limitat (0.8)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (0.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C,Vit A)"
+  },
+  {
+    "ingredient": "Ardei gras/gogoșar",
+    "proteine_hq": "Limitat (0.8)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Superior (Vit C,Vit A,Vit B6)"
+  },
+  {
+    "ingredient": "Ardei iute",
+    "proteine_hq": "Limitat (1.1)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Vit C)"
+  },
+  {
+    "ingredient": "Vinete",
+    "proteine_hq": "Limitat (0.8)",
+    "fibra_solubila": "Mediu (1.0)",
+    "fibra_insolubila": "Limitat (1.5)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Dovlecel (zucchini)",
+    "proteine_hq": "Limitat (1.3)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Dovleac plăcintar (110 g)",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit A)"
+  },
+  {
+    "ingredient": "Castravete",
+    "proteine_hq": "Limitat (0.5)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (0.7)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Salată verde (lăptucă)",
+    "proteine_hq": "Limitat (0.9)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit K,Folat)"
+  },
+  {
+    "ingredient": "Spanac",
+    "proteine_hq": "Limitat (2.5)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Limitat (1.2)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Superior (Vit K,Folat,Fe)"
+  },
+  {
+    "ingredient": "Kale",
+    "proteine_hq": "Limitat (3.7)",
+    "fibra_solubila": "Mediu (1.4)",
+    "fibra_insolubila": "Limitat (2.0)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Superior (Vit K,Vit C,Vit A)"
+  },
+  {
+    "ingredient": "Rucola",
+    "proteine_hq": "Limitat (2.6)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Limitat (1.4)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Ridicat (Vit K,Folat)"
+  },
+  {
+    "ingredient": "Mangold (chard)",
+    "proteine_hq": "Limitat (1.8)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Limitat (1.4)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Ridicat (Vit K,Mg)"
+  },
+  {
+    "ingredient": "Endivă/Radicchio",
+    "proteine_hq": "Limitat (1.1)",
+    "fibra_solubila": "Limitat (0.6)",
+    "fibra_insolubila": "Limitat (1.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit K)"
+  },
+  {
+    "ingredient": "Fenicul",
+    "proteine_hq": "Limitat (1.2)",
+    "fibra_solubila": "Limitat (0.9)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Anghinare",
+    "proteine_hq": "Limitat (2.8)",
+    "fibra_solubila": "Mediu (1.7)",
+    "fibra_insolubila": "Mediu (2.9)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Folat,K,Mg)"
+  },
+  {
+    "ingredient": "Sparanghel",
+    "proteine_hq": "Limitat (1.9)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.3)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Folat,Vit K)"
+  },
+  {
+    "ingredient": "Fasole verde/păstăi",
+    "proteine_hq": "Limitat (1.8)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (2.2)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Vit C,Vit K)"
+  },
+  {
+    "ingredient": "Porumb dulce (110 g)",
+    "proteine_hq": "Limitat (3.3)",
+    "fibra_solubila": "Mediu (1.3)",
+    "fibra_insolubila": "Mediu (4.7)",
+    "grasimi_sanatoase": "Limitat (1.5)",
+    "vitamine_minerale": "Mediu (Tiamină,Folat)"
+  },
+  {
+    "ingredient": "Ciuperci champignon",
+    "proteine_hq": "Limitat (2.6)",
+    "fibra_solubila": "Limitat (0.3)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Se,Vit B2)"
+  },
+  {
+    "ingredient": "Ciuperci pleurotus",
+    "proteine_hq": "Limitat (2.7)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Niacin,Cu)"
+  },
+  {
+    "ingredient": "Hrib (porcini)",
+    "proteine_hq": "Limitat (3.0)",
+    "fibra_solubila": "Limitat (0.7)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit B2,Cu)"
+  },
+  {
+    "ingredient": "Gălbiori",
+    "proteine_hq": "Limitat (1.5)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Vit D*,Cu)"
+  },
+  {
+    "ingredient": "Ghebe",
+    "proteine_hq": "Limitat (2.0)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.1)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Se)"
+  },
+  {
+    "ingredient": "Shiitake",
+    "proteine_hq": "Limitat (1.9)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (1.3)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Ridicat (Cu,Vit B5)"
+  },
+  {
+    "ingredient": "Alge wakame",
+    "proteine_hq": "Limitat (2.5)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (0.3)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Superior (Iod,Vit K,Ca)"
+  },
+  {
+    "ingredient": "Nori (alge uscate)",
+    "proteine_hq": "Limitat (3.0)",
+    "fibra_solubila": "Limitat (0.5)",
+    "fibra_insolubila": "Limitat (1.0)",
+    "grasimi_sanatoase": "Limitat (0.3)",
+    "vitamine_minerale": "Superior (Iod)"
+  },
+  {
+    "ingredient": "Varză murată (85 g)",
+    "proteine_hq": "Limitat (1.1)",
+    "fibra_solubila": "Limitat (0.8)",
+    "fibra_insolubila": "Limitat (2.1)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C)"
+  },
+  {
+    "ingredient": "Castraveți murați (85 g)",
+    "proteine_hq": "Limitat (0.5)",
+    "fibra_solubila": "Limitat (0.2)",
+    "fibra_insolubila": "Limitat (0.6)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Limitat"
+  },
+  {
+    "ingredient": "Gogoșari murați (85 g)",
+    "proteine_hq": "Limitat (0.7)",
+    "fibra_solubila": "Limitat (0.4)",
+    "fibra_insolubila": "Limitat (0.8)",
+    "grasimi_sanatoase": "Limitat (0.1)",
+    "vitamine_minerale": "Mediu (Vit C)"
+  },
+  {
+    "ingredient": "Okra (bame)",
+    "proteine_hq": "Limitat (1.9)",
+    "fibra_solubila": "Mediu (1.6)",
+    "fibra_insolubila": "Limitat (1.6)",
+    "grasimi_sanatoase": "Limitat (0.2)",
+    "vitamine_minerale": "Mediu (Vit C,K)"
+  }  
+]
