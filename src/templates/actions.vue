@@ -85,12 +85,12 @@ const PRIORITY_CONFIG = {
 // Computed properties for better performance
 const rootActions = computed(() => {
     const filtered = actions.value.filter(action => !action.parent_id);
-    // Sort by status (incomplete first), then by creation date (newest first)
-    return filtered.sort((a, b) => {
-        if (a.status !== b.status) {
-            return a.status ? 1 : -1; // Incomplete (false) first, completed (true) last
+    // Sort by status (incomplete first), then by creation date (oldest first)
+    return filtered.sort((action_a, action_b) => {
+        if (action_a.status !== action_b.status) {
+            return action_a.status ? 1 : -1; // Incomplete (false) first, completed (true) last
         }
-        return new Date(b.created_at) - new Date(a.created_at); // Newest first within each group
+        return new Date(action_a.created_at) - new Date(action_b.created_at); // Oldest first within each group
     });
 });
 
@@ -107,11 +107,11 @@ const subActionsByParent = computed(() => {
     
     // Sort sub-actions within each parent group
     map.forEach((subActions, parentId) => {
-        subActions.sort((a, b) => {
-            if (a.status !== b.status) {
-                return a.status ? 1 : -1; // Incomplete first, completed last
+        subActions.sort((action_a, action_b) => {
+            if (action_a.status !== action_b.status) {
+                return action_a.status ? 1 : -1; // Incomplete first, completed last
             }
-            return new Date(b.created_at) - new Date(a.created_at); // Newest first within each group
+            return new Date(action_a.created_at) - new Date(action_b.created_at); // Oldest first within each group
         });
     });
     
