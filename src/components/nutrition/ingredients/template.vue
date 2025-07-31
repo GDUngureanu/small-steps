@@ -1,13 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
-import ArticleTemplate from '../../templates/article.vue';
-import ActionsTemplate from '../../templates/actions.vue';
-import SuggestionsTemplate from '../../templates/suggestions.vue';
-import suggestions from './suggestions.json';
+import ArticleTemplate from '../../../templates/article.vue';
+import ActionsTemplate from '../../../templates/actions.vue';
 import ingredients from './ingredients.json';
 
 defineOptions({
-    name: 'NutritionTemplate'
+    name: 'IngredientsTemplate'
 });
 
 // Table filtering and sorting
@@ -111,7 +109,7 @@ const getNutritionalValueClass = (value) => {
 
 <template>
 
-    <ArticleTemplate title="Actions" meta="July 31, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Ingredients Actions" meta="July 31, 2025 by G. D. Ungureanu">
         <ActionsTemplate list-id="7c2e4a8b-9f1d-4e3a-b5c6-8d9f2a1e4c7b" />
     </ArticleTemplate>
 

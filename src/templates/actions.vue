@@ -615,33 +615,6 @@ watch(
             </div>
         </div>
 
-        <!-- Statistics -->
-        <div v-if="actions.length > 0" class="card mt-4">
-            <div class="card-body">
-                <h6 class="card-title text-muted mb-3">
-                    <i class="bi bi-graph-up me-2"></i>
-                    Statistics
-                </h6>
-                <div class="row text-center">
-                    <div class="col-3">
-                        <div class="h4 mb-0 text-primary">{{ actions.length }}</div>
-                        <small class="text-muted">Total</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="h4 mb-0 text-success">{{actions.filter(a => a.status).length}}</div>
-                        <small class="text-muted">Completed</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="h4 mb-0 text-warning">{{actions.filter(a => !a.status).length}}</div>
-                        <small class="text-muted">Pending</small>
-                    </div>
-                    <div class="col-3">
-                        <div class="h4 mb-0 text-info">{{ rootActions.length }}</div>
-                        <small class="text-muted">Main Actions</small>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Delete Confirmation Modal -->
         <div class="modal fade" :class="{ show: showDeleteModal }" :style="{ display: showDeleteModal ? 'block' : 'none' }" tabindex="-1" v-if="showDeleteModal">

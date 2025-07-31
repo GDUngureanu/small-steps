@@ -13,7 +13,15 @@
           <li class="nav-item px-2"><RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/nutrition" class="nav-link fw-medium" active-class="active">Nutrition</RouterLink></li>
+          <li class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle fw-medium" href="#" id="nutritionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Nutrition
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="nutritionDropdown">
+              <li><RouterLink to="/nutrition" class="dropdown-item">Overview</RouterLink></li>
+              <li><RouterLink to="/nutrition/ingredients" class="dropdown-item">Ingredients</RouterLink></li>
+            </ul>
+          </li>
           <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/books" class="nav-link fw-medium" active-class="active">Books</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/poems" class="nav-link fw-medium" active-class="active">Poems</RouterLink></li>
