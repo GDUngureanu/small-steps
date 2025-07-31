@@ -22,9 +22,26 @@
               <li><RouterLink to="/nutrition/ingredients" class="dropdown-item">Ingredients</RouterLink></li>
             </ul>
           </li>
-          <li class="nav-item px-2"><RouterLink to="/anime" class="nav-link fw-medium" active-class="active">Anime</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/books" class="nav-link fw-medium" active-class="active">Books</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/poems" class="nav-link fw-medium" active-class="active">Poems</RouterLink></li>
+          <li class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle fw-medium" href="#" id="literatureDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Literature
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="literatureDropdown">
+              <li><RouterLink to="/literature" class="dropdown-item">Overview</RouterLink></li>
+              <li><RouterLink to="/books" class="dropdown-item">Books</RouterLink></li>
+              <li><RouterLink to="/poems" class="dropdown-item">Poems</RouterLink></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle fw-medium" href="#" id="entertainmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Entertainment
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="entertainmentDropdown">
+              <li><RouterLink to="/entertainment" class="dropdown-item">Overview</RouterLink></li>
+              <li><RouterLink to="/anime" class="dropdown-item">Anime</RouterLink></li>
+              <li><RouterLink to="/movies" class="dropdown-item">Movies</RouterLink></li>
+            </ul>
+          </li>
           <li class="nav-item px-2"><RouterLink to="/experiments" class="nav-link fw-medium" active-class="active">Experiments</RouterLink></li>
           <li class="nav-item px-2"><RouterLink to="/random" class="nav-link fw-medium" active-class="active">Random</RouterLink></li>
         </ul>

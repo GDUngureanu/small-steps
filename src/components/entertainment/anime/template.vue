@@ -19,8 +19,8 @@
 -->
 
 <script setup>
-import ArticleTemplate from '../../templates/article.vue';
-import SuggestionsTemplate from '../../templates/suggestions.vue';
+import ArticleTemplate from '../../../templates/article.vue';
+import SuggestionsTemplate from '../../../templates/suggestions.vue';
 import animeList from './data.json';
 import suggestions from './suggestions.json';
 
