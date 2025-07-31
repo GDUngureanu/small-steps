@@ -1,6 +1,6 @@
 // Vue imports
 import { createApp } from 'vue'
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createWebHashHistory, createRouter } from 'vue-router'
 
 // Third-party library imports
 import { Popover } from 'bootstrap';
@@ -49,7 +49,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHashHistory(),
   routes,
 })
 
