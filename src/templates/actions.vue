@@ -450,8 +450,8 @@ watch(
                 <div class="text-muted">
                     <i class="bi bi-plus-circle fs-5"></i>
                 </div>
-                <input ref="createActionInput" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
-                    @keyup.enter="addAction()" @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
+                <input ref="createActionInput" id="new-action-input" name="new-action" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a new action..." v-model="newActionText"
+                    @keyup.enter="addAction()" @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading" autocomplete="off"
                     style="background: transparent; outline: none;">
             </div>
         </div>
@@ -492,9 +492,9 @@ watch(
                                     <div class="text-muted">
                                         <i class="bi bi-arrow-return-right text-primary"></i>
                                     </div>
-                                    <input :ref="el => createSubActionInputs[action.id] = el" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a sub-action..."
+                                    <input :ref="el => createSubActionInputs[action.id] = el" :id="`sub-action-input-${action.id}`" :name="`sub-action-${action.id}`" type="text" class="form-control border-0 border-bottom border-primary rounded-0 shadow-none" placeholder="Add a sub-action..."
                                         v-model="newSubActionText[action.id]" @keyup.enter="addAction(action.id)" @keyup.escape="delete newSubActionText[action.id]"
-                                        @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading"
+                                        @focus="$event.target.classList.add('border-2')" @blur="$event.target.classList.remove('border-2')" :disabled="loading" autocomplete="off"
                                         style="background: transparent; outline: none;">
                                 </div>
                             </div>

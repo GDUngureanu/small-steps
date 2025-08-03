@@ -229,7 +229,7 @@ const getNutritionalValueClass = (value) => {
                 <span class="input-group-text">
                     <i class="bi bi-search"></i>
                 </span>
-                <input type="text" class="form-control" placeholder="Search ingredients..." v-model="searchFilter" style="border: 1px solid #dee2e6;">
+                <input id="ingredients-search" name="ingredients-search" type="text" class="form-control" placeholder="Search ingredients..." v-model="searchFilter" autocomplete="off" style="border: 1px solid #dee2e6;">
             </div>
             <small class="text-muted">
                 Found {{ filteredIngredients.length }} of {{ ingredients.length }} ingredients
