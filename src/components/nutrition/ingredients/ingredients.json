@@ -929,7 +929,7 @@
     "format": "Uscat",
     "type": "Cereale",
     "vitamins_minerals": "Mediu (Fier)",
-    "notes": "Daca sunt fortificat, scorul la Vitamine si Minerale poate fi Ridicat/Superior",
+    "notes": "Daca sunt fortificats, scorul la Vitamine si Minerale poate fi Ridicat/Superior",
     "protein": 4.0,
     "soluble_fiber": 2.5,
     "insoluble_fiber": 7.5,
@@ -2561,7 +2561,7 @@
     "unsaturated_fats": 0.1
   },
   {
-    "ingredient": "Piept de pui (fara piele)",
+    "ingredient": "Piept de Pui",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2574,7 +2574,7 @@
     "unsaturated_fats": 1.9
   },
   {
-    "ingredient": "Pulpe de pui (fara piele)",
+    "ingredient": "Pulpe de Pui",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2587,7 +2587,7 @@
     "unsaturated_fats": 4.0
   },
   {
-    "ingredient": "Piept de curcan",
+    "ingredient": "Piept de Curcan",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2600,7 +2600,7 @@
     "unsaturated_fats": 2.0
   },
   {
-    "ingredient": "Pulpa de curcan (fara piele)",
+    "ingredient": "Pulpa de Curcan",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2613,7 +2613,7 @@
     "unsaturated_fats": 4.0
   },
   {
-    "ingredient": "Vita slaba (muschi)",
+    "ingredient": "Vita Slaba (Muschi)",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2626,20 +2626,7 @@
     "unsaturated_fats": 5.0
   },
   {
-    "ingredient": "Vita tocata 10% grasime",
-    "preferred": false,
-    "portion": 85.0,
-    "format": "Gătit",
-    "type": "Carne rosie procesata calit.",
-    "vitamins_minerals": "Ridicat (Zinc, Fier)",
-    "notes": "—",
-    "protein": 26.0,
-    "soluble_fiber": 0.0,
-    "insoluble_fiber": 0.0,
-    "unsaturated_fats": 6.0
-  },
-  {
-    "ingredient": "Porc slaba (cotlet)",
+    "ingredient": "Porc Slaba (Cotlet)",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2665,7 +2652,7 @@
     "unsaturated_fats": 6.0
   },
   {
-    "ingredient": "Ficat de vita",
+    "ingredient": "Ficat de Vita",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
@@ -2678,7 +2665,7 @@
     "unsaturated_fats": 4.0
   },
   {
-    "ingredient": "Ficat de pui",
+    "ingredient": "Ficat de Pui",
     "preferred": false,
     "portion": 85.0,
     "format": "Gătit",
