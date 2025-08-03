@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import ArticleTemplate from '../../../templates/article.vue';
 import ActionsTemplate from '../../../templates/actions.vue';
 import ingredients from './ingredients.json';
@@ -14,24 +14,28 @@ const preferatFilter = ref(''); // '' = all, 'true' = preferred only, 'false' = 
 const sortColumn = ref('');
 const sortDirection = ref('asc');
 
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+
 const filteredIngredients = computed(() => {
     let filtered = [...ingredients];
 
     // Apply search filter
     if (searchFilter.value) {
-        const search = searchFilter.value.toLowerCase();
+        const normalizedSearch = normalizeRomanianText(searchFilter.value);
         filtered = filtered.filter(item =>
             Object.values(item).some(value =>
-                String(value).toLowerCase().includes(search)
+                normalizeRomanianText(value).includes(normalizedSearch)
             )
         );
     }
 
-    // Apply preferat filter
+    // Apply preferred filter
     if (preferatFilter.value !== '') {
         const showPreferred = preferatFilter.value === 'true';
         filtered = filtered.filter(item =>
-            Boolean(item.preferat) === showPreferred
+            Boolean(item.preferred) === showPreferred
         );
     }
 
@@ -41,11 +45,19 @@ const filteredIngredients = computed(() => {
             let aVal = a[sortColumn.value];
             let bVal = b[sortColumn.value];
 
-            // Handle boolean sorting for preferat field
-            if (sortColumn.value === 'preferat') {
+            // Handle boolean sorting for preferred field
+            if (sortColumn.value === 'preferred') {
                 aVal = Boolean(aVal);
                 bVal = Boolean(bVal);
                 const result = aVal === bVal ? 0 : (aVal ? 1 : -1);
+                return sortDirection.value === 'asc' ? result : -result;
+            }
+
+            // Handle numeric sorting for nutritional value fields
+            if (['protein', 'soluble_fiber', 'insoluble_fiber', 'unsaturated_fats'].includes(sortColumn.value)) {
+                aVal = Number(aVal) || 0;
+                bVal = Number(bVal) || 0;
+                const result = aVal - bVal;
                 return sortDirection.value === 'asc' ? result : -result;
             }
 
@@ -60,12 +72,53 @@ const filteredIngredients = computed(() => {
     return filtered;
 });
 
+const totalPages = computed(() => {
+    return Math.ceil(filteredIngredients.value.length / itemsPerPage.value);
+});
+
+const paginatedIngredients = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return filteredIngredients.value.slice(start, end);
+});
+
+const visiblePages = computed(() => {
+    const pages = [];
+    const maxVisible = 5;
+    const total = totalPages.value;
+    const current = currentPage.value;
+    
+    if (total <= maxVisible) {
+        for (let i = 1; i <= total; i++) {
+            pages.push(i);
+        }
+    } else {
+        let start = Math.max(1, current - Math.floor(maxVisible / 2));
+        let end = Math.min(total, start + maxVisible - 1);
+        
+        if (end - start + 1 < maxVisible) {
+            start = Math.max(1, end - maxVisible + 1);
+        }
+        
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+    }
+    
+    return pages;
+});
+
+// Reset pagination when filters change
+watch([searchFilter, preferatFilter], () => {
+    currentPage.value = 1;
+});
+
 const sortBy = (column) => {
     if (sortColumn.value === column) {
         sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
     } else {
         sortColumn.value = column;
-        sortDirection.value = 'asc';
+        sortDirection.value = ['protein', 'soluble_fiber', 'insoluble_fiber', 'unsaturated_fats'].includes(column) ? 'desc' : 'asc';
     }
 };
 
@@ -96,6 +149,61 @@ const getPreferatFilterTitle = () => {
     return 'Toate (click pentru preferate)';
 };
 
+const normalizeRomanianText = (text) => {
+    if (!text) return '';
+    return String(text)
+        .toLowerCase()
+        .replace(/ă/g, 'a')
+        .replace(/â/g, 'a')
+        .replace(/î/g, 'i')
+        .replace(/ș/g, 's')
+        .replace(/ț/g, 't');
+};
+
+const calculateProteinScore = (value) => {
+    if (!value && value !== 0) return '—';
+    const numValue = Number(value);
+    if (isNaN(numValue)) return '—';
+    
+    if (numValue >= 25.0) return 'Superior';
+    if (numValue >= 12.5) return 'Ridicat';
+    if (numValue >= 5.0) return 'Mediu';
+    return 'Limitat';
+};
+
+const calculateSolubleFiberScore = (value) => {
+    if (!value && value !== 0) return '—';
+    const numValue = Number(value);
+    if (isNaN(numValue)) return '—';
+    
+    if (numValue >= 5.0) return 'Superior';
+    if (numValue >= 2.5) return 'Ridicat';
+    if (numValue >= 1.0) return 'Mediu';
+    return 'Limitat';
+};
+
+const calculateInsolubleFiberScore = (value) => {
+    if (!value && value !== 0) return '—';
+    const numValue = Number(value);
+    if (isNaN(numValue)) return '—';
+    
+    if (numValue >= 10.0) return 'Superior';
+    if (numValue >= 5.0) return 'Ridicat';
+    if (numValue >= 2.0) return 'Mediu';
+    return 'Limitat';
+};
+
+const calculateUnsaturatedFatsScore = (value) => {
+    if (!value && value !== 0) return '—';
+    const numValue = Number(value);
+    if (isNaN(numValue)) return '—';
+    
+    if (numValue >= 15.0) return 'Superior';
+    if (numValue >= 7.5) return 'Ridicat';
+    if (numValue >= 3.0) return 'Mediu';
+    return 'Limitat';
+};
+
 const getNutritionalValueClass = (value) => {
     if (!value || value === '—') return '';
     const valueStr = String(value).toLowerCase();
@@ -124,7 +232,7 @@ const getNutritionalValueClass = (value) => {
                 <input type="text" class="form-control" placeholder="Search ingredients..." v-model="searchFilter" style="border: 1px solid #dee2e6;">
             </div>
             <small class="text-muted">
-                Showing {{ filteredIngredients.length }} of {{ ingredients.length }} ingredients
+                Found {{ filteredIngredients.length }} of {{ ingredients.length }} ingredients
             </small>
         </div>
 
@@ -147,36 +255,36 @@ const getNutritionalValueClass = (value) => {
                             Porție
                         </th>
                         <th scope="col" class="d-none d-md-table-cell fw-bold">
-                            Format
+                            Formă
                         </th>
                         <th scope="col" class="d-none d-sm-table-cell">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('tip')">
-                                Tip <i class="bi" :class="getSortIcon('tip')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('type')">
+                                Tip <i class="bi" :class="getSortIcon('type')"></i>
                             </button>
                         </th>
                         <th scope="col">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('proteina')">
-                                Proteină <i class="bi" :class="getSortIcon('proteina')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('protein')">
+                                Proteină <i class="bi" :class="getSortIcon('protein')"></i>
                             </button>
                         </th>
                         <th scope="col">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('fibra_solubila')">
-                                Fibră Solubilă <i class="bi" :class="getSortIcon('fibra_solubila')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('unsaturated_fats')">
+                                Grăsimi Nesaturate <i class="bi" :class="getSortIcon('unsaturated_fats')"></i>
                             </button>
                         </th>
                         <th scope="col">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('fibra_insolubila')">
-                                Fibră insolubilă <i class="bi" :class="getSortIcon('fibra_insolubila')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('soluble_fiber')">
+                                Fibră Solubilă <i class="bi" :class="getSortIcon('soluble_fiber')"></i>
                             </button>
                         </th>
                         <th scope="col">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('grasimi_nesaturate')">
-                                Grăsimi Nesaturate <i class="bi" :class="getSortIcon('grasimi_nesaturate')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('insoluble_fiber')">
+                                Fibră insolubilă <i class="bi" :class="getSortIcon('insoluble_fiber')"></i>
                             </button>
                         </th>
                         <th scope="col">
-                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('vitamine_minerale')">
-                                Vitamine-Minerale <i class="bi" :class="getSortIcon('vitamine_minerale')"></i>
+                            <button class="btn btn-link text-white text-decoration-none p-0 fw-bold" @click="sortBy('vitamins_minerals')">
+                                Vitamine & Minerale <i class="bi" :class="getSortIcon('vitamins_minerals')"></i>
                             </button>
                         </th>
                         <th scope="col" class="d-none d-md-table-cell fw-bold">
@@ -185,24 +293,60 @@ const getNutritionalValueClass = (value) => {
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    <tr v-for="(item, index) in filteredIngredients" :key="`${sortColumn}-${sortDirection}-${index}-${item.ingredient}`">
+                    <tr v-for="(item, index) in paginatedIngredients" :key="`${sortColumn}-${sortDirection}-${index}-${item.ingredient}`">
                         <td class="text-center">
-                            <i v-if="item.preferat" class="bi bi-star-fill text-warning" title="Preferat"></i>
+                            <i v-if="item.preferred" class="bi bi-star-fill text-warning" title="Preferat"></i>
                             <i v-else class="bi bi-star text-muted" title="Nu este preferat"></i>
                         </td>
                         <th scope="row">{{ item.ingredient }}</th>
-                        <td class="d-none d-sm-table-cell">{{ item.portie }}</td>
+                        <td class="d-none d-sm-table-cell">{{ item.portion }}g</td>
                         <td class="d-none d-md-table-cell">{{ item.format }}</td>
-                        <td class="d-none d-sm-table-cell">{{ item.tip }}</td>
-                        <td :class="getNutritionalValueClass(item.proteina)">{{ item.proteina }}</td>
-                        <td :class="getNutritionalValueClass(item.fibra_solubila)">{{ item.fibra_solubila }}</td>
-                        <td :class="getNutritionalValueClass(item.fibra_insolubila)">{{ item.fibra_insolubila }}</td>
-                        <td :class="getNutritionalValueClass(item.grasimi_nesaturate)">{{ item.grasimi_nesaturate }}</td>
-                        <td :class="getNutritionalValueClass(item.vitamine_minerale)">{{ item.vitamine_minerale }}</td>
-                        <td class="d-none d-md-table-cell">{{ item.notite || '—' }}</td>
+                        <td class="d-none d-sm-table-cell">{{ item.type }}</td>
+                        <td :class="getNutritionalValueClass(calculateProteinScore(item.protein))">{{ calculateProteinScore(item.protein) }} ({{ item.protein }}g)</td>
+                        <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(item.unsaturated_fats))">{{ calculateUnsaturatedFatsScore(item.unsaturated_fats) }} ({{ item.unsaturated_fats }}g)</td>
+                        <td :class="getNutritionalValueClass(calculateSolubleFiberScore(item.soluble_fiber))">{{ calculateSolubleFiberScore(item.soluble_fiber) }} ({{ item.soluble_fiber }}g)</td>
+                        <td :class="getNutritionalValueClass(calculateInsolubleFiberScore(item.insoluble_fiber))">{{ calculateInsolubleFiberScore(item.insoluble_fiber) }} ({{ item.insoluble_fiber }}g)</td>
+                        <td :class="getNutritionalValueClass(item.vitamins_minerals)">{{ item.vitamins_minerals }}</td>
+                        <td class="d-none d-md-table-cell">{{ item.notes || '—' }}</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+                Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredIngredients.length) }} of {{ filteredIngredients.length }} ingredients
+            </div>
+            <nav aria-label="Ingredients pagination" v-if="totalPages > 1">
+                <ul class="pagination mb-0">
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <button class="page-link" @click="currentPage = 1" :disabled="currentPage === 1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </button>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                        <button class="page-link" @click="currentPage--" :disabled="currentPage === 1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </button>
+                    </li>
+                    
+                    <li v-for="page in visiblePages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+                        <button class="page-link" @click="currentPage = page">{{ page }}</button>
+                    </li>
+                    
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <button class="page-link" @click="currentPage++" :disabled="currentPage === totalPages" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </button>
+                    </li>
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                        <button class="page-link" @click="currentPage = totalPages" :disabled="currentPage === totalPages" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
         <!-- Legend -->
@@ -230,6 +374,14 @@ const getNutritionalValueClass = (value) => {
                             <td class="text-secondary">&lt;5.0 g</td>
                         </tr>
                         <tr>
+                            <td><strong>Grăsimi Nesaturate</strong></td>
+                            <td>15 g</td>
+                            <td class="text-success-emphasis">≥15.0 g</td>
+                            <td class="text-info-emphasis">7.5-14.9 g</td>
+                            <td class="text-warning-emphasis">3.0-7.4 g</td>
+                            <td class="text-secondary">&lt;3.0 g</td>
+                        </tr>
+                        <tr>
                             <td><strong>Fibră Solubilă</strong></td>
                             <td>5 g</td>
                             <td class="text-success-emphasis">≥5.0 g</td>
@@ -244,14 +396,6 @@ const getNutritionalValueClass = (value) => {
                             <td class="text-info-emphasis">5.0-9.9 g</td>
                             <td class="text-warning-emphasis">2.0-4.9 g</td>
                             <td class="text-secondary">&lt;2.0 g</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Grăsimi Nesaturate</strong></td>
-                            <td>15 g</td>
-                            <td class="text-success-emphasis">≥15.0 g</td>
-                            <td class="text-info-emphasis">7.5-14.9 g</td>
-                            <td class="text-warning-emphasis">3.0-7.4 g</td>
-                            <td class="text-secondary">&lt;3.0 g</td>
                         </tr>
                     </tbody>
                 </table>
