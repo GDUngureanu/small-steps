@@ -1,0 +1,42 @@
+[
+  {
+    "action": "Visit the Northern Lights in Iceland",
+    "status": false
+  },
+  {
+    "action": "Explore Machu Picchu in Peru",
+    "status": false
+  },
+  {
+    "action": "Experience the cherry blossoms in Japan",
+    "status": false
+  },
+  {
+    "action": "Go on a Safari in Kenya",
+    "status": false
+  },
+  {
+    "action": "Visit the ancient city of Petra in Jordan",
+    "status": false
+  },
+  {
+    "action": "Explore the temples of Angkor Wat in Cambodia",
+    "status": false
+  },
+  {
+    "action": "Take a road trip across Route 66 in the USA",
+    "status": false
+  },
+  {
+    "action": "Visit the Great Wall of China",
+    "status": false
+  },
+  {
+    "action": "Experience the midnight sun in Norway",
+    "status": false
+  },
+  {
+    "action": "Explore the Amazon rainforest in Brazil",
+    "status": false
+  }
+]

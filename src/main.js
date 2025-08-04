@@ -27,6 +27,10 @@ import Movies from './components/entertainment/movies/template.vue'
 import Nutrition from './components/nutrition/overview/template.vue'
 import Ingredients from './components/nutrition/ingredients/template.vue'
 
+// Bucket List Components
+import BucketList from './components/bucketlist/overview/template.vue'
+import Destinations from './components/bucketlist/destinations/template.vue'
+
 // Styles
 import './scss/styles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -46,6 +50,8 @@ const routes = [
   { path: '/random', component: Random },
   { path: '/nutrition', component: Nutrition },
   { path: '/nutrition/ingredients', component: Ingredients },
+  { path: '/bucketlist', component: BucketList },
+  { path: '/destinations', component: Destinations },
 ]
 
 const router = createRouter({

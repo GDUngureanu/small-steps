@@ -2,12 +2,10 @@
   "name": "small-steps",
   "description": "Passion project.",
   "author": "George Daniel Ungureanu",
-
   "version": "0.1.1",
   "private": true,
   "repository": "https://github.com/GDUngureanu/small-steps",
   "license": "MIT",
-
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -18,16 +16,15 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-
   "dependencies": {
-    "@supabase/supabase-js": "^1.1.2",
     "@popperjs/core": "^2.11.8",
+    "@supabase/supabase-js": "^1.1.2",
     "bootstrap": "^5.3.6",
     "bootstrap-icons": "^1.13.1",
+    "leaflet": "^1.9.4",
     "vue": "^3.5.14",
     "vue-router": "^4.5.1"
   },
-
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
     "eslint": "^9.27.0",
