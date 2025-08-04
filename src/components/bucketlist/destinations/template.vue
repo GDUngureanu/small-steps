@@ -264,32 +264,10 @@ onMounted(() => {
 <template>
   <!-- Destinations List Article -->
   <ArticleTemplate title="My Travel Destinations" meta="August 4, 2025 by G. D. Ungureanu">
-    <p>A comprehensive list of all the places I want to visit, organized by travel status.</p>
-
-    <!-- Summary Stats -->
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <div class="card border-success">
-          <div class="card-body text-center">
-            <h3 class="text-success mb-1">{{ destinationsByStatus.visited.length }}</h3>
-            <small class="text-muted">✅ Visited Countries</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card border-primary">
-          <div class="card-body text-center">
-            <h3 class="text-primary mb-1">{{ destinationsByStatus.unvisited.length }}</h3>
-            <small class="text-muted">🌍 Countries to Visit</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Visited Countries -->
     <div class="mb-5">
       <h3 class="mb-3">
-        <span class="badge bg-success me-2">✅ Visited</span>
+        <span class="badge me-2">✅ Visited</span>
         {{ destinationsByStatus.visited.length }} {{ destinationsByStatus.visited.length === 1 ? 'Country' : 'Countries' }}
       </h3>
       
@@ -354,7 +332,7 @@ onMounted(() => {
     <!-- Countries to Visit -->
     <div class="mb-5">
       <h3 class="mb-3">
-        <span class="badge bg-primary me-2">🌍 To Visit</span>
+        <span class="badge me-2">🌍 To Visit</span>
         {{ destinationsByStatus.unvisited.length }} {{ destinationsByStatus.unvisited.length === 1 ? 'Country' : 'Countries' }}
       </h3>
       
@@ -416,28 +394,6 @@ onMounted(() => {
       </p>
     </div>
 
-    <!-- Quick Stats Footer -->
-    <div class="alert alert-info mt-4">
-      <h6 class="alert-heading">📊 Travel Statistics</h6>
-      <div class="row text-center">
-        <div class="col-md-3">
-          <strong>{{ destinationsWithStatus.length }}</strong><br>
-          <small>Total Countries</small>
-        </div>
-        <div class="col-md-3">
-          <strong>{{ destinationsWithStatus.reduce((sum, d) => sum + (d.cities?.length || 0), 0) }}</strong><br>
-          <small>Total Cities</small>
-        </div>
-        <div class="col-md-3">
-          <strong>{{ destinationsWithStatus.reduce((sum, d) => sum + (d.cities?.reduce((citySum, c) => citySum + (c.attractions?.length || 0), 0) || 0), 0) }}</strong><br>
-          <small>Total Attractions</small>
-        </div>
-        <div class="col-md-3">
-          <strong>{{ Math.round((destinationsByStatus.visited.length / destinationsWithStatus.length) * 100) }}%</strong><br>
-          <small>Completed</small>
-        </div>
-      </div>
-    </div>
   </ArticleTemplate>
 
   <!-- Destinations Map Article -->
