@@ -1,0 +1,183 @@
+{
+  "destinations": [
+    {
+      "country": "United States of America",
+      "iso": "USA",
+      "cities": [
+        {
+          "name": "New York City",
+          "attractions": [
+            { "name": "Statue of Liberty", "visited": true, "priority": 4 },
+            { "name": "Central Park", "visited": true, "priority": 3 },
+            { "name": "Times Square", "visited": true, "priority": 2 },
+            { "name": "Brooklyn Bridge", "visited": false, "priority": 3 }
+          ]
+        },
+        {
+          "name": "San Francisco",
+          "attractions": [
+            { "name": "Golden Gate Bridge", "visited": false, "priority": 5 },
+            { "name": "Alcatraz Island", "visited": false, "priority": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Japan",
+      "iso": "JPN",
+      "cities": [
+        {
+          "name": "Tokyo",
+          "attractions": [
+            { "name": "Shibuya Crossing", "visited": true, "priority": 3 },
+            { "name": "Tokyo Tower", "visited": true, "priority": 4 },
+            { "name": "Cherry Blossom Viewing", "visited": true, "priority": 5 }
+          ]
+        },
+        {
+          "name": "Kyoto",
+          "attractions": [
+            { "name": "Fushimi Inari Shrine", "visited": true, "priority": 4 },
+            { "name": "Bamboo Forest", "visited": true, "priority": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Iceland",
+      "iso": "ISL",
+      "cities": [
+        {
+          "name": "Reykjavik",
+          "attractions": [
+            { "name": "Northern Lights Tour", "visited": false, "priority": 5 },
+            { "name": "Blue Lagoon", "visited": false, "priority": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Peru",
+      "iso": "PER",
+      "cities": [
+        {
+          "name": "Cusco",
+          "attractions": [
+            { "name": "Machu Picchu", "visited": false, "priority": 5 },
+            { "name": "Sacred Valley", "visited": false, "priority": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Kenya",
+      "iso": "KEN",
+      "cities": [
+        {
+          "name": "Masai Mara",
+          "attractions": [
+            { "name": "Safari Game Drive", "visited": false, "priority": 5 },
+            { "name": "Great Migration", "visited": false, "priority": 5 }
+          ]
+        },
+        {
+          "name": "Nairobi",
+          "attractions": [
+            { "name": "Giraffe Centre", "visited": false, "priority": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Jordan",
+      "iso": "JOR",
+      "cities": [
+        {
+          "name": "Petra",
+          "attractions": [
+            { "name": "Treasury (Al-Khazneh)", "visited": false, "priority": 5 },
+            { "name": "Monastery", "visited": false, "priority": 4 }
+          ]
+        },
+        {
+          "name": "Wadi Rum",
+          "attractions": [
+            { "name": "Desert Camping", "visited": false, "priority": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Cambodia",
+      "iso": "KHM",
+      "cities": [
+        {
+          "name": "Siem Reap",
+          "attractions": [
+            { "name": "Angkor Wat", "visited": false, "priority": 5 },
+            { "name": "Angkor Thom", "visited": false, "priority": 4 },
+            { "name": "Ta Prohm Temple", "visited": false, "priority": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "China",
+      "iso": "CHN",
+      "cities": [
+        {
+          "name": "Beijing",
+          "attractions": [
+            { "name": "Great Wall of China", "visited": false, "priority": 5 },
+            { "name": "Forbidden City", "visited": false, "priority": 4 }
+          ]
+        },
+        {
+          "name": "Shanghai",
+          "attractions": [
+            { "name": "The Bund", "visited": false, "priority": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Norway",
+      "iso": "NOR",
+      "cities": [
+        {
+          "name": "Tromsø",
+          "attractions": [
+            { "name": "Midnight Sun Experience", "visited": false, "priority": 5 },
+            { "name": "Northern Lights", "visited": false, "priority": 5 }
+          ]
+        },
+        {
+          "name": "Lofoten Islands",
+          "attractions": [
+            { "name": "Scenic Hiking", "visited": false, "priority": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "country": "Brazil",
+      "iso": "BRA",
+      "cities": [
+        {
+          "name": "Manaus",
+          "attractions": [
+            { "name": "Amazon Rainforest Tour", "visited": false, "priority": 5 },
+            { "name": "River Cruise", "visited": false, "priority": 3 }
+          ]
+        },
+        {
+          "name": "Rio de Janeiro",
+          "attractions": [
+            { "name": "Christ the Redeemer", "visited": false, "priority": 4 },
+            { "name": "Copacabana Beach", "visited": false, "priority": 2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

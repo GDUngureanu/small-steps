@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import ArticleTemplate from '../../../templates/article.vue';
 import SuggestionsTemplate from '../../../templates/suggestions.vue';
 import suggestions from './suggestions.json';
-import destinationsData from '../../../data/destinations.json';
+import destinationsData from './destinations.json';
 
 defineOptions({
   name: 'DestinationsTemplate'
@@ -25,10 +25,10 @@ const statusLabels = {
   unexplored: 'Not yet explored'
 };
 
-// Generate country colors from destinations data
+// Generate country colors from destinations data with computed status
 const countryColors = computed(() => {
   return Object.fromEntries(
-    destinationsData.destinations.map(destination => [
+    destinationsWithStatus.value.map(destination => [
       destination.iso,
       countryColorsByStatus[destination.status] || '#d3d3d3'
     ])
@@ -37,10 +37,82 @@ const countryColors = computed(() => {
 
 const getCountryColor = (countryId) => countryColors.value[countryId] || '#d3d3d3';
 
-// Helper function to find destination data by ISO code
-const findDestination = (iso) => {
-  return destinationsData.destinations.find(d => d.iso === iso);
+// Status deduction logic
+const getCityStatus = (city) => {
+  if (!city.attractions || city.attractions.length === 0) {
+    return 'dreaming'; // Cities without attractions are dreaming
+  }
+  
+  const visitedCount = city.attractions.filter(attraction => attraction.visited).length;
+  const totalCount = city.attractions.length;
+  
+  if (visitedCount === totalCount) {
+    return 'visited'; // All attractions visited
+  } else if (visitedCount > 0) {
+    return 'planned'; // Some attractions visited, some not
+  } else {
+    return 'dreaming'; // No attractions visited yet
+  }
 };
+
+const getDestinationStatus = (destination) => {
+  if (!destination.cities || destination.cities.length === 0) {
+    return 'dreaming';
+  }
+  
+  const cityStatuses = destination.cities.map(city => getCityStatus(city));
+  const visitedCities = cityStatuses.filter(status => status === 'visited').length;
+  const plannedCities = cityStatuses.filter(status => status === 'planned').length;
+  const totalCities = cityStatuses.length;
+  
+  if (visitedCities === totalCities) {
+    return 'visited'; // All cities visited
+  } else if (visitedCities > 0 || plannedCities > 0) {
+    return 'planned'; // Some progress made
+  } else {
+    return 'dreaming'; // No progress yet
+  }
+};
+
+// Calculate country priority based on attraction priorities
+const getDestinationPriority = (destination) => {
+  if (!destination.cities || destination.cities.length === 0) {
+    return 1;
+  }
+  
+  // Get all attractions across all cities
+  const allAttractions = destination.cities.flatMap(city => city.attractions || []);
+  
+  if (allAttractions.length === 0) {
+    return 1;
+  }
+  
+  // Calculate weighted average priority
+  // Higher priority attractions contribute more to the overall country priority
+  const totalPriorityPoints = allAttractions.reduce((sum, attraction) => sum + (attraction.priority || 1), 0);
+  const averagePriority = totalPriorityPoints / allAttractions.length;
+  
+  // Round to nearest integer (1-5)
+  return Math.round(Math.max(1, Math.min(5, averagePriority)));
+};
+
+// Helper function to find destination data by ISO code with computed status
+const findDestination = (iso) => {
+  return destinationsWithStatus.value.find(d => d.iso === iso);
+};
+
+// Computed destinations with status and priority
+const destinationsWithStatus = computed(() => {
+  return destinationsData.destinations.map(destination => ({
+    ...destination,
+    status: getDestinationStatus(destination),
+    priority: getDestinationPriority(destination),
+    cities: destination.cities?.map(city => ({
+      ...city,
+      status: getCityStatus(city)
+    }))
+  }));
+});
 
 // Variables for destinations list functionality
 const statusBadgeClasses = {
@@ -49,12 +121,31 @@ const statusBadgeClasses = {
   dreaming: 'bg-warning'
 };
 
-// Group destinations by status for better organization
-const destinationsByStatus = {
-  visited: destinationsData.destinations.filter(d => d.status === 'visited'),
-  planned: destinationsData.destinations.filter(d => d.status === 'planned'),
-  dreaming: destinationsData.destinations.filter(d => d.status === 'dreaming')
+// Priority display helper - just stars
+const getPriorityStars = (priority) => {
+  return '⭐'.repeat(Math.max(1, Math.min(5, priority || 1)));
 };
+
+// Group destinations by computed status and sort by priority then alphabetically
+const destinationsByStatus = computed(() => {
+  const sortByPriorityThenAlpha = (a, b) => {
+    // First sort by priority (highest first)
+    if (b.priority !== a.priority) {
+      return b.priority - a.priority;
+    }
+    // Then sort alphabetically
+    return a.country.localeCompare(b.country);
+  };
+
+  return {
+    visited: destinationsWithStatus.value
+      .filter(d => d.status === 'visited')
+      .sort(sortByPriorityThenAlpha),
+    unvisited: destinationsWithStatus.value
+      .filter(d => d.status === 'planned' || d.status === 'dreaming')
+      .sort(sortByPriorityThenAlpha)
+  };
+});
 
 const mapElement = ref(null);
 const isLoading = ref(true);
@@ -177,7 +268,7 @@ onMounted(() => {
 
     <!-- Summary Stats -->
     <div class="row mb-4">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="card border-success">
           <div class="card-body text-center">
             <h3 class="text-success mb-1">{{ destinationsByStatus.visited.length }}</h3>
@@ -185,92 +276,144 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="card border-primary">
           <div class="card-body text-center">
-            <h3 class="text-primary mb-1">{{ destinationsByStatus.planned.length }}</h3>
-            <small class="text-muted">📅 Planned Countries</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card border-warning">
-          <div class="card-body text-center">
-            <h3 class="text-warning mb-1">{{ destinationsByStatus.dreaming.length }}</h3>
-            <small class="text-muted">💭 Dream Countries</small>
+            <h3 class="text-primary mb-1">{{ destinationsByStatus.unvisited.length }}</h3>
+            <small class="text-muted">🌍 Countries to Visit</small>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Destinations by Status -->
-    <div v-for="(destinations, status) in destinationsByStatus" :key="status" class="mb-5">
+    <!-- Visited Countries -->
+    <div class="mb-5">
       <h3 class="mb-3">
-        <span :class="`badge ${statusBadgeClasses[status]} me-2`">
-          {{ statusLabels[status] }}
-        </span>
-        {{ destinations.length }} {{ destinations.length === 1 ? 'Country' : 'Countries' }}
+        <span class="badge bg-success me-2">✅ Visited</span>
+        {{ destinationsByStatus.visited.length }} {{ destinationsByStatus.visited.length === 1 ? 'Country' : 'Countries' }}
       </h3>
-
-      <div class="row">
-        <div v-for="destination in destinations" :key="destination.iso" class="col-lg-6 mb-4">
-          <div class="card h-100">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">{{ destination.country }}</h5>
-              <span :class="`badge ${statusBadgeClasses[destination.status]}`">
-                {{ statusLabels[destination.status] }}
-              </span>
+      
+      <div v-for="destination in destinationsByStatus.visited" :key="destination.iso" class="mb-3">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" :id="`visited-${destination.iso}`" checked disabled>
+          <label class="form-check-label d-flex justify-content-between align-items-center w-100" :for="`visited-${destination.iso}`">
+            <span>
+              <strong>{{ destination.country }}</strong>
+              <small class="text-muted ms-2">
+                ({{ destination.cities?.length || 0 }} {{ destination.cities?.length === 1 ? 'city' : 'cities' }})
+              </small>
+            </span>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted" style="font-size: 0.8em;">{{ getPriorityStars(destination.priority) }}</span>
+              <button 
+                v-if="destination.cities && destination.cities.length > 0"
+                class="btn btn-link btn-sm p-0 text-decoration-none text-muted" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                :data-bs-target="`#visited-details-${destination.iso}`"
+                aria-expanded="false"
+                style="font-size: 0.9em;"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
             </div>
-            
-            <div class="card-body" v-if="destination.cities">
-              <h6 class="card-subtitle mb-3 text-muted">
-                {{ destination.cities.length }} {{ destination.cities.length === 1 ? 'City' : 'Cities' }} to Explore
-              </h6>
-              
-              <div class="accordion" :id="`accordion-${destination.iso}`">
-                <div v-for="(city, cityIndex) in destination.cities" :key="city.name" class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button 
-                      class="accordion-button collapsed" 
-                      type="button" 
-                      data-bs-toggle="collapse" 
-                      :data-bs-target="`#collapse-${destination.iso}-${cityIndex}`"
-                      :aria-expanded="false"
-                      :aria-controls="`collapse-${destination.iso}-${cityIndex}`"
-                    >
-                      <strong>{{ city.name }}</strong>
-                      <span :class="`badge ${statusBadgeClasses[city.status]} ms-2`" style="font-size: 0.7em;">
-                        {{ statusLabels[city.status] }}
-                      </span>
-                    </button>
-                  </h2>
-                  <div 
-                    :id="`collapse-${destination.iso}-${cityIndex}`" 
-                    class="accordion-collapse collapse"
-                    :data-bs-parent="`#accordion-${destination.iso}`"
-                  >
-                    <div class="accordion-body">
-                      <ul class="list-unstyled mb-0" v-if="city.attractions">
-                        <li v-for="attraction in city.attractions" :key="attraction.name" class="d-flex justify-content-between align-items-center mb-2">
-                          <span>{{ attraction.name }}</span>
-                          <span :class="`badge ${statusBadgeClasses[attraction.status]}`" style="font-size: 0.65em;">
-                            {{ statusLabels[attraction.status] }}
-                          </span>
-                        </li>
-                      </ul>
-                      <p v-else class="text-muted mb-0">No specific attractions listed yet.</p>
-                    </div>
-                  </div>
-                </div>
+          </label>
+        </div>
+        
+        <!-- Simple accordion for cities and attractions -->
+        <div v-if="destination.cities && destination.cities.length > 0" class="collapse ms-4 mt-2" :id="`visited-details-${destination.iso}`">
+          <div class="list-group list-group-flush small">
+            <div v-for="city in destination.cities" :key="city.name" class="list-group-item px-0 py-2">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-primary">{{ city.name }}</strong>
+                <span :class="`badge ${statusBadgeClasses[city.status]}`">
+                  {{ statusLabels[city.status] }}
+                </span>
               </div>
-            </div>
-            
-            <div class="card-body" v-else>
-              <p class="text-muted mb-0">No specific cities or attractions listed yet.</p>
+              <ul class="list-unstyled ms-3 mb-0" v-if="city.attractions && city.attractions.length > 0">
+                <li v-for="attraction in city.attractions" :key="attraction.name" class="d-flex justify-content-between align-items-center py-1">
+                  <span>{{ attraction.name }}</span>
+                  <div class="d-flex gap-2 align-items-center">
+                    <small class="text-muted">{{ getPriorityStars(attraction.priority) }}</small>
+                    <span :class="`badge ${attraction.visited ? 'bg-success' : 'bg-secondary'}`">
+                      {{ attraction.visited ? '✅' : '❌' }}
+                    </span>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
+      
+      <p v-if="destinationsByStatus.visited.length === 0" class="text-muted fst-italic">
+        No countries visited yet. Time to start exploring! 🌍
+      </p>
+    </div>
+
+    <!-- Countries to Visit -->
+    <div class="mb-5">
+      <h3 class="mb-3">
+        <span class="badge bg-primary me-2">🌍 To Visit</span>
+        {{ destinationsByStatus.unvisited.length }} {{ destinationsByStatus.unvisited.length === 1 ? 'Country' : 'Countries' }}
+      </h3>
+      
+      <div v-for="destination in destinationsByStatus.unvisited" :key="destination.iso" class="mb-3">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" :id="`unvisited-${destination.iso}`">
+          <label class="form-check-label d-flex justify-content-between align-items-center w-100" :for="`unvisited-${destination.iso}`">
+            <span>
+              <strong>{{ destination.country }}</strong>
+              <small class="text-muted ms-2">
+                ({{ destination.cities?.length || 0 }} {{ destination.cities?.length === 1 ? 'city' : 'cities' }})
+              </small>
+            </span>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted" style="font-size: 0.8em;">{{ getPriorityStars(destination.priority) }}</span>
+              <button 
+                v-if="destination.cities && destination.cities.length > 0"
+                class="btn btn-link btn-sm p-0 text-decoration-none text-muted" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                :data-bs-target="`#unvisited-details-${destination.iso}`"
+                aria-expanded="false"
+                style="font-size: 0.9em;"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </label>
+        </div>
+        
+        <!-- Simple accordion for cities and attractions -->
+        <div v-if="destination.cities && destination.cities.length > 0" class="collapse ms-4 mt-2" :id="`unvisited-details-${destination.iso}`">
+          <div class="list-group list-group-flush small">
+            <div v-for="city in destination.cities" :key="city.name" class="list-group-item px-0 py-2">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-primary">{{ city.name }}</strong>
+                <span :class="`badge ${statusBadgeClasses[city.status]}`">
+                  {{ statusLabels[city.status] }}
+                </span>
+              </div>
+              <ul class="list-unstyled ms-3 mb-0" v-if="city.attractions && city.attractions.length > 0">
+                <li v-for="attraction in city.attractions" :key="attraction.name" class="d-flex justify-content-between align-items-center py-1">
+                  <span>{{ attraction.name }}</span>
+                  <div class="d-flex gap-2 align-items-center">
+                    <small class="text-muted">{{ getPriorityStars(attraction.priority) }}</small>
+                    <span :class="`badge ${attraction.visited ? 'bg-success' : 'bg-secondary'}`">
+                      {{ attraction.visited ? '✅' : '❌' }}
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <p v-if="destinationsByStatus.unvisited.length === 0" class="text-muted fst-italic">
+        All countries visited! Time to add more destinations to your bucket list! ✈️
+      </p>
     </div>
 
     <!-- Quick Stats Footer -->
@@ -278,19 +421,19 @@ onMounted(() => {
       <h6 class="alert-heading">📊 Travel Statistics</h6>
       <div class="row text-center">
         <div class="col-md-3">
-          <strong>{{ destinationsData.destinations.length }}</strong><br>
+          <strong>{{ destinationsWithStatus.length }}</strong><br>
           <small>Total Countries</small>
         </div>
         <div class="col-md-3">
-          <strong>{{ destinationsData.destinations.reduce((sum, d) => sum + (d.cities?.length || 0), 0) }}</strong><br>
+          <strong>{{ destinationsWithStatus.reduce((sum, d) => sum + (d.cities?.length || 0), 0) }}</strong><br>
           <small>Total Cities</small>
         </div>
         <div class="col-md-3">
-          <strong>{{ destinationsData.destinations.reduce((sum, d) => sum + (d.cities?.reduce((citySum, c) => citySum + (c.attractions?.length || 0), 0) || 0), 0) }}</strong><br>
+          <strong>{{ destinationsWithStatus.reduce((sum, d) => sum + (d.cities?.reduce((citySum, c) => citySum + (c.attractions?.length || 0), 0) || 0), 0) }}</strong><br>
           <small>Total Attractions</small>
         </div>
         <div class="col-md-3">
-          <strong>{{ Math.round((destinationsByStatus.visited.length / destinationsData.destinations.length) * 100) }}%</strong><br>
+          <strong>{{ Math.round((destinationsByStatus.visited.length / destinationsWithStatus.length) * 100) }}%</strong><br>
           <small>Completed</small>
         </div>
       </div>
@@ -355,22 +498,9 @@ onMounted(() => {
   border-radius: 0.375rem;
 }
 
-/* Destinations list styles */
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: rgba(var(--bs-primary-rgb), 0.1);
-}
-
-.badge {
-  font-size: 0.75em;
+/* Clean button styling for details toggle */
+.btn-link:hover {
+  color: var(--bs-primary) !important;
 }
 </style>
 
