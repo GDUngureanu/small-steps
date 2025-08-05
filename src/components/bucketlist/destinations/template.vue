@@ -251,19 +251,6 @@ const initializeMap = async () => {
           className: 'custom-tooltip',
           maxWidth: 300
         });
-
-        // Accessibility improvements: keyboard navigation
-        const el = layer.getElement();
-        if (el) {
-          el.setAttribute('tabindex', '0');
-          el.setAttribute('aria-label', `${countryName}, Status: ${status}${destination?.cities ? `, ${destination.cities.length} cities planned` : ''}`);
-          el.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              layer.openTooltip();
-            }
-          });
-        }
       }
     }).addTo(map);
 
@@ -291,7 +278,7 @@ onMounted(() => {
 
 <template>
   <!-- Destinations List Article -->
-  <ArticleTemplate title="My Travel Destinations" meta="August 4, 2025 by G. D. Ungureanu">
+  <ArticleTemplate title="Travel Destinations" meta="August 4, 2025 by G. D. Ungureanu">
     <!-- Halfway There -->
     <div class="mb-5" v-if="destinationsByStatus.inProgress.length > 0">
       <h3 class="mb-3">
@@ -599,7 +586,7 @@ onMounted(() => {
 }
 
 .custom-tooltip .tooltip-cities li::before {
-  content: "\F3E6" !important;
+  content: "\F3E8" !important;
   position: absolute !important;
   left: -20px !important;
   font-family: "bootstrap-icons" !important;

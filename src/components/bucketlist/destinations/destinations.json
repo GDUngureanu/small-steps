@@ -62,7 +62,7 @@
     },
     {
       "country": "America",
-      "iso": "UNK",
+      "iso": "USA",
       "cities": [
         {
           "name": "New York",
@@ -142,7 +142,7 @@
     },
     {
       "country": "Korea",
-      "iso": "UNK",
+      "iso": "KOR",
       "cities": [
         {
           "name": "Seoul",
@@ -238,7 +238,7 @@
     },
     {
       "country": "Czech Republic",
-      "iso": "UNK",
+      "iso": "CZE",
       "cities": [
         {
           "name": "Prague",
@@ -270,7 +270,7 @@
     },
     {
       "country": "United Kingdom",
-      "iso": "UNK",
+      "iso": "GBR",
       "cities": [
         {
           "name": "London",
@@ -348,7 +348,7 @@
     },
     {
       "country": "Switzerland",
-      "iso": "UNK",
+      "iso": "CHE",
       "cities": [
         {
           "name": "Zermatt",
@@ -366,7 +366,7 @@
     },
     {
       "country": "Turkey",
-      "iso": "UNK",
+      "iso": "TUR",
       "cities": [
         {
           "name": "Istanbul",
@@ -440,7 +440,7 @@
     },
     {
       "country": "Austria",
-      "iso": "UNK",
+      "iso": "AUT",
       "cities": [
         {
           "name": "Vienna",
@@ -470,7 +470,7 @@
     },
     {
       "country": "Ireland",
-      "iso": "UNK",
+      "iso": "IRL",
       "cities": [
         {
           "name": "Dublin",
@@ -510,7 +510,7 @@
     },
     {
       "country": "Sweden",
-      "iso": "UNK",
+      "iso": "SWE",
       "cities": [
         {
           "name": "Stockholm",
@@ -524,7 +524,7 @@
     },
     {
       "country": "Monaco",
-      "iso": "UNK",
+      "iso": "MCO",
       "cities": []
     },
     {
@@ -607,7 +607,7 @@
     },
     {
       "country": "Denmark",
-      "iso": "UNK",
+      "iso": "DNK",
       "cities": [
         {
           "name": "Copenhagen",
@@ -641,7 +641,7 @@
     },
     {
       "country": "Cyprus",
-      "iso": "UNK",
+      "iso": "CYP",
       "cities": [
         {
           "name": "Protaras",
@@ -675,12 +675,12 @@
     },
     {
       "country": "Croatia",
-      "iso": "UNK",
+      "iso": "HRV",
       "cities": []
     },
     {
-      "country": "Finlanda",
-      "iso": "UNK",
+      "country": "Finland",
+      "iso": "FIN",
       "cities": []
     }
   ]
