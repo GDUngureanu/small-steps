@@ -3,6 +3,7 @@ import { onMounted, ref, nextTick, computed } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import ArticleTemplate from '../../../templates/article.vue';
+import ActionsTemplate from '../../../templates/actions.vue';
 import destinationsData from './destinations.json';
 
 defineOptions({
@@ -277,6 +278,11 @@ onMounted(() => {
 </script>
 
 <template>
+
+  <ArticleTemplate title="Destinations Actions" meta="August 5, 2025 by G. D. Ungureanu">
+    <ActionsTemplate list-id="23137b93-91c1-46cb-a479-253ef789d17d" />
+  </ArticleTemplate>
+
   <!-- Destinations List Article -->
   <ArticleTemplate title="Travel Destinations" meta="August 4, 2025 by G. D. Ungureanu">
     <!-- Halfway There -->
@@ -325,7 +331,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- Countries without cities - simple display -->
         <div v-else class="d-flex justify-content-between align-items-center p-2 border-bottom">
           <span>
@@ -382,7 +388,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- Countries without cities - simple display -->
         <div v-else class="d-flex justify-content-between align-items-center p-2 border-bottom">
           <span>
@@ -439,7 +445,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- Countries without cities - simple display -->
         <div v-else class="d-flex justify-content-between align-items-center">
           <span>
@@ -496,7 +502,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        
+
         <!-- Countries without cities - simple display -->
         <div v-else class="d-flex justify-content-between align-items-center p-2 border-bottom">
           <span>

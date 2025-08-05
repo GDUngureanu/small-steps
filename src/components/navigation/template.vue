@@ -43,12 +43,12 @@
             </ul>
           </li>
           <li class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" id="bucketlistDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Bucket List
+            <a class="nav-link dropdown-toggle fw-medium" href="#" id="adventuresDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Adventures
             </a>
-            <ul class="dropdown-menu" aria-labelledby="bucketlistDropdown">
-              <li><RouterLink to="/bucketlist" class="dropdown-item">Overview</RouterLink></li>
-              <li><RouterLink to="/destinations" class="dropdown-item">Destinations</RouterLink></li>
+            <ul class="dropdown-menu" aria-labelledby="adventuresDropdown">
+              <li><RouterLink to="/adventures" class="dropdown-item">Overview</RouterLink></li>
+              <li><RouterLink to="/adventures/destinations" class="dropdown-item">Destinations</RouterLink></li>
             </ul>
           </li>
           <li class="nav-item px-2"><RouterLink to="/experiments" class="nav-link fw-medium" active-class="active">Experiments</RouterLink></li>
