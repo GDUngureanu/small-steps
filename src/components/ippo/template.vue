@@ -1,7 +1,6 @@
 <script setup>
 import ArticleTemplate from '../../templates/article.vue';
-import SuggestionsTemplate from '../../templates/suggestions.vue';
-import suggestions from './suggestions.json';
+import ActionsTemplate from '../../templates/actions.vue';
 
 defineOptions({
     name: 'IppoTemplate'
@@ -13,7 +12,7 @@ defineOptions({
     <ArticleTemplate title="Steps that I would like to take" meta="May 26, 2025 by G. D. Ungureanu">
         <p>So many things To do/To learn.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <ActionsTemplate list-id="379d2ab8-7b25-43ee-a2ea-4979ce1629d5" />
     </ArticleTemplate>
 
 </template>
