@@ -1,7 +1,6 @@
 <script setup>
 import ArticleTemplate from '../../../templates/article.vue';
-import SuggestionsTemplate from '../../../templates/suggestions.vue';
-import suggestions from './suggestions.json';
+import ActionsTemplate from '../../../templates/actions.vue';
 
 defineOptions({
     name: 'PoemsTemplate'
@@ -13,7 +12,7 @@ defineOptions({
     <ArticleTemplate title="Poems" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm working on compiling a list of Poems.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <ActionsTemplate list-id="dda51899-9ca9-4858-b2b2-5888dfa6db10" />
     </ArticleTemplate>
 
     <ArticleTemplate title="Memento Mori" meta="1872 by Mihai Eminescu">
