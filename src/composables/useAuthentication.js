@@ -7,13 +7,17 @@ const CORRECT_PASSWORD = import.meta.env.VITE_APP_PASSWORD
 const isAuthenticated = ref(false)
 
 // Check sessionStorage on composable creation and watch for changes
-const storedAuthentication = sessionStorage.getItem('memento-mori-authentication')
-if (storedAuthentication === 'true') {
-  isAuthenticated.value = true
+if (typeof sessionStorage !== 'undefined') {
+  const storedAuthentication = sessionStorage.getItem('memento-mori-authentication')
+  if (storedAuthentication === 'true') {
+    isAuthenticated.value = true
+  }
 }
 
 // Automatically sync authentication state with sessionStorage
 watchEffect(() => {
+  if (typeof sessionStorage === 'undefined') return
+
   if (isAuthenticated.value) {
     sessionStorage.setItem('memento-mori-authentication', 'true')
   } else {
