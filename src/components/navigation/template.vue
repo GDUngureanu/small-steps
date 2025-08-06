@@ -1,5 +1,21 @@
-<template>
+<script setup>
+import { ref } from 'vue'
+import { useAuthentication } from '../../composables/useAuthentication.js'
 
+const { isAuthenticated, dropdownSections, standaloneItems, logout } = useAuthentication()
+
+const emit = defineEmits(['showAuthentication'])
+
+const showAuthenticationModal = () => {
+  emit('showAuthentication')
+}
+
+defineOptions({
+  name: 'NavigationTemplate'
+})
+</script>
+
+<template>
   <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 d-block"
     data-navbar-on-scroll="data-navbar-on-scroll">
     <div class="container">
@@ -10,52 +26,53 @@
       </button>
       <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item px-2"><RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink></li>
-          <li class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" id="nutritionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Nutrition
+          <!-- Home (always visible) -->
+          <li class="nav-item px-2">
+            <RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink>
+          </li>
+          
+          <!-- Restricted individual items -->
+          <li v-if="isAuthenticated" class="nav-item px-2">
+            <RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item px-2">
+            <RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink>
+          </li>
+          
+          <!-- Dynamic dropdown sections -->
+          <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle fw-medium" href="#" :id="`${key}Dropdown`" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ section.label }}
             </a>
-            <ul class="dropdown-menu" aria-labelledby="nutritionDropdown">
-              <li><RouterLink to="/nutrition" class="dropdown-item">Overview</RouterLink></li>
-              <li><RouterLink to="/nutrition/ingredients" class="dropdown-item">Ingredients</RouterLink></li>
+            <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
+              <li v-for="item in section.items" :key="item.path">
+                <RouterLink :to="item.path" class="dropdown-item">{{ item.label }}</RouterLink>
+              </li>
             </ul>
           </li>
-          <li class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" id="literatureDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Literature
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="literatureDropdown">
-              <li><RouterLink to="/literature" class="dropdown-item">Overview</RouterLink></li>
-              <li><RouterLink to="/books" class="dropdown-item">Books</RouterLink></li>
-              <li><RouterLink to="/poems" class="dropdown-item">Poems</RouterLink></li>
-            </ul>
+          
+          <!-- Standalone restricted items -->
+          <li v-for="item in standaloneItems" :key="item.path" class="nav-item px-2">
+            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active">{{ item.label }}</RouterLink>
           </li>
-          <li class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" id="entertainmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Entertainment
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="entertainmentDropdown">
-              <li><RouterLink to="/entertainment" class="dropdown-item">Overview</RouterLink></li>
-              <li><RouterLink to="/anime" class="dropdown-item">Anime</RouterLink></li>
-              <li><RouterLink to="/movies" class="dropdown-item">Movies</RouterLink></li>
-            </ul>
+        </ul>
+        
+        <!-- Auth controls -->
+        <ul class="navbar-nav">
+          <li v-if="!isAuthenticated" class="nav-item px-2">
+            <button @click="showAuthenticationModal" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-unlock"></i>
+              Login
+            </button>
           </li>
-          <li class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" id="adventureDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Adventure
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="adventureDropdown">
-              <li><RouterLink to="/adventure" class="dropdown-item">Overview</RouterLink></li>
-              <li><RouterLink to="/adventure/destinations" class="dropdown-item">Destinations</RouterLink></li>
-            </ul>
+          <li v-if="isAuthenticated" class="nav-item px-2">
+            <button @click="logout" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-lock"></i>
+              Logout
+            </button>
           </li>
-          <li class="nav-item px-2"><RouterLink to="/experiments" class="nav-link fw-medium" active-class="active">Experiments</RouterLink></li>
-          <li class="nav-item px-2"><RouterLink to="/random" class="nav-link fw-medium" active-class="active">Random</RouterLink></li>
         </ul>
       </div>
     </div>
   </nav>
-
 </template>

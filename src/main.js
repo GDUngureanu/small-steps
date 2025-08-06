@@ -31,6 +31,10 @@ import Ingredients from './components/nutrition/ingredients/template.vue'
 import Adventure from './components/adventure/overview/template.vue'
 import Destinations from './components/adventure/destinations/template.vue'
 
+// Practice Components
+import Practice from './components/practice/overview/template.vue'
+import Routines from './components/practice/routines/template.vue'
+
 // Styles
 import './scss/styles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -52,6 +56,8 @@ const routes = [
   { path: '/nutrition/ingredients', component: Ingredients },
   { path: '/adventure', component: Adventure },
   { path: '/adventure/destinations', component: Destinations },
+  { path: '/practice', component: Practice },
+  { path: '/practice/routines', component: Routines },
 ]
 
 const router = createRouter({
