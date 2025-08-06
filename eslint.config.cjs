@@ -17,6 +17,7 @@ module.exports = [
       'src/application.vue',
       'src/components/navigation/template.vue',
       'eslint.config.cjs',
+      'eslint-wide-formatter.js',
       'vite.config.js',
       'tests/**',
     ],
