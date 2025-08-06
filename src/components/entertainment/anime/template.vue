@@ -38,7 +38,7 @@ defineOptions({
         <p>I'm using <a href="https://myanimelist.net/" class="text-decoration-none">MyAnimeList.net</a> as my
             main source of reference.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <SuggestionsTemplate :suggestions="suggestions" storage-key="entertainment-anime" />
         
         <p></p>
 

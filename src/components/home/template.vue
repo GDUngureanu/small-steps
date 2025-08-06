@@ -14,7 +14,7 @@ defineOptions({
     <ArticleTemplate title="Coding my passions" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm coding because I like to.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <SuggestionsTemplate :suggestions="suggestions" storage-key="home" />
     </ArticleTemplate>
 
     <ArticleTemplate title="Play the most Magnificent Game that you can!" meta="Jun 4, 2025 by G. D. Ungureanu">

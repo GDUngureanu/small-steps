@@ -16,7 +16,7 @@ defineOptions({
     </ArticleTemplate>
 
     <ArticleTemplate title="Notes" meta="Jav 7, 2025 by G. D. Ungureanu">
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <SuggestionsTemplate :suggestions="suggestions" storage-key="ikigai-notes" />
     </ArticleTemplate>
 
 

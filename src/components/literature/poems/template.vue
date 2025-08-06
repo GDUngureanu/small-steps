@@ -13,7 +13,7 @@ defineOptions({
     <ArticleTemplate title="Poems" meta="May 26, 2025 by G. D. Ungureanu">
         <p>I'm working on compiling a list of Poems.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <SuggestionsTemplate :suggestions="suggestions" storage-key="literature-poems" />
     </ArticleTemplate>
 
     <ArticleTemplate title="Memento Mori" meta="1872 by Mihai Eminescu">
