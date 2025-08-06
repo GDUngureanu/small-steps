@@ -10,7 +10,7 @@ defineOptions({
 
 <template>
 
-    <ArticleTemplate title="Books" meta="Jav 4, 2025 by G. D. Ungureanu">
+    <ArticleTemplate title="Books" meta="Jun 4, 2025 by G. D. Ungureanu">
         <p>Work work work.</p>
 
         <SuggestionsTemplate :suggestions="suggestions" />
