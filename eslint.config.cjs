@@ -18,6 +18,7 @@ module.exports = [
       'src/components/navigation/template.vue',
       'eslint.config.cjs',
       'vite.config.js',
+      'tests/**',
     ],
   },
   {
