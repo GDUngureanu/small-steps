@@ -20,9 +20,8 @@
 
 <script setup>
 import ArticleTemplate from '../../../templates/article.vue';
-import SuggestionsTemplate from '../../../templates/suggestions.vue';
+import ActionsTemplate from '../../../templates/actions.vue';
 import animeList from './data.json';
-import suggestions from './suggestions.json';
 
 defineOptions({
     name: 'AnimeTemplate'
@@ -38,7 +37,7 @@ defineOptions({
         <p>I'm using <a href="https://myanimelist.net/" class="text-decoration-none">MyAnimeList.net</a> as my
             main source of reference.</p>
 
-        <SuggestionsTemplate :suggestions="suggestions" />
+        <ActionsTemplate list-id="e0ad76c7-28ab-4d43-80f9-0c463979226c" />
         
         <p></p>
 
