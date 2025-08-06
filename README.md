@@ -39,7 +39,7 @@ npm start
 | `npm run preview` | Preview production build on port 4173 |
 | `npm run lint` | Run ESLint on .vue, .js files |
 | `npm run fix` | Fix linting issues automatically |
-| `npm run test` | Run build and lint (full test suite) |
+| `npm run test` | Run build and lint steps (no unit tests included) |
 | `npm run deploy` | Deploy to GitHub Pages |
 
 ## Project Structure
