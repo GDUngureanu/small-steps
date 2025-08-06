@@ -10,7 +10,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview --port 4173",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs -f ./eslint-wide-formatter.js",
     "fix": "npm run lint -- --fix",
     "test": "node --test --experimental-test-coverage && npm run lint",
     "predeploy": "npm run build",
