@@ -1,5 +1,4 @@
-import test from 'node:test'
-import assert from 'node:assert/strict'
+import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../pageTestUtils.js'
 import path from 'node:path'
 
@@ -13,11 +12,11 @@ for (const { file, route } of pages) {
   const name = path.basename(file)
   test(`${name} renders without errors`, async () => {
     const html = await renderComponent(file)
-    assert.ok(html.length > 0)
+    expect(html.length).toBeGreaterThan(0)
   })
 
   test(`route ${route} resolves`, async () => {
     const resolved = await resolveRoute(route)
-    assert.equal(resolved, route)
+    expect(resolved).toBe(route)
   })
 }

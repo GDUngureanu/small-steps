@@ -17,7 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "fix": "npm run lint:fix && npm run format",
-    "test": "node --test --experimental-test-coverage tests/**/*.js && npm run lint",
+    "test": "node --test --experimental-test-coverage tests/components/**/*.js tests/composables/**/*.js tests/router/**/*.js && vitest run tests/pages/**/*.test.js && npm run lint",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -40,6 +40,8 @@
     "sass": "^1.89.0",
     "sass-loader": "^16.0.5",
     "vite": "^6.3.5",
-    "vue-loader": "^17.4.2"
+    "vue-loader": "^17.4.2",
+    "@vue/test-utils": "^2.4.5",
+    "vitest": "^1.6.0"
   }
 }
