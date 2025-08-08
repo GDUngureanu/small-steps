@@ -34,7 +34,7 @@ async function setup(authenticated = false) {
   return router
 }
 
-const protectedPaths = rawRoutes.filter(r => r.meta?.requiresAuth).map(r => r.path)
+const protectedPaths = rawRoutes.filter((r) => r.meta?.requiresAuth).map((r) => r.path)
 
 for (const path of protectedPaths) {
   test(`emits auth-required and redirects unauthenticated users from ${path}`, async () => {

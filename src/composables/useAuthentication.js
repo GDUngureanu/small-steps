@@ -86,18 +86,18 @@ export function useAuthentication() {
   // Build navigation items from route metadata
   const navigationItems = computed(() => {
     return routes
-      .filter(route => !route.meta?.group)
-      .map(route => ({
+      .filter((route) => !route.meta?.group)
+      .map((route) => ({
         path: route.path,
         label: route.meta?.label || route.path,
         public: !route.meta?.requiresAuth,
       }))
-      .filter(item => item.public || isAuthenticated.value)
+      .filter((item) => item.public || isAuthenticated.value)
   })
 
   const dropdownSections = computed(() => {
     const sections = {}
-    routes.forEach(route => {
+    routes.forEach((route) => {
       const meta = route.meta || {}
       if (!meta.group) return
 

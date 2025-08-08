@@ -36,8 +36,8 @@ test('authenticate and logout flow', async () => {
 
 test('route access control', async () => {
   const auth = await setup()
-  const publicPath = routes.find(r => !r.meta?.requiresAuth)?.path
-  const restrictedPath = routes.find(r => r.meta?.requiresAuth)?.path
+  const publicPath = routes.find((r) => !r.meta?.requiresAuth)?.path
+  const restrictedPath = routes.find((r) => r.meta?.requiresAuth)?.path
   assert.equal(auth.isRoutePublic(publicPath), true)
   assert.equal(auth.isRouteRestricted(restrictedPath), true)
   assert.equal(auth.canAccessRoute(restrictedPath), false)
