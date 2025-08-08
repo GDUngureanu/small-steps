@@ -12,17 +12,17 @@ const showAuthenticationModal = () => {
 }
 
 const navbarCollapse = ref(null)
-let bsCollapse
+let bootstrapCollapse
 
 onMounted(() => {
   if (navbarCollapse.value) {
-    bsCollapse = new Collapse(navbarCollapse.value, { toggle: false })
+    bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
   }
 })
 
 const closeMenu = () => {
-  if (window.innerWidth < 992 && bsCollapse) {
-    bsCollapse.hide()
+  if (window.innerWidth < 992 && bootstrapCollapse) {
+    bootstrapCollapse.hide()
   }
 }
 

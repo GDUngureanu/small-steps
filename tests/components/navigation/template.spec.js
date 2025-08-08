@@ -4,19 +4,19 @@ test('navbar collapse hides on small screens after link click', () => {
   const originalWindow = global.window
   global.window = { innerWidth: 500 }
 
-  let hideCalled = false
-  const bsCollapse = { hide: () => { hideCalled = true } }
+  let hideFunctionCalled = false
+  const bootstrapCollapse = { hide: () => { hideFunctionCalled = true } }
 
   const closeMenu = () => {
-    if (window.innerWidth < 992 && bsCollapse) {
-      bsCollapse.hide()
+    if (window.innerWidth < 992 && bootstrapCollapse) {
+      bootstrapCollapse.hide()
     }
   }
 
-  const link = new EventTarget()
-  link.addEventListener('click', closeMenu)
-  link.dispatchEvent(new Event('click'))
+  const navigationLinkElement = new EventTarget()
+  navigationLinkElement.addEventListener('click', closeMenu)
+  navigationLinkElement.dispatchEvent(new Event('click'))
 
-  assert.equal(hideCalled, true)
+  assert.equal(hideFunctionCalled, true)
   global.window = originalWindow
 })
