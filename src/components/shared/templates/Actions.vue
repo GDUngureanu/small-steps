@@ -1,6 +1,6 @@
 <script setup>
   import { ref, watch, computed, nextTick } from 'vue'
-  import { supabase } from '../../../config/supabase.js'
+  import { supabase } from '@/config/supabase.js'
   import ActionItem from './actions/ActionItem.vue'
   import DeleteModal from './actions/DeleteModal.vue'
   import { PRIORITY_LEVELS } from './actions/utils.js'

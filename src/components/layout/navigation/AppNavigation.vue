@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import { Collapse } from 'bootstrap'
-  import { useAuthentication } from '../../../composables/useAuthentication.js'
+  import { useAuthentication } from '@/composables/useAuthentication.js'
 
   /**
    * Top-level navigation bar showing public and restricted sections.

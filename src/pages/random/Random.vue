@@ -1,5 +1,5 @@
 <script setup>
-  import ArticleTemplate from '../../components/shared/templates/Article.vue'
+  import ArticleTemplate from '@/components/shared/templates/Article.vue'
 
   defineOptions({
     name: 'RandomTemplate',
