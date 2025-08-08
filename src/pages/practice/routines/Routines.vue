@@ -316,13 +316,13 @@ Contrast verification (AA):
 
       case 'week': {
         // Calculate ISO week number and associated week-year
-        const temp = new Date(date)
-        temp.setHours(0, 0, 0, 0)
-        const day = temp.getDay() || 7 // ISO: Mon=1, Sun=7
-        temp.setDate(temp.getDate() + 4 - day) // Move to Thursday to determine week-year
-        const weekYear = temp.getFullYear()
+        const weekCalculationDate = new Date(date)
+        weekCalculationDate.setHours(0, 0, 0, 0)
+        const isoWeekDay = weekCalculationDate.getDay() || 7 // ISO: Mon=1, Sun=7
+        weekCalculationDate.setDate(weekCalculationDate.getDate() + 4 - isoWeekDay) // Move to Thursday to determine week-year
+        const weekYear = weekCalculationDate.getFullYear()
         const yearStart = new Date(weekYear, 0, 1)
-        const weekNum = Math.ceil(((temp - yearStart) / 86400000 + 1) / 7)
+        const weekNum = Math.ceil(((weekCalculationDate - yearStart) / 86400000 + 1) / 7)
         return `${weekYear}-W${weekNum.toString().padStart(2, '0')}`
       }
 
