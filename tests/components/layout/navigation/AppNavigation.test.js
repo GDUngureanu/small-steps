@@ -1,5 +1,5 @@
-import test from 'node:test'
-import assert from 'node:assert/strict'
+import { test, expect } from 'vitest'
+
 test('navbar collapse hides on small screens after link click', () => {
   const originalWindow = global.window
   global.window = { innerWidth: 500 }
@@ -21,7 +21,7 @@ test('navbar collapse hides on small screens after link click', () => {
   navigationLinkElement.addEventListener('click', closeMenu)
   navigationLinkElement.dispatchEvent(new Event('click'))
 
-  assert.equal(hideFunctionCalled, true)
+  expect(hideFunctionCalled).toBe(true)
   global.window = originalWindow
 })
 
@@ -66,9 +66,9 @@ test('prefetch only triggers after delay and cancels on quick leave', async () =
   navigationLinkElement.dispatchEvent(new Event('mouseover'))
   setTimeout(() => navigationLinkElement.dispatchEvent(new Event('mouseleave')), 100)
   await new Promise((r) => setTimeout(r, 200))
-  assert.equal(fetched, false)
+  expect(fetched).toBe(false)
 
   navigationLinkElement.dispatchEvent(new Event('mouseover'))
   await new Promise((r) => setTimeout(r, 200))
-  assert.equal(fetched, true)
+  expect(fetched).toBe(true)
 })

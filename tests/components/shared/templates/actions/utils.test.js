@@ -1,5 +1,4 @@
-import test from 'node:test'
-import assert from 'node:assert/strict'
+import { test, expect } from 'vitest'
 import {
   getPriorityText,
   getPriorityClass,
@@ -7,13 +6,13 @@ import {
 } from '../../../../../src/components/shared/templates/actions/utils.js'
 
 test('getPriorityText returns correct labels', () => {
-  assert.equal(getPriorityText(PRIORITY_LEVELS.LOW), 'Low')
-  assert.equal(getPriorityText(PRIORITY_LEVELS.MEDIUM), 'Medium')
-  assert.equal(getPriorityText(PRIORITY_LEVELS.HIGH), 'High')
+  expect(getPriorityText(PRIORITY_LEVELS.LOW)).toBe('Low')
+  expect(getPriorityText(PRIORITY_LEVELS.MEDIUM)).toBe('Medium')
+  expect(getPriorityText(PRIORITY_LEVELS.HIGH)).toBe('High')
 })
 
 test('getPriorityClass returns correct classes', () => {
-  assert.equal(getPriorityClass(PRIORITY_LEVELS.LOW), 'text-secondary')
-  assert.equal(getPriorityClass(PRIORITY_LEVELS.MEDIUM), 'text-warning')
-  assert.equal(getPriorityClass(PRIORITY_LEVELS.HIGH), 'text-danger')
+  expect(getPriorityClass(PRIORITY_LEVELS.LOW)).toBe('text-secondary')
+  expect(getPriorityClass(PRIORITY_LEVELS.MEDIUM)).toBe('text-warning')
+  expect(getPriorityClass(PRIORITY_LEVELS.HIGH)).toBe('text-danger')
 })
