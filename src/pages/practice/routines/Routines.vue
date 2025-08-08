@@ -315,10 +315,15 @@ Contrast verification (AA):
         return date.toISOString().split('T')[0] // YYYY-MM-DD
 
       case 'week': {
-        // Calculate ISO week number
-        const yearStart = new Date(date.getFullYear(), 0, 1)
-        const weekNum = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7)
-        return `${date.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`
+        // Calculate ISO week number and associated week-year
+        const temp = new Date(date)
+        temp.setHours(0, 0, 0, 0)
+        const day = temp.getDay() || 7 // ISO: Mon=1, Sun=7
+        temp.setDate(temp.getDate() + 4 - day) // Move to Thursday to determine week-year
+        const weekYear = temp.getFullYear()
+        const yearStart = new Date(weekYear, 0, 1)
+        const weekNum = Math.ceil(((temp - yearStart) / 86400000 + 1) / 7)
+        return `${weekYear}-W${weekNum.toString().padStart(2, '0')}`
       }
 
       case 'month':
@@ -327,6 +332,18 @@ Contrast verification (AA):
       case 'year':
         return date.getFullYear().toString()
     }
+  }
+
+  if (import.meta.env.DEV) {
+    // Console checks for ISO week-year edge cases
+    console.assert(
+      formatIntervalId('week', new Date('2015-12-31')) === '2015-W53',
+      '2015-12-31 should be in 2015-W53'
+    )
+    console.assert(
+      formatIntervalId('week', new Date('2016-01-01')) === '2015-W53',
+      '2016-01-01 should be in 2015-W53'
+    )
   }
 
   function humanLabel(scope, start, end) {
