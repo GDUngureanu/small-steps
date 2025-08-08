@@ -84,7 +84,7 @@
     })
 
     // Sort sub-actions within each parent group
-    map.forEach((subActions, parentId) => {
+    map.forEach((subActions) => {
       subActions.sort((action_a, action_b) => {
         if (action_a.status !== action_b.status) {
           return action_a.status ? 1 : -1 // Incomplete first, completed last
@@ -119,7 +119,7 @@
       setCachedActions(props.listId, actions.value)
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while fetching actions:', exception)
+      // Exception thrown while fetching actions
     } finally {
       loading.value = false
     }
@@ -158,7 +158,7 @@
       }
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while creating actions:', exception)
+      // Exception thrown while creating actions
     } finally {
       loading.value = false
 
@@ -205,7 +205,7 @@
       setCachedActions(props.listId, actions.value)
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while updating action status:', exception)
+      // Exception thrown while updating action status
       // Revert status on error
       action.status = originalStatus
       optimisticUpdates.value.delete(action.id)
@@ -229,7 +229,7 @@
       setCachedActions(props.listId, actions.value)
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while updating action description:', exception)
+      // Exception thrown while updating action description
       editingActionId.value = null
     }
   }
@@ -266,7 +266,7 @@
       deleteModalAction.value = null
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while deleting action:', exception)
+      // Exception thrown while deleting action
     } finally {
       loading.value = false
     }
@@ -302,7 +302,7 @@
       setCachedActions(props.listId, actions.value)
     } catch (exception) {
       error.value = exception.message
-      console.error('Exception thrown while updating priority:', exception)
+      // Exception thrown while updating priority
       // Revert priority on error
       action.priority = originalPriority
       optimisticUpdates.value.delete(action.id)

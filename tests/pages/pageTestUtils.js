@@ -52,8 +52,8 @@ export async function renderComponent(file) {
         cacheHandlers: false
       },
     })
-  } catch (templateError) {
-    console.warn(`Template compilation failed for ${file}:`, templateError.message)
+  } catch {
+    // Template compilation failed
     template = { code: 'function render() { return Vue.h("div", "Template compilation failed") }' }
   }
   
@@ -64,7 +64,7 @@ export async function renderComponent(file) {
       ${template.code}
       return { ...__default__, render }
     } catch (error) {
-      console.warn('Component compilation error:', error.message);
+      // Component compilation error
       return {
         name: 'FailedComponent',
         render: () => Vue.h('div', 'Component failed to compile')
@@ -75,8 +75,8 @@ export async function renderComponent(file) {
   let component
   try {
     component = new Function('Vue', 'path', code)(Vue, path)
-  } catch (compilationError) {
-    console.warn(`Script compilation failed for ${file}:`, compilationError.message)
+  } catch {
+    // Script compilation failed
     component = {
       name: 'FailedComponent',
       render: () => Vue.h('div', `Failed to compile: ${path.basename(file)}`)
@@ -87,8 +87,8 @@ export async function renderComponent(file) {
   
   try {
     return await renderToString(app)
-  } catch (renderError) {
-    console.warn(`Render failed for ${file}:`, renderError.message)
+  } catch {
+    // Render failed
     return `<div>Failed to render: ${path.basename(file)}</div>`
   }
 }

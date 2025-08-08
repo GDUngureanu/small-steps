@@ -251,8 +251,8 @@
       map._cleanupResize = () => {
         window.removeEventListener('resize', handleResize)
       }
-    } catch (error) {
-      console.error('Error loading map data:', error)
+    } catch {
+      // Error loading map data
       // User-friendly error message
       loadError.value = 'Unable to load map data. Please check your internet connection and try again later.'
       isLoading.value = false

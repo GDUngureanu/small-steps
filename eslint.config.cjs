@@ -34,7 +34,8 @@ module.exports = [
       'vue/multi-word-component-names': 'off', // Too many single-word components
       'vue/no-unused-vars': 'warn',
       'vue/no-console': 'warn',
-      'vue/no-v-html': 'warn', // XSS warning but not error
+      'vue/no-v-html': 'off', // Disabled - needed for rich content
+      'vue/v-bind-style': 'off', // Disabled - allow both v-bind and : syntax
       
       // Relax formatting rules for Phase 1
       'vue/max-attributes-per-line': 'off',

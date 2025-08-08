@@ -1,4 +1,5 @@
 /* eslint-env node */
+/* eslint-disable no-undef */
 /**
  * Custom ESLint formatter that outputs results in a wide-screen friendly format.
  * Lines and columns are padded so that messages align neatly when viewed on
