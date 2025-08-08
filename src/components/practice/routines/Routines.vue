@@ -1,8 +1,8 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import ArticleTemplate from '../../../templates/Article.vue';
 import habitsData from './habits.json';
-import activitiesData from './activities.json';
+import { isDone, toggleHabit, computeCompletionCount } from './state.js';
 
 /*
 SPEC—Temporal Windows (Europe/Bucharest, ISO week Monday)
@@ -126,7 +126,7 @@ Worked examples (indices only):
 SPEC—State Model (Ephemeral only; no localStorage/URL)
 Data sources:
 - SeedHabits: loaded from habits.json
-- SeedActivities: loaded from activities.json (sparse; only "done")
+- SeedActivities: loaded from activities.js (sparse; only "done")
 - SessionOverrides: Map key = `${habitId}|${scope}|${intervalId}`, value = "done"|"undone"
 
 Derived:
@@ -247,8 +247,6 @@ defineOptions({
     name: 'RoutinesTemplate'
 });
 
-// Reactive state
-const sessionOverrides = reactive(new Map());
 const currentTime = ref(new Date());
 const allScopes = ['day', 'week', 'month', 'year'];
 
@@ -401,77 +399,9 @@ function computeWindows(scope, nowTZ) {
   };
 }
 
-// State management functions
-function isDone(habitId, scope, completedOn) {
-  const key = `${habitId}|${scope}|${completedOn}`;
-  
-  if (sessionOverrides.has(key)) {
-    return sessionOverrides.get(key) === 'done';
-  }
-  
-  return activitiesData.activities.some(
-    activity => activity.habitId === habitId && 
-                activity.scope === scope && 
-                activity.completedOn === completedOn
-  );
-}
-
-function toggleHabit(habitId, scope, completedOn) {
-  const key = `${habitId}|${scope}|${completedOn}`;
-  const current = isDone(habitId, scope, completedOn);
-  const next = !current;
-  
-  if (next) {
-    sessionOverrides.set(key, 'done');
-  } else {
-    // Check if it exists in seed data
-    const existsInSeed = activitiesData.activities.some(
-      activity => activity.habitId === habitId && 
-                  activity.scope === scope && 
-                  activity.completedOn === completedOn
-    );
-    
-    if (existsInSeed) {
-      sessionOverrides.set(key, 'undone');
-    } else {
-      sessionOverrides.delete(key);
-    }
-  }
-}
-
-// Completion count calculation
-function computeCompletionCount(habitId, scope) {
-  const completedIntervals = [];
-  
-  // Add from seed data (all activities are considered completed since status field removed)
-  activitiesData.activities.forEach(activity => {
-    if (activity.habitId === habitId && activity.scope === scope) {
-      completedIntervals.push(activity.completedOn);
-    }
-  });
-  
-  // Add from session overrides
-  sessionOverrides.forEach((status, key) => {
-    const [overrideHabitId, overrideScope, completedOn] = key.split('|');
-    if (overrideHabitId === habitId && overrideScope === scope && status === 'done') {
-      if (!completedIntervals.includes(completedOn)) {
-        completedIntervals.push(completedOn);
-      }
-    }
-  });
-  
-  // Remove any intervals that are explicitly marked as undone
-  const filteredIntervals = completedIntervals.filter(completedOn => {
-    const key = `${habitId}|${scope}|${completedOn}`;
-    return sessionOverrides.get(key) !== 'undone';
-  });
-  
-  return filteredIntervals.length;
-}
-
 function getFireColor(count) {
   if (count > 20) return 'text-primary';   // Blue
-  if (count > 10) return 'text-danger';    // Red  
+  if (count > 10) return 'text-danger';    // Red
   if (count > 5) return 'text-warning';    // Yellow
   return 'text-muted';                     // Gray for <= 5
 }

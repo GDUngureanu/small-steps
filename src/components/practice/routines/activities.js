@@ -1,4 +1,4 @@
-{
+export default {
   "version": "1.0",
   "activities": [
     { "habitId": "h-001", "scope": "day", "completedOn": "2025-08-01" },
@@ -34,4 +34,4 @@
     { "habitId": "h-020", "scope": "year", "completedOn": "2023" },
     { "habitId": "h-020", "scope": "year", "completedOn": "2024" }
   ]
-}
+};
