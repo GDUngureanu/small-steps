@@ -32,8 +32,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
-    "ajv": "^8.17.1",
-    "ajv-formats": "^3.0.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.1.0",
