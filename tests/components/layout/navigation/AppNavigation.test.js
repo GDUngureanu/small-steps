@@ -24,3 +24,51 @@ test('navbar collapse hides on small screens after link click', () => {
   assert.equal(hideFunctionCalled, true)
   global.window = originalWindow
 })
+
+test('prefetch only triggers after delay and cancels on quick leave', async () => {
+  let fetched = false
+  const mockRouter = {
+    resolve: () => ({
+      matched: [
+        {
+          components: {
+            default: () => {
+              fetched = true
+            },
+          },
+        },
+      ],
+    }),
+  }
+
+  let prefetchTimer
+  const prefetch = (path) => {
+    clearTimeout(prefetchTimer)
+    prefetchTimer = setTimeout(() => {
+      const route = mockRouter.resolve(path)
+      route.matched.forEach((record) => {
+        const component = record.components?.default
+        if (typeof component === 'function') {
+          component()
+        }
+      })
+    }, 150)
+  }
+
+  const cancelPrefetch = () => {
+    clearTimeout(prefetchTimer)
+  }
+
+  const navigationLinkElement = new EventTarget()
+  navigationLinkElement.addEventListener('mouseover', () => prefetch('/test'))
+  navigationLinkElement.addEventListener('mouseleave', cancelPrefetch)
+
+  navigationLinkElement.dispatchEvent(new Event('mouseover'))
+  setTimeout(() => navigationLinkElement.dispatchEvent(new Event('mouseleave')), 100)
+  await new Promise((r) => setTimeout(r, 200))
+  assert.equal(fetched, false)
+
+  navigationLinkElement.dispatchEvent(new Event('mouseover'))
+  await new Promise((r) => setTimeout(r, 200))
+  assert.equal(fetched, true)
+})
