@@ -2,7 +2,6 @@ import { ref, computed, watchEffect } from 'vue'
 import routes from '../routes.js'
 import { env } from '../env.js'
 
-// Reactive authentication state
 const isAuthenticated = ref(false)
 
 // Build a lookup of route metadata for quick access checks
@@ -11,7 +10,7 @@ const routeMeta = routes.reduce((metaByPath, route) => {
   return metaByPath
 }, {})
 
-// Check sessionStorage on composable creation and watch for changes
+// Check sessionStorage on initialization
 if (typeof sessionStorage !== 'undefined') {
   const storedAuthentication = sessionStorage.getItem('memento-mori-authentication')
   if (storedAuthentication === 'true') {
@@ -86,7 +85,7 @@ export function useAuthentication() {
     return isRoutePublic(path) || isAuthenticated.value
   }
 
-  // Build navigation items from route metadata
+  // Build primary navigation menu, hiding restricted routes for unauthenticated users
   const navigationItems = computed(() => {
     return routes
       .filter((route) => !route.meta?.group)

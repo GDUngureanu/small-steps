@@ -1,14 +1,7 @@
-// Vue imports
 import { createApp } from 'vue'
-
-// Third-party library imports
 import { Popover } from 'bootstrap'
-
-// Local component imports
 import App from '@/App.vue'
 import { createAppRouter } from '@/configuration/router.js'
-
-// Styles
 import '@/scss/styles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
