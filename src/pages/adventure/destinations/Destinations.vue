@@ -27,13 +27,6 @@
     'journey-postponed': '<i class="bi bi-dash-circle-dotted"></i> Not Interested',
   }
 
-  // Generate country colors from destinations data with computed status
-  const countryColors = computed(() => {
-    return Object.fromEntries(destinationsWithStatus.value.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3']))
-  })
-
-  const getCountryColor = (countryId) => countryColors.value[countryId] || '#d3d3d3'
-
   // =============================================================================
   // BUSINESS LOGIC FUNCTIONS
   // =============================================================================
@@ -103,25 +96,32 @@
     return Math.round(Math.max(1, Math.min(5, averagePriority)))
   }
 
+  // =============================================================================
+  // PREPROCESS DESTINATIONS
+  // =============================================================================
+  const processedDestinations = destinationsData.destinations.map((destination) => ({
+    ...destination,
+    status: getDestinationStatus(destination),
+    priority: getDestinationPriority(destination),
+    cities: destination.cities?.map((city) => ({
+      ...city,
+      status: getCityStatus(city),
+    })),
+  }))
+
+  // Generate country colors from destinations data with computed status
+  const countryColors = computed(() => {
+    return Object.fromEntries(
+      processedDestinations.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3'])
+    )
+  })
+
+  const getCountryColor = (countryId) => countryColors.value[countryId] || '#d3d3d3'
+
   // Helper function to find destination data by ISO code with computed status
   const findDestination = (iso) => {
-    return destinationsWithStatus.value.find((d) => d.iso === iso)
+    return processedDestinations.find((d) => d.iso === iso)
   }
-
-  // =============================================================================
-  // COMPUTED PROPERTIES
-  // =============================================================================
-  const destinationsWithStatus = computed(() => {
-    return destinationsData.destinations.map((destination) => ({
-      ...destination,
-      status: getDestinationStatus(destination),
-      priority: getDestinationPriority(destination),
-      cities: destination.cities?.map((city) => ({
-        ...city,
-        status: getCityStatus(city),
-      })),
-    }))
-  })
 
   // Variables for destinations list functionality
   const statusBadgeClasses = {
@@ -149,11 +149,21 @@
     }
 
     return {
-      completed: destinationsWithStatus.value.filter((d) => d.status === 'epic-adventure-done').sort(sortByPriorityThenAlpha),
-      inProgress: destinationsWithStatus.value.filter((d) => d.status === 'halfway-there').sort(sortByPriorityThenAlpha),
-      adventureAwaits: destinationsWithStatus.value.filter((d) => d.status === 'adventure-awaits').sort(sortByPriorityThenAlpha),
-      questForFun: destinationsWithStatus.value.filter((d) => d.status === 'quest-for-fun').sort(sortByPriorityThenAlpha),
-      postponed: destinationsWithStatus.value.filter((d) => d.status === 'journey-postponed').sort(sortByPriorityThenAlpha),
+      completed: processedDestinations
+        .filter((d) => d.status === 'epic-adventure-done')
+        .sort(sortByPriorityThenAlpha),
+      inProgress: processedDestinations
+        .filter((d) => d.status === 'halfway-there')
+        .sort(sortByPriorityThenAlpha),
+      adventureAwaits: processedDestinations
+        .filter((d) => d.status === 'adventure-awaits')
+        .sort(sortByPriorityThenAlpha),
+      questForFun: processedDestinations
+        .filter((d) => d.status === 'quest-for-fun')
+        .sort(sortByPriorityThenAlpha),
+      postponed: processedDestinations
+        .filter((d) => d.status === 'journey-postponed')
+        .sort(sortByPriorityThenAlpha),
     }
   })
 
