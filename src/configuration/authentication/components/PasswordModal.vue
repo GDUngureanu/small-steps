@@ -1,6 +1,6 @@
 <script setup>
   import { ref, nextTick, watch, computed } from 'vue'
-  import { useAuthentication } from '@/composables/useAuthentication.js'
+  import { useAuthentication } from '../useAuthentication.js'
 
   /**
    * Modal dialog prompting for a password before navigating to a restricted

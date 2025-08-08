@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import routes from './routes.js'
-import { useAuthentication } from './composables/useAuthentication.js'
-import { authEvents, AUTH_REQUIRED_EVENT } from './authEvents.js'
+import { useAuthentication } from './authentication/useAuthentication.js'
+import { authEvents, AUTH_REQUIRED_EVENT } from './authentication/authEvents.js'
 
 /**
  * Create a Vue Router instance with a simple authentication guard.

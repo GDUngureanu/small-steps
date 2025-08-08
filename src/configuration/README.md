@@ -1,4 +1,4 @@
-# Config
+# Configuration
 
 Centralised configuration and third‑party clients.
 
@@ -10,6 +10,19 @@ Centralised configuration and third‑party clients.
 - `VITE_SUPABASE_ANON_KEY` – public anon key
 
 The exported `supabase` instance is used by composables for authentication and data management.
+
+## Authentication
+
+The `authentication/` directory contains the complete authentication system:
+
+- `useAuthentication.js` - Core authentication logic and password validation
+- `authEvents.js` - Event system for authentication state management  
+- `components/PasswordModal.vue` - Password input modal component
+
+## Router and Routes
+
+- `router.js` - Vue Router factory with authentication guards
+- `routes.js` - Route definitions with lazy-loaded components
 
 ## Local Development
 

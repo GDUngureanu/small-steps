@@ -4,7 +4,7 @@ import { parse, compileScript, compileTemplate } from '@vue/compiler-sfc'
 import * as Vue from 'vue'
 import { createSSRApp } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import rawRoutes from '../../src/routes.js'
+import rawRoutes from '../../src/configuration/routes.js'
 import { createMemoryHistory } from 'vue-router'
 
 /**
@@ -114,9 +114,9 @@ export async function resolveRoute(pathName, authenticated = false) {
   process.env.VITE_APP_PASSWORD = 'secret'
 
   const routes = rawRoutes.map((r) => ({ ...r, component: {} }))
-  const { createAppRouter } = await import('../../src/router.js')
+  const { createAppRouter } = await import('../../src/configuration/router.js')
   const router = createAppRouter(createMemoryHistory(), routes)
-  const { useAuthentication } = await import('../../src/composables/useAuthentication.js')
+  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
   const auth = useAuthentication()
   auth.logout()
   if (authenticated) auth.authenticate('secret')

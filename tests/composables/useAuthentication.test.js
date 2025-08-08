@@ -1,12 +1,12 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import routes from '../../src/routes.js'
+import routes from '../../src/configuration/routes.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t) {
   setupTestEnvironment(t)
-  const { useAuthentication } = await import('../../src/composables/useAuthentication.js')
+  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
   const auth = useAuthentication()
   auth.logout()
   return auth
@@ -16,7 +16,7 @@ test('initializes from existing session token and clears on logout', async (t) =
   setupTestEnvironment(t)
   sessionStorage.setItem('memento-mori-authentication', 'true')
   const { useAuthentication } = await import(
-    '../../src/composables/useAuthentication.js?from-session'
+    '../../src/configuration/authentication/useAuthentication.js?from-session'
   )
   const auth = useAuthentication()
   assert.equal(auth.isAuthenticated.value, true)
@@ -55,7 +55,7 @@ test('fails fast when password variable is absent', () => {
   const env = { ...process.env }
   delete env.VITE_APP_PASSWORD
 
-  const result = spawnSync(process.execPath, ['--input-type=module', '--eval', "import('./src/composables/useAuthentication.js')"], {
+  const result = spawnSync(process.execPath, ['--input-type=module', '--eval', "import('./src/configuration/authentication/useAuthentication.js')"], {
     cwd: process.cwd(),
     env,
     encoding: 'utf-8',
