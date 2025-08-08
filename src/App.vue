@@ -4,23 +4,23 @@
   import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
   import AppHeader from '@/components/layout/header/AppHeader.vue'
   import AppFooter from '@/components/layout/footer/AppFooter.vue'
-  import PasswordModal from '@/configuration/authentication/components/PasswordModal.vue'
+  import AccessModal from '@/configuration/authentication/components/AccessModal.vue'
   import { authenticationEvents, AUTH_REQUIRED_EVENT } from '@/configuration/authentication/authenticationEvents.js'
 
   /**
    * Root application shell. Renders navigation, header, footer and the active
-   * route content. It also guards restricted routes by showing a password modal
+   * route content. It also guards restricted routes by showing an access modal
    * when unauthenticated users attempt to access them.
    */
 
   const router = useRouter()
 
-  const showPasswordModal = ref(false)
+  const showAccessModal = ref(false)
   const pendingRoute = ref('')
 
   const handleAuthRequired = (event) => {
     pendingRoute.value = event.detail
-    showPasswordModal.value = true
+    showAccessModal.value = true
   }
 
   onMounted(() => {
@@ -36,19 +36,19 @@
     if (targetRoute) {
       router.push(targetRoute)
     }
-    showPasswordModal.value = false
+    showAccessModal.value = false
     pendingRoute.value = ''
   }
 
   // Handle modal close
   const handleModalClose = () => {
-    showPasswordModal.value = false
+    showAccessModal.value = false
     pendingRoute.value = ''
   }
 
   // Handle manual authentication request from navigation
   const handleShowAuthentication = () => {
-    showPasswordModal.value = true
+    showAccessModal.value = true
     pendingRoute.value = '' // No specific route, just authenticate
   }
 </script>
@@ -63,6 +63,6 @@
 
   <AppFooter />
 
-  <!-- Password Modal -->
-  <PasswordModal :show="showPasswordModal" :target-route="pendingRoute" @hide="handleModalClose" @authenticated="handleAuthenticated" />
+  <!-- Access Modal -->
+  <AccessModal :show="showAccessModal" :target-route="pendingRoute" @hide="handleModalClose" @authenticated="handleAuthenticated" />
 </template>

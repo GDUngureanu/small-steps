@@ -79,7 +79,7 @@
   }
 
   defineOptions({
-    name: 'PasswordModal',
+    name: 'AccessModal',
   })
 </script>
 
@@ -121,7 +121,7 @@
     </div>
   </div>
 
-  <!-- Modal backdrop -->
+  <!-- Modal backdrop: clicking it emits hide -->
   <div v-if="show" class="modal-backdrop fade show" @click="handleCancel"></div>
 </template>
 

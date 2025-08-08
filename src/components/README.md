@@ -4,7 +4,7 @@ Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) 
 
 ### Key directories
 
-- `auth/` – password modal for gated routes.
+- `auth/` – access modal for gated routes.
 - `navigation/`, `header/`, `footer/` – layout chrome shared across pages.
 - Feature pages such as `adventure/`, `entertainment/`, `literature/`, `nutrition/`, `practice/`, `ikigai/`, `ippo/`, `random/` and `home/` each provide a router-mounted component file and optional JSON data files.
 
