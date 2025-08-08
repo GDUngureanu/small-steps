@@ -6,33 +6,33 @@
  * Dynamic imports keep bundle size small and the optional `meta.requiresAuth`
  * flag marks routes that should be hidden behind the password modal.
  */
-const Home = () => import('./components/home/template.vue')
-const Ikigai = () => import('./components/ikigai/template.vue')
-const Ippo = () => import('./components/ippo/template.vue')
-const Experiments = () => import('./components/experiments/template.vue')
-const Random = () => import('./components/random/template.vue')
+const Home = () => import('./components/home/Home.vue')
+const Ikigai = () => import('./components/ikigai/Ikigai.vue')
+const Ippo = () => import('./components/ippo/Ippo.vue')
+const Experiments = () => import('./components/experiments/Experiments.vue')
+const Random = () => import('./components/random/Random.vue')
 
 // Literature Components
-const Literature = () => import('./components/literature/overview/template.vue')
-const Books = () => import('./components/literature/books/template.vue')
-const Poems = () => import('./components/literature/poems/template.vue')
+const Literature = () => import('./components/literature/overview/Overview.vue')
+const Books = () => import('./components/literature/books/Books.vue')
+const Poems = () => import('./components/literature/poems/Poems.vue')
 
 // Entertainment Components
-const Entertainment = () => import('./components/entertainment/overview/template.vue')
-const Anime = () => import('./components/entertainment/anime/template.vue')
-const Movies = () => import('./components/entertainment/movies/template.vue')
+const Entertainment = () => import('./components/entertainment/overview/Overview.vue')
+const Anime = () => import('./components/entertainment/anime/Anime.vue')
+const Movies = () => import('./components/entertainment/movies/Movies.vue')
 
 // Nutrition Components
-const Nutrition = () => import('./components/nutrition/overview/template.vue')
-const Ingredients = () => import('./components/nutrition/ingredients/template.vue')
+const Nutrition = () => import('./components/nutrition/overview/Overview.vue')
+const Ingredients = () => import('./components/nutrition/ingredients/Ingredients.vue')
 
 // Adventure Components
-const Adventure = () => import('./components/adventure/overview/template.vue')
-const Destinations = () => import('./components/adventure/destinations/template.vue')
+const Adventure = () => import('./components/adventure/overview/Overview.vue')
+const Destinations = () => import('./components/adventure/destinations/Destinations.vue')
 
 // Practice Components
-const Practice = () => import('./components/practice/overview/template.vue')
-const Routines = () => import('./components/practice/routines/template.vue')
+const Practice = () => import('./components/practice/overview/Overview.vue')
+const Routines = () => import('./components/practice/routines/Routines.vue')
 
 export default [
   { path: '/', component: Home },

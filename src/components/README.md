@@ -1,12 +1,12 @@
 # Components
 
-Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) exposes a `template.vue` file that is registered with Vue Router.
+Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) exposes a PascalCase component file (e.g. `Ikigai.vue`) that is registered with Vue Router.
 
 ### Key directories
 
 - `auth/` – password modal for gated routes.
 - `navigation/`, `header/`, `footer/` – layout chrome shared across pages.
-- Feature pages such as `adventure/`, `entertainment/`, `literature/`, `nutrition/`, `practice/`, `ikigai/`, `ippo/`, `random/` and `home/` each provide a router-mounted `template.vue` and optional JSON data files.
+- Feature pages such as `adventure/`, `entertainment/`, `literature/`, `nutrition/`, `practice/`, `ikigai/`, `ippo/`, `random/` and `home/` each provide a router-mounted component file and optional JSON data files.
 
 ## Dependencies
 
@@ -23,4 +23,4 @@ npm start
 
 ## Entry Points
 
-Pages are rendered by `template.vue` files. Shared pieces such as headers and navigation live at the top level of this directory.
+Pages are rendered by these component files. Shared pieces such as headers and navigation live at the top level of this directory.

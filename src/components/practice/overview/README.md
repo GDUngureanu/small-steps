@@ -3,4 +3,4 @@
 Overview of habit practice section.
 
 ## Component
-- `template.vue` – static description. No props or events.
+- `Overview.vue` – static description. No props or events.

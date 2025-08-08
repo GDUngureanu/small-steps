@@ -1,7 +1,7 @@
 <script setup>
-import ArticleTemplate from '../../templates/article.vue';
-import ActionsTemplate from '../../templates/actions.vue';
-import SuggestionsTemplate from '../../templates/suggestions.vue';
+import ArticleTemplate from '../../templates/Article.vue';
+import ActionsTemplate from '../../templates/Actions.vue';
+import SuggestionsTemplate from '../../templates/Suggestions.vue';
 import suggestions from './suggestions.json';
 
 defineOptions({

@@ -1,6 +1,6 @@
 <script setup>
-import ArticleTemplate from '../../../templates/article.vue';
-import ActionsTemplate from '../../../templates/actions.vue';
+import ArticleTemplate from '../../../templates/Article.vue';
+import ActionsTemplate from '../../../templates/Actions.vue';
 
 defineOptions({
     name: 'BooksTemplate'
