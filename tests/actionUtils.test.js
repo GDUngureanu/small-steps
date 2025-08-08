@@ -1,6 +1,10 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { getPriorityText, getPriorityClass, PRIORITY_LEVELS } from '../src/templates/actions/utils.js'
+import {
+  getPriorityText,
+  getPriorityClass,
+  PRIORITY_LEVELS,
+} from '../src/components/shared/templates/actions/utils.js'
 
 test('getPriorityText returns correct labels', () => {
   assert.equal(getPriorityText(PRIORITY_LEVELS.LOW), 'Low')
