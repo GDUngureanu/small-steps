@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { Collapse } from 'bootstrap'
 import { useAuthentication } from '../../composables/useAuthentication.js'
 
 const { isAuthenticated, dropdownSections, standaloneItems, logout } = useAuthentication()
@@ -8,6 +9,21 @@ const emit = defineEmits(['showAuthentication'])
 
 const showAuthenticationModal = () => {
   emit('showAuthentication')
+}
+
+const navbarCollapse = ref(null)
+let bsCollapse
+
+onMounted(() => {
+  if (navbarCollapse.value) {
+    bsCollapse = new Collapse(navbarCollapse.value, { toggle: false })
+  }
+})
+
+const closeMenu = () => {
+  if (window.innerWidth < 992 && bsCollapse) {
+    bsCollapse.hide()
+  }
 }
 
 defineOptions({
@@ -24,21 +40,21 @@ defineOptions({
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent" ref="navbarCollapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <!-- Home (always visible) -->
           <li class="nav-item px-2">
-            <RouterLink to="/" class="nav-link fw-medium" active-class="active">Home</RouterLink>
+            <RouterLink to="/" class="nav-link fw-medium" active-class="active" @click="closeMenu">Home</RouterLink>
           </li>
-          
+
           <!-- Restricted individual items -->
           <li v-if="isAuthenticated" class="nav-item px-2">
-            <RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active">Ikigai</RouterLink>
+            <RouterLink to="/ikigai" class="nav-link fw-medium" active-class="active" @click="closeMenu">Ikigai</RouterLink>
           </li>
           <li v-if="isAuthenticated" class="nav-item px-2">
-            <RouterLink to="/ippo" class="nav-link fw-medium" active-class="active">Ippo</RouterLink>
+            <RouterLink to="/ippo" class="nav-link fw-medium" active-class="active" @click="closeMenu">Ippo</RouterLink>
           </li>
-          
+
           <!-- Dynamic dropdown sections -->
           <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
             <a class="nav-link dropdown-toggle fw-medium" href="#" :id="`${key}Dropdown`" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,14 +62,14 @@ defineOptions({
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
               <li v-for="item in section.items" :key="item.path">
-                <RouterLink :to="item.path" class="dropdown-item">{{ item.label }}</RouterLink>
+                <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu">{{ item.label }}</RouterLink>
               </li>
             </ul>
           </li>
-          
+
           <!-- Standalone restricted items -->
           <li v-for="item in standaloneItems" :key="item.path" class="nav-item px-2">
-            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active">{{ item.label }}</RouterLink>
+            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu">{{ item.label }}</RouterLink>
           </li>
         </ul>
         
