@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
+import routes from '../src/routes.js'
 
 const PASSWORD = 'secret'
 
@@ -35,11 +36,13 @@ test('authenticate and logout flow', async () => {
 
 test('route access control', async () => {
   const auth = await setup()
-  assert.equal(auth.isRoutePublic('/'), true)
-  assert.equal(auth.isRouteRestricted('/practice'), true)
-  assert.equal(auth.canAccessRoute('/practice'), false)
+  const publicPath = routes.find(r => !r.meta?.requiresAuth)?.path
+  const restrictedPath = routes.find(r => r.meta?.requiresAuth)?.path
+  assert.equal(auth.isRoutePublic(publicPath), true)
+  assert.equal(auth.isRouteRestricted(restrictedPath), true)
+  assert.equal(auth.canAccessRoute(restrictedPath), false)
   auth.authenticate(PASSWORD)
-  assert.equal(auth.canAccessRoute('/practice'), true)
+  assert.equal(auth.canAccessRoute(restrictedPath), true)
 })
 
 test('fails fast when password variable is absent', () => {
