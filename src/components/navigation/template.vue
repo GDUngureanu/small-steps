@@ -46,8 +46,8 @@ defineOptions({
         aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent" ref="navbarCollapse">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
+        <ul class="navbar-nav me-auto">
           <!-- Home (always visible) -->
           <li class="nav-item px-2">
             <RouterLink to="/" class="nav-link fw-medium" active-class="active" @click="closeMenu">Home</RouterLink>

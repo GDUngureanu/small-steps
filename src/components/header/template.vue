@@ -1,6 +1,11 @@
-<template>
+<script setup>
+import { useRoute } from 'vue-router'
 
-  <div class="px-3 py-3 my-5 text-center">
+const route = useRoute()
+</script>
+
+<template>
+  <div v-if="route.path === '/'" class="px-3 py-3 my-5 text-center">
     <h1 class="display-5 fw-bold text-body-emphasis">Memento Mori</h1>
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4 fst-italic">As a Man among Men <br />
@@ -13,5 +18,4 @@
         By hunting knowledge. </p>
     </div>
   </div>
-
 </template>
