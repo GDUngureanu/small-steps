@@ -1,8 +1,9 @@
+/* global process */
 import { createClient } from '@supabase/supabase-js';
 
-// Environment variables with fallbacks for development
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Environment variables with fallbacks for development and testing
+const supabaseUrl = import.meta.env?.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env?.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
 // Validate required environment variables
 if (!supabaseUrl) {
