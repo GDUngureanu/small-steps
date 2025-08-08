@@ -12,14 +12,31 @@ async function setup(t) {
   return auth
 }
 
+test('initializes from existing session token and clears on logout', async (t) => {
+  setupTestEnvironment(t)
+  sessionStorage.setItem('memento-mori-authentication', 'true')
+  const { useAuthentication } = await import(
+    '../src/composables/useAuthentication.js?from-session'
+  )
+  const auth = useAuthentication()
+  assert.equal(auth.isAuthenticated.value, true)
+  auth.logout()
+  await Promise.resolve()
+  assert.equal(sessionStorage.getItem('memento-mori-authentication'), null)
+})
+
 test('authenticate and logout flow', async (t) => {
   const auth = await setup(t)
   assert.equal(auth.isAuthenticated.value, false)
   assert.equal(auth.authenticate('wrong'), false)
   assert.equal(auth.isAuthenticated.value, false)
   assert.equal(auth.authenticate(PASSWORD), true)
+  await Promise.resolve()
+  assert.equal(sessionStorage.getItem('memento-mori-authentication'), 'true')
   assert.equal(auth.isAuthenticated.value, true)
   auth.logout()
+  await Promise.resolve()
+  assert.equal(sessionStorage.getItem('memento-mori-authentication'), null)
   assert.equal(auth.isAuthenticated.value, false)
 })
 
