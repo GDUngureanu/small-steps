@@ -13,6 +13,7 @@ module.exports = [
       '*.config.js',
       '*.config.cjs',
       'eslint-wide-formatter.js',
+      'eslint-wide-formatter.cjs',
     ],
   },
   {
