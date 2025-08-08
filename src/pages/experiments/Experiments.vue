@@ -1,7 +1,7 @@
 <script setup>
   import ArticleTemplate from '@/components/shared/templates/Article.vue'
   import SuggestionsTemplate from '@/components/shared/templates/Suggestions.vue'
-  import ActionsTemplate from '@/components/shared/templates/Actions.vue'
+  import ActionsTemplate from '@/components/shared/templates/actions/Actions.vue'
   import suggestions from './suggestions.json'
   import experiment1 from './assets/Visinata_Experient_1_2025-06-28.jpeg'
   import experiment2 from './assets/Visinata_Experient_2_2025-06-28.jpeg'

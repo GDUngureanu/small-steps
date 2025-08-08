@@ -1,7 +1,7 @@
 <script setup>
   import { onMounted, ref, nextTick, computed } from 'vue'
   import ArticleTemplate from '@/components/shared/templates/Article.vue'
-  import ActionsTemplate from '@/components/shared/templates/Actions.vue'
+  import ActionsTemplate from '@/components/shared/templates/actions/Actions.vue'
   import destinationsData from './destinations.json'
 
   defineOptions({
