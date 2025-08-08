@@ -1,8 +1,0 @@
-# Practice
-
-Habit and routine tracking.
-
-## Submodules
-
-- `overview/` – introduction to practice philosophy.
-- `routines/` – renders routines from `habits.json` and `activities.json` plus database schemas.
