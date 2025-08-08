@@ -3898,5 +3898,18 @@
     "soluble_fiber": 0.3,
     "insoluble_fiber": 0.6,
     "unsaturated_fats": 3.5
+  },
+  {
+    "ingredient": "Lapte de Ovaz",
+    "preferred": false,
+    "portion": 240.0,
+    "format": "Lichida",
+    "type": "Alternative Vegetale",
+    "vitamins_minerals": "Limitat ()",
+    "notes": "β-glucan ~1.0 g/portie (estimare)",
+    "protein": 2.9,
+    "soluble_fiber": 1.0,
+    "insoluble_fiber": 0.4,
+    "unsaturated_fats": 3.5
   }
 ]
