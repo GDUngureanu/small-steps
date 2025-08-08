@@ -13,14 +13,22 @@
   const { isAuthenticated, navigationItems, dropdownSections, logout } = useAuthentication()
   const router = useRouter()
 
+  let prefetchTimer
   const prefetch = (path) => {
-    const route = router.resolve(path)
-    route.matched.forEach((record) => {
-      const component = record.components?.default
-      if (typeof component === 'function') {
-        component()
-      }
-    })
+    clearTimeout(prefetchTimer)
+    prefetchTimer = setTimeout(() => {
+      const route = router.resolve(path)
+      route.matched.forEach((record) => {
+        const component = record.components?.default
+        if (typeof component === 'function') {
+          component()
+        }
+      })
+    }, 150)
+  }
+
+  const cancelPrefetch = () => {
+    clearTimeout(prefetchTimer)
   }
 
   const emit = defineEmits(['showAuthentication'])
@@ -58,7 +66,16 @@
       <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
-            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu" @mouseover="prefetch(item.path)">{{ item.label }}</RouterLink>
+            <RouterLink
+              :to="item.path"
+              class="nav-link fw-medium"
+              active-class="active"
+              @click="closeMenu"
+              @mouseover="prefetch(item.path)"
+              @mouseleave="cancelPrefetch"
+            >
+              {{ item.label }}
+            </RouterLink>
           </li>
 
           <!-- Dynamic dropdown sections -->
@@ -68,7 +85,15 @@
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
               <li v-for="item in section.items" :key="item.path">
-                <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu" @mouseover="prefetch(item.path)">{{ item.label }}</RouterLink>
+                <RouterLink
+                  :to="item.path"
+                  class="dropdown-item"
+                  @click="closeMenu"
+                  @mouseover="prefetch(item.path)"
+                  @mouseleave="cancelPrefetch"
+                >
+                  {{ item.label }}
+                </RouterLink>
               </li>
             </ul>
           </li>
