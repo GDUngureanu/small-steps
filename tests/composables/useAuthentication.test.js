@@ -16,7 +16,7 @@ test('initializes from existing session token and clears on logout', async (t) =
   setupTestEnvironment(t)
   sessionStorage.setItem('memento-mori-authentication', 'true')
   const { useAuthentication } = await import(
-    '../src/composables/useAuthentication.js?from-session'
+    '../../src/composables/useAuthentication.js?from-session'
   )
   const auth = useAuthentication()
   assert.equal(auth.isAuthenticated.value, true)

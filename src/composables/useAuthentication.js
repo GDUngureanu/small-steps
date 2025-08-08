@@ -1,5 +1,5 @@
 import { ref, computed, watchEffect } from 'vue'
-import routes from '@/routes.js'
+import routes from '../routes.js'
 
 // Password from environment variable (fallback to process.env for tests)
 const CORRECT_PASSWORD = import.meta.env?.VITE_APP_PASSWORD || globalThis.process?.env?.VITE_APP_PASSWORD
