@@ -12,9 +12,9 @@ if (!CORRECT_PASSWORD) {
 const isAuthenticated = ref(false)
 
 // Build a lookup of route metadata for quick access checks
-const routeMeta = routes.reduce((acc, route) => {
-  acc[route.path] = route.meta || {}
-  return acc
+const routeMeta = routes.reduce((metaByPath, route) => {
+  metaByPath[route.path] = route.meta || {}
+  return metaByPath
 }, {})
 
 // Check sessionStorage on composable creation and watch for changes
@@ -92,36 +92,36 @@ export function useAuthentication() {
         label: route.meta?.label || route.path,
         public: !route.meta?.requiresAuth,
       }))
-      .filter((item) => item.public || isAuthenticated.value)
+      .filter((navigationItem) => navigationItem.public || isAuthenticated.value)
   })
 
   const dropdownSections = computed(() => {
-    const sections = {}
+    const sectionsByGroup = {}
     routes.forEach((route) => {
       const meta = route.meta || {}
       if (!meta.group) return
 
-      if (!sections[meta.group]) {
-        sections[meta.group] = {
+      if (!sectionsByGroup[meta.group]) {
+        sectionsByGroup[meta.group] = {
           label: meta.group.charAt(0).toUpperCase() + meta.group.slice(1),
           public: !meta.requiresAuth,
           items: [],
         }
       }
 
-      sections[meta.group].public = sections[meta.group].public && !meta.requiresAuth
-      sections[meta.group].items.push({ path: route.path, label: meta.label })
+      sectionsByGroup[meta.group].public = sectionsByGroup[meta.group].public && !meta.requiresAuth
+      sectionsByGroup[meta.group].items.push({ path: route.path, label: meta.label })
     })
 
-    const filteredSections = {}
-    Object.keys(sections).forEach((key) => {
-      const section = sections[key]
-      if (section.public || isAuthenticated.value) {
-        filteredSections[key] = section
+    const visibleSections = {}
+    Object.keys(sectionsByGroup).forEach((sectionName) => {
+      const sectionDetails = sectionsByGroup[sectionName]
+      if (sectionDetails.public || isAuthenticated.value) {
+        visibleSections[sectionName] = sectionDetails
       }
     })
 
-    return filteredSections
+    return visibleSections
   })
 
   return {
