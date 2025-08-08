@@ -8,6 +8,22 @@
     name: 'IngredientsTemplate',
   })
 
+  const normalizeRomanianText = (text) => {
+    if (!text) return ''
+    return String(text)
+      .toLowerCase()
+      .replace(/ă/g, 'a')
+      .replace(/â/g, 'a')
+      .replace(/î/g, 'i')
+      .replace(/ș/g, 's')
+      .replace(/ț/g, 't')
+  }
+
+  const searchIndex = ingredients.map((item) => ({
+    ...item,
+    search: normalizeRomanianText(Object.values(item).join(' ')),
+  }))
+
   // Table filtering and sorting
   const searchFilter = ref('')
   const preferatFilter = ref('') // '' = all, 'true' = preferred only, 'false' = non-preferred only
@@ -19,12 +35,12 @@
   const itemsPerPage = ref(10)
 
   const filteredIngredients = computed(() => {
-    let filtered = [...ingredients]
+    let filtered = [...searchIndex]
 
     // Apply search filter
     if (searchFilter.value) {
       const normalizedSearch = normalizeRomanianText(searchFilter.value)
-      filtered = filtered.filter((item) => Object.values(item).some((value) => normalizeRomanianText(value).includes(normalizedSearch)))
+      filtered = filtered.filter((item) => item.search.includes(normalizedSearch))
     }
 
     // Apply preferred filter
@@ -141,11 +157,6 @@
     if (preferatFilter.value === 'true') return 'Doar preferate (click pentru nepreferate)'
     if (preferatFilter.value === 'false') return 'Doar nepreferate (click pentru toate)'
     return 'Toate (click pentru preferate)'
-  }
-
-  const normalizeRomanianText = (text) => {
-    if (!text) return ''
-    return String(text).toLowerCase().replace(/ă/g, 'a').replace(/â/g, 'a').replace(/î/g, 'i').replace(/ș/g, 's').replace(/ț/g, 't')
   }
 
   const calculateProteinScore = (value) => {
