@@ -1,4 +1,10 @@
 <script setup>
+/**
+ * Render a checklist of suggestions.
+ *
+ * @prop {Array<{action:string,status:boolean}>} suggestions array of items to
+ *   display with checkbox state
+ */
 defineProps({
     suggestions: {
         type: Array,

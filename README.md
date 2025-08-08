@@ -70,6 +70,10 @@ npm run deploy
 
 This builds the project and deploys it to the `gh-pages` branch.
 
+## Documentation
+
+Additional reference material lives in the [`docs/`](docs) directory and in per-module `README.md` files inside `src/`.
+
 ## License
 
 MIT

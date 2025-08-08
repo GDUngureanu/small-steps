@@ -1,5 +1,11 @@
-// Centralized route definitions with dynamic imports
+// Centralized route definitions with dynamic imports.
 // Routes with `meta.requiresAuth: true` are protected and require authentication.
+
+/**
+ * Export an array of `RouteRecordRaw` objects consumed by Vue Router.
+ * Dynamic imports keep bundle size small and the optional `meta.requiresAuth`
+ * flag marks routes that should be hidden behind the password modal.
+ */
 const Home = () => import('./components/home/template.vue')
 const Ikigai = () => import('./components/ikigai/template.vue')
 const Ippo = () => import('./components/ippo/template.vue')

@@ -2,6 +2,16 @@
 /* eslint-disable vue/no-mutating-props */
 import { defineProps, defineOptions } from 'vue'
 
+/**
+ * Display a single action row with edit, delete and priority controls.
+ *
+ * The component relies on the `useActions` state for all mutations. It accepts
+ * the current `action` record and the shared `state` object used across the
+ * action list.
+ *
+ * @prop {Action} action individual action record to render
+ * @prop {ActionsState} state reactive helpers returned by `useActions`
+ */
 defineOptions({ name: 'ActionItem' })
 
 /**
