@@ -249,6 +249,8 @@ Contrast verification (AA):
 
   // Reactive state
   const sessionOverrides = reactive(new Map())
+  const activitiesMap = reactive(new Map())
+  const seedActivityKeys = new Set()
   const currentTime = ref(new Date())
   const allScopes = ['day', 'week', 'month', 'year']
 
@@ -411,7 +413,7 @@ Contrast verification (AA):
       return sessionOverrides.get(key) === 'done'
     }
 
-    return activitiesData.activities.some((activity) => activity.habitId === habitId && activity.scope === scope && activity.completedOn === completedOn)
+    return activitiesMap.has(key)
   }
 
   function toggleHabit(habitId, scope, completedOn) {
@@ -420,47 +422,30 @@ Contrast verification (AA):
     const next = !current
 
     if (next) {
-      sessionOverrides.set(key, 'done')
-    } else {
-      // Check if it exists in seed data
-      const existsInSeed = activitiesData.activities.some((activity) => activity.habitId === habitId && activity.scope === scope && activity.completedOn === completedOn)
-
-      if (existsInSeed) {
-        sessionOverrides.set(key, 'undone')
+        activitiesMap.set(key, true)
+        sessionOverrides.set(key, 'done')
       } else {
-        sessionOverrides.delete(key)
+        activitiesMap.delete(key)
+        if (seedActivityKeys.has(key)) {
+          sessionOverrides.set(key, 'undone')
+        } else {
+          sessionOverrides.delete(key)
+        }
       }
-    }
   }
 
   // Completion count calculation
   function computeCompletionCount(habitId, scope) {
-    const completedIntervals = []
+    const prefix = `${habitId}|${scope}|`
+    let count = 0
 
-    // Add from seed data (all activities are considered completed since status field removed)
-    activitiesData.activities.forEach((activity) => {
-      if (activity.habitId === habitId && activity.scope === scope) {
-        completedIntervals.push(activity.completedOn)
+    activitiesMap.forEach((_, key) => {
+      if (key.startsWith(prefix)) {
+        count++
       }
     })
 
-    // Add from session overrides
-    sessionOverrides.forEach((status, key) => {
-      const [overrideHabitId, overrideScope, completedOn] = key.split('|')
-      if (overrideHabitId === habitId && overrideScope === scope && status === 'done') {
-        if (!completedIntervals.includes(completedOn)) {
-          completedIntervals.push(completedOn)
-        }
-      }
-    })
-
-    // Remove any intervals that are explicitly marked as undone
-    const filteredIntervals = completedIntervals.filter((completedOn) => {
-      const key = `${habitId}|${scope}|${completedOn}`
-      return sessionOverrides.get(key) !== 'undone'
-    })
-
-    return filteredIntervals.length
+    return count
   }
 
   function getFireColor(count) {
@@ -503,11 +488,17 @@ Contrast verification (AA):
 
   // Lifecycle
   onMounted(() => {
-    // Update current time every minute for day scope
-    setInterval(() => {
-      currentTime.value = new Date()
-    }, 60000)
-  })
+      activitiesData.activities.forEach((activity) => {
+        const key = `${activity.habitId}|${activity.scope}|${activity.completedOn}`
+        activitiesMap.set(key, true)
+        seedActivityKeys.add(key)
+      })
+
+      // Update current time every minute for day scope
+      setInterval(() => {
+        currentTime.value = new Date()
+      }, 60000)
+    })
 </script>
 
 <template>
