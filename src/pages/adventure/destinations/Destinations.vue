@@ -1,7 +1,5 @@
 <script setup>
   import { onMounted, ref, nextTick, computed } from 'vue'
-  import L from 'leaflet'
-  import 'leaflet/dist/leaflet.css'
   import ArticleTemplate from '@/components/shared/templates/Article.vue'
   import ActionsTemplate from '@/components/shared/templates/Actions.vue'
   import destinationsData from './destinations.json'
@@ -180,7 +178,7 @@
     return cachedGeoData.value
   }
 
-  const initializeMap = async () => {
+  const initializeMap = async (L) => {
     try {
       // Load GeoJSON data with caching
       const worldData = await fetchWorldData()
@@ -259,8 +257,10 @@
     }
   }
 
-  onMounted(() => {
-    initializeMap()
+  onMounted(async () => {
+    const { default: L } = await import('leaflet')
+    await import('leaflet/dist/leaflet.css')
+    await initializeMap(L)
   })
 </script>
 
