@@ -13,8 +13,12 @@
   const { isAuthenticated, navigationItems, dropdownSections, logout } = useAuthentication()
   const router = useRouter()
 
+  const prefetched = new Set()
   let prefetchTimer
   const prefetch = (path) => {
+    if (prefetched.has(path)) {
+      return
+    }
     clearTimeout(prefetchTimer)
     prefetchTimer = setTimeout(() => {
       const route = router.resolve(path)
@@ -24,6 +28,7 @@
           component()
         }
       })
+      prefetched.add(path)
     }, 150)
   }
 

@@ -11,7 +11,7 @@ async function setup(t) {
   return auth
 }
 
-test('initializes from existing session token and clears on logout', async (t) => {
+test('initializes from existing session token and clears on logout', { concurrency: false }, async (t) => {
   setupTestEnvironment(t)
   sessionStorage.setItem('memento-mori-authentication', 'true')
   const { useAuthentication } = await import(
@@ -24,7 +24,7 @@ test('initializes from existing session token and clears on logout', async (t) =
   assert.equal(sessionStorage.getItem('memento-mori-authentication'), null)
 })
 
-test('authenticate and logout flow', async (t) => {
+test('authenticate and logout flow', { concurrency: false }, async (t) => {
   const auth = await setup(t)
   assert.equal(auth.isAuthenticated.value, false)
   assert.equal(auth.authenticate('wrong'), false)
@@ -39,7 +39,7 @@ test('authenticate and logout flow', async (t) => {
   assert.equal(auth.isAuthenticated.value, false)
 })
 
-test('route access control', async (t) => {
+test('route access control', { concurrency: false }, async (t) => {
   const auth = await setup(t)
   const publicPath = routes.find((r) => !r.meta?.requiresAuth)?.path
   const restrictedPath = routes.find((r) => r.meta?.requiresAuth)?.path
@@ -50,29 +50,17 @@ test('route access control', async (t) => {
   assert.equal(auth.canAccessRoute(restrictedPath), true)
 })
 
-test('warns when password variable is absent', async (t) => {
-  const originalEnv = { ...process.env }
-  delete process.env.VITE_APP_PASSWORD
-  t.after(() => {
-    process.env = originalEnv
-  })
+test('warns when password variable is absent', { concurrency: false }, async (t) => {
+  setupTestEnvironment(t, { password: null })
 
   const { useAuthentication } = await import(
     '../../src/configuration/authentication/useAuthentication.js?no-password'
   )
   const auth = useAuthentication()
 
-  let warning = ''
-  /* eslint-disable no-console */
-  const originalWarn = console.warn
-  console.warn = (msg) => {
-    warning = msg
-  }
-  t.after(() => {
-    console.warn = originalWarn
-  })
-  /* eslint-enable no-console */
+  const warnMock = t.mock.method(console, 'warn')
 
   assert.equal(auth.authenticate('anything'), false)
-  assert.match(warning, /VITE_APP_PASSWORD/)
+  assert.equal(warnMock.mock.callCount(), 1)
+  assert.match(warnMock.mock.calls[0].arguments[0], /VITE_APP_PASSWORD/)
 })

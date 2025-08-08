@@ -1,6 +1,18 @@
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/configuration/routes.js'
+import { vi } from 'vitest'
+
+vi.mock('../../src/configuration/env.js', () => ({
+  env: {
+    getViteAppPassword: () => 'secret',
+    getViteSupabaseUrl: () => 'https://example.supabase.co',
+    getViteSupabaseAnonKey: () => 'anon',
+  },
+  getViteAppPassword: () => 'secret',
+  getViteSupabaseUrl: () => 'https://example.supabase.co',
+  getViteSupabaseAnonKey: () => 'anon',
+}))
 
 /**
  * Render a Vue component using Vue Test Utils with proper router and global setup.
@@ -18,9 +30,6 @@ export async function renderComponent(file) {
     },
     configurable: true
   })
-
-  // Set up environment variables
-  process.env.VITE_APP_PASSWORD = 'secret'
 
   const component = (await import(`../../${file}`)).default
   
@@ -74,9 +83,7 @@ export async function resolveRoute(pathName, authenticated = false) {
     configurable: true
   })
   
-  process.env.VITE_APP_PASSWORD = 'secret'
-
-  const routes = rawRoutes.map((r) => ({ 
+  const routes = rawRoutes.map((r) => ({
     ...r, 
     component: { template: '<div>Test Route</div>' }
   }))
