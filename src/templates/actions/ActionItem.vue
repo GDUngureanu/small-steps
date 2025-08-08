@@ -1,7 +1,7 @@
 <script setup>
 import { PRIORITY_LEVELS, getPriorityClass, getPriorityText, formatDate } from './utils.js';
 
-defineProps({
+const props = defineProps({
     action: { type: Object, required: true },
     editingActionId: { type: [String, Number, null], required: true },
     editingActionText: { type: String, required: true },
@@ -20,6 +20,8 @@ defineProps({
     createSubActionInputs: { type: Object, required: true }
 });
 
+const emit = defineEmits(['update:editingActionText', 'update:newSubActionText']);
+
 defineOptions({ name: 'ActionItem' });
 </script>
 
@@ -32,7 +34,8 @@ defineOptions({ name: 'ActionItem' });
             <div class="flex-grow-1">
                 <div v-if="editingActionId === action.id">
                     <input :ref="el => editActionInputs[action.id] = el" type="text" class="form-control form-control-sm"
-                        v-model="editingActionText" @keyup.enter="saveEdit(action)" @keyup.escape="cancelEditing"
+                        :value="editingActionText" @input="emit('update:editingActionText', $event.target.value)" 
+                        @keyup.enter="saveEdit(action)" @keyup.escape="cancelEditing"
                         @blur="saveEdit(action)" placeholder="Press Enter to save, Esc to cancel">
                 </div>
                 <div v-else>
@@ -59,8 +62,9 @@ defineOptions({ name: 'ActionItem' });
                         <input :ref="el => createSubActionInputs[action.id] = el" :id="`sub-action-input-${action.id}`"
                             :name="`sub-action-${action.id}`" type="text"
                             class="form-control border-0 border-bottom border-primary rounded-0 shadow-none max-width-400"
-                            placeholder="Add a sub-action..." v-model="newSubActionText[action.id]"
-                            @keyup.enter="addAction(action.id)" @keyup.escape="delete newSubActionText[action.id]"
+                            placeholder="Add a sub-action..." :value="newSubActionText[action.id]"
+                            @input="$event => { const updated = {...newSubActionText}; updated[action.id] = $event.target.value; emit('update:newSubActionText', updated); }"
+                            @keyup.enter="addAction(action.id)" @keyup.escape="() => { const updated = {...newSubActionText}; delete updated[action.id]; emit('update:newSubActionText', updated); }"
                             @focus="$event.target.classList.add('border-2')"
                             @blur="$event.target.classList.remove('border-2')" autocomplete="off"
                             style="background: transparent; outline: none;">
@@ -130,7 +134,10 @@ defineOptions({ name: 'ActionItem' });
                 addAction,
                 editActionInputs,
                 createSubActionInputs
-            }" />
+            }" 
+            @update:editingActionText="emit('update:editingActionText', $event)"
+            @update:newSubActionText="emit('update:newSubActionText', $event)"
+            />
         </div>
     </div>
 </template>

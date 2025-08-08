@@ -442,7 +442,10 @@ watch(
                 addAction,
                 editActionInputs,
                 createSubActionInputs
-            }" />
+            }" 
+            @update:editingActionText="editingActionText = $event"
+            @update:newSubActionText="newSubActionText = $event"
+            />
         </div>
 
 
