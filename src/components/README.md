@@ -4,7 +4,6 @@ Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) 
 
 ### Key directories
 
-- `actions/` – interactive task list composed of `ActionList` and `ActionItem` components using the `useActions` composable.
 - `auth/` – password modal for gated routes.
 - `navigation/`, `header/`, `footer/` – layout chrome shared across pages.
 - Feature pages such as `adventure/`, `entertainment/`, `literature/`, `nutrition/`, `practice/`, `ikigai/`, `ippo/`, `random/` and `home/` each provide a router-mounted `template.vue` and optional JSON data files.

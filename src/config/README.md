@@ -9,8 +9,7 @@ Centralised configuration and third‑party clients.
 - `VITE_SUPABASE_URL` – project URL
 - `VITE_SUPABASE_ANON_KEY` – public anon key
 
-The exported `supabase` instance is used by composables such as `useActions`
-to perform database reads/writes.
+The exported `supabase` instance is used by composables for authentication and data management.
 
 ## Local Development
 
