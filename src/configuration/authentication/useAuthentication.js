@@ -1,13 +1,6 @@
 import { ref, computed, watchEffect } from 'vue'
 import routes from '../routes.js'
 
-// Password from environment variable (fallback to process.env for tests)
-const CORRECT_PASSWORD = import.meta.env?.VITE_APP_PASSWORD || globalThis.process?.env?.VITE_APP_PASSWORD
-
-if (!CORRECT_PASSWORD) {
-  throw new Error('VITE_APP_PASSWORD environment variable is not configured')
-}
-
 // Reactive authentication state
 const isAuthenticated = ref(false)
 
@@ -59,7 +52,17 @@ watchEffect(() => {
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
+  // Password from environment variable (fallback to process.env for tests)
+  const CORRECT_PASSWORD =
+    import.meta.env?.VITE_APP_PASSWORD || globalThis.process?.env?.VITE_APP_PASSWORD
+
   const authenticate = (password) => {
+    if (!CORRECT_PASSWORD) {
+      // eslint-disable-next-line no-console
+      console.warn('VITE_APP_PASSWORD environment variable is not configured')
+      return false
+    }
+
     if (password === CORRECT_PASSWORD) {
       isAuthenticated.value = true
       return true

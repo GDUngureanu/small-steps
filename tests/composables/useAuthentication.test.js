@@ -1,6 +1,5 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { spawnSync } from 'node:child_process'
 import routes from '../../src/configuration/routes.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
@@ -51,16 +50,29 @@ test('route access control', async (t) => {
   assert.equal(auth.canAccessRoute(restrictedPath), true)
 })
 
-test('fails fast when password variable is absent', () => {
-  const env = { ...process.env }
-  delete env.VITE_APP_PASSWORD
-
-  const result = spawnSync(process.execPath, ['--input-type=module', '--eval', "import('./src/configuration/authentication/useAuthentication.js')"], {
-    cwd: process.cwd(),
-    env,
-    encoding: 'utf-8',
+test('warns when password variable is absent', async (t) => {
+  const originalEnv = { ...process.env }
+  delete process.env.VITE_APP_PASSWORD
+  t.after(() => {
+    process.env = originalEnv
   })
 
-  assert.notEqual(result.status, 0)
-  assert.match(result.stderr, /VITE_APP_PASSWORD/)
+  const { useAuthentication } = await import(
+    '../../src/configuration/authentication/useAuthentication.js?no-password'
+  )
+  const auth = useAuthentication()
+
+  let warning = ''
+  /* eslint-disable no-console */
+  const originalWarn = console.warn
+  console.warn = (msg) => {
+    warning = msg
+  }
+  t.after(() => {
+    console.warn = originalWarn
+  })
+  /* eslint-enable no-console */
+
+  assert.equal(auth.authenticate('anything'), false)
+  assert.match(warning, /VITE_APP_PASSWORD/)
 })
