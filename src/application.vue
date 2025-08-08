@@ -1,11 +1,11 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import AppNavigation from './components/navigation/template.vue'
 import AppHeader from './components/header/template.vue'
 import AppFooter from './components/footer/template.vue'
 import PasswordModal from './components/auth/PasswordModal.vue'
-import { useAuthentication } from './composables/useAuthentication.js'
+import { authEvents, AUTH_REQUIRED_EVENT } from './authEvents.js'
 
 /**
  * Root application shell. Renders navigation, header, footer and the active
@@ -14,25 +14,22 @@ import { useAuthentication } from './composables/useAuthentication.js'
  */
 
 const router = useRouter()
-const route = useRoute()
-const { canAccessRoute, isRouteRestricted } = useAuthentication()
 
 const showPasswordModal = ref(false)
 const pendingRoute = ref('')
 
-// Watch for route changes and check authentication
-watch(route, (to) => {
-  if (!canAccessRoute(to.path) && isRouteRestricted(to.path)) {
-    // Store the target route and show password modal
-    pendingRoute.value = to.path
-    showPasswordModal.value = true
-    
-    // Navigate back to home for now
-    if (to.path !== '/') {
-      router.push('/')
-    }
-  }
-}, { immediate: true })
+const handleAuthRequired = (event) => {
+  pendingRoute.value = event.detail
+  showPasswordModal.value = true
+}
+
+onMounted(() => {
+  authEvents.addEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
+})
+
+onBeforeUnmount(() => {
+  authEvents.removeEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
+})
 
 // Handle successful authentication
 const handleAuthenticated = (targetRoute) => {

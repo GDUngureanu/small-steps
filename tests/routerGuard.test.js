@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createMemoryHistory } from 'vue-router'
 import rawRoutes from '../src/routes.js'
+import { authEvents, AUTH_REQUIRED_EVENT } from '../src/authEvents.js'
 
 const PASSWORD = 'secret'
 
@@ -36,9 +37,18 @@ async function setup(authenticated = false) {
 const protectedPaths = ['/experiments', '/practice']
 
 for (const path of protectedPaths) {
-  test(`redirects unauthenticated users from ${path}`, async () => {
+  test(`emits auth-required and redirects unauthenticated users from ${path}`, async () => {
     const router = await setup(false)
+
+    let eventDetail
+    const handler = (e) => {
+      eventDetail = e.detail
+    }
+    authEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
+
     await router.push(path)
+
+    assert.equal(eventDetail, path)
     assert.equal(router.currentRoute.value.fullPath, '/')
   })
 
