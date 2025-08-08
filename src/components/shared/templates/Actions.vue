@@ -189,12 +189,30 @@
 
       // Update child actions status if parent is completed
       if (action.status) {
-        const childActions = getSubActions(action.id)
-        for (const child of childActions) {
-          if (!child.status) {
-            child.status = true
-            await updateActionStatus(child)
+        const collectChildIds = (parentId) => {
+          const children = getSubActions(parentId)
+          let ids = []
+          for (const child of children) {
+            if (!child.status) ids.push(child.id)
+            ids = ids.concat(collectChildIds(child.id))
           }
+          return ids
+        }
+
+        const childIds = collectChildIds(action.id)
+
+        if (childIds.length > 0) {
+          const { error: childUpdateError } = await supabase
+            .from('actions')
+            .update({ status: true })
+            .in('id', childIds)
+
+          if (childUpdateError) throw childUpdateError
+
+          const idSet = new Set(childIds)
+          actions.value.forEach((a) => {
+            if (idSet.has(a.id)) a.status = true
+          })
         }
       }
 
@@ -245,19 +263,28 @@
       loading.value = true
       error.value = null
 
-      // Soft delete child actions first
-      const childActions = getSubActions(actionId)
-      for (const child of childActions) {
-        await deleteAction(child.id)
+      const collectIds = (id) => {
+        const children = getSubActions(id)
+        let ids = [id]
+        for (const child of children) {
+          ids = ids.concat(collectIds(child.id))
+        }
+        return ids
       }
 
+      const idsToDelete = collectIds(actionId)
+
       // Soft delete: update deleted_at instead of actual deletion
-      const { error: deleteError } = await supabase.from('actions').update({ deleted_at: new Date().toISOString() }).eq('id', actionId)
+      const { error: deleteError } = await supabase
+        .from('actions')
+        .update({ deleted_at: new Date().toISOString() })
+        .in('id', idsToDelete)
 
       if (deleteError) throw deleteError
 
+      const idSet = new Set(idsToDelete)
       // Remove from local state
-      actions.value = actions.value.filter((action) => action.id !== actionId)
+      actions.value = actions.value.filter((action) => !idSet.has(action.id))
       // Update cache
       setCachedActions(props.listId, actions.value)
 

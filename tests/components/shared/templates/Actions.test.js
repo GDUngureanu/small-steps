@@ -142,3 +142,230 @@ test('uses cached actions without fetching', async () => {
   expect(wrapper.vm.actions).toEqual(cached)
   expect(fromMock).not.toHaveBeenCalled()
 })
+
+test('marks action complete updates all descendants in one request and local state', async () => {
+  const listId = 'list1'
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, status: false, created_at: '2024-01-03', priority: 'LOW' }
+
+  const childUpdateSpy = vi.fn().mockResolvedValue({ data: null, error: null })
+
+  fromMock
+    .mockImplementationOnce(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          is: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+          })),
+        })),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: vi.fn(() => ({
+        eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: vi.fn(() => ({
+        in: childUpdateSpy,
+      })),
+    }))
+
+  const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
+  await flushPromises()
+
+  parent.status = true
+  await wrapper.vm.updateActionStatus(parent)
+  await flushPromises()
+
+  expect(childUpdateSpy).toHaveBeenCalledTimes(1)
+  expect(childUpdateSpy).toHaveBeenCalledWith('id', [2, 3])
+  expect(wrapper.vm.actions.map((a) => a.status)).toEqual([true, true, true])
+  const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
+  expect(cache.data.map((a) => a.status)).toEqual([true, true, true])
+  expect(fromMock).toHaveBeenCalledTimes(3)
+})
+
+test('unmarking a parent does not change descendant statuses', async () => {
+  const listId = 'list1'
+  const parent = {
+    id: 1,
+    description: 'parent',
+    list_id: listId,
+    parent_id: null,
+    status: true,
+    created_at: '2024-01-01',
+    priority: 'LOW',
+  }
+  const child = {
+    id: 2,
+    description: 'child',
+    list_id: listId,
+    parent_id: 1,
+    status: true,
+    created_at: '2024-01-02',
+    priority: 'LOW',
+  }
+  const grandchild = {
+    id: 3,
+    description: 'grand',
+    list_id: listId,
+    parent_id: 2,
+    status: true,
+    created_at: '2024-01-03',
+    priority: 'LOW',
+  }
+
+  const parentUpdateSpy = vi.fn(() => ({
+    eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+  }))
+
+  fromMock
+    .mockImplementationOnce(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          is: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+          })),
+        })),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: parentUpdateSpy,
+    }))
+
+  const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
+  await flushPromises()
+
+  parent.status = false
+  await wrapper.vm.updateActionStatus(parent)
+  await flushPromises()
+
+  expect(parentUpdateSpy).toHaveBeenCalledTimes(1)
+  expect(fromMock).toHaveBeenCalledTimes(2)
+
+  const parentAction = wrapper.vm.actions.find((a) => a.id === 1)
+  const childAction = wrapper.vm.actions.find((a) => a.id === 2)
+  const grandchildAction = wrapper.vm.actions.find((a) => a.id === 3)
+  expect(parentAction.status).toBe(false)
+  expect(childAction.status).toBe(true)
+  expect(grandchildAction.status).toBe(true)
+
+  const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
+  const cacheParent = cache.data.find((a) => a.id === 1)
+  const cacheChild = cache.data.find((a) => a.id === 2)
+  const cacheGrandchild = cache.data.find((a) => a.id === 3)
+  expect(cacheParent.status).toBe(false)
+  expect(cacheChild.status).toBe(true)
+  expect(cacheGrandchild.status).toBe(true)
+})
+
+test('handles status update failure and reverts local state', async () => {
+  const listId = 'list1'
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+
+  fromMock
+    .mockImplementationOnce(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          is: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+          })),
+        })),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: vi.fn(() => ({
+        eq: vi.fn().mockResolvedValue({ data: null, error: { message: 'fail' } }),
+      })),
+    }))
+
+  const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
+  await flushPromises()
+
+  parent.status = true
+  await wrapper.vm.updateActionStatus(parent)
+  await flushPromises()
+
+  expect(wrapper.vm.actions.map((a) => a.status)).toEqual([true, false])
+  expect(wrapper.vm.error).toBe('fail')
+  const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
+  expect(cache.data.map((a) => a.status)).toEqual([false, false])
+  expect(fromMock).toHaveBeenCalledTimes(2)
+})
+
+test('soft deletes action and descendants in one request updating local state and cache', async () => {
+  const listId = 'list1'
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, status: false, created_at: '2024-01-03', priority: 'LOW' }
+  const other = { id: 4, description: 'other', list_id: listId, parent_id: null, status: false, created_at: '2024-01-04', priority: 'LOW' }
+
+  const deleteSpy = vi.fn().mockResolvedValue({ data: null, error: null })
+
+  fromMock
+    .mockImplementationOnce(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          is: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild, other], error: null }),
+          })),
+        })),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: vi.fn(() => ({
+        in: deleteSpy,
+      })),
+    }))
+
+  const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
+  await flushPromises()
+
+  await wrapper.vm.deleteAction(parent.id)
+  await flushPromises()
+
+  expect(deleteSpy).toHaveBeenCalledTimes(1)
+  expect(deleteSpy).toHaveBeenCalledWith('id', [1, 2, 3])
+  expect(wrapper.vm.actions).toEqual([other])
+  const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
+  expect(cache.data).toEqual([other])
+  expect(fromMock).toHaveBeenCalledTimes(2)
+})
+
+test('handles delete failure and preserves state', async () => {
+  const listId = 'list1'
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+
+  fromMock
+    .mockImplementationOnce(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          is: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+          })),
+        })),
+      })),
+    }))
+    .mockImplementationOnce(() => ({
+      update: vi.fn(() => ({
+        in: vi.fn().mockResolvedValue({ data: null, error: { message: 'delete fail' } }),
+      })),
+    }))
+
+  const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
+  await flushPromises()
+
+  await wrapper.vm.deleteAction(parent.id)
+  await flushPromises()
+
+  expect(wrapper.vm.actions).toEqual([parent, child])
+  expect(wrapper.vm.error).toBe('delete fail')
+  const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
+  expect(cache.data).toEqual([parent, child])
+  expect(fromMock).toHaveBeenCalledTimes(2)
+})
+
