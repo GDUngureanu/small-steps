@@ -16,8 +16,8 @@ defineProps({
 <template>
     <p class="mb-2"><strong>Suggestions:</strong></p>
 
-    <div class="form-check" v-for="suggestion in suggestions">
-        <input type="checkbox" class="form-check-input" id="checkboxInput" v-model="suggestion.status">
-        <label class="form-check-label" for="checkboxInput">{{ suggestion.action }}</label>
+    <div class="form-check" v-for="(suggestion, index) in suggestions" :key="index">
+        <input type="checkbox" class="form-check-input" :id="`suggestion-${index}`" v-model="suggestion.status">
+        <label class="form-check-label" :for="`suggestion-${index}`">{{ suggestion.action }}</label>
     </div>
 </template>

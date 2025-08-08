@@ -20,7 +20,7 @@ const props = defineProps({
     createSubActionInputs: { type: Object, required: true }
 });
 
-const emit = defineEmits(['update:editingActionText', 'update:newSubActionText']);
+const emit = defineEmits(['update:editingActionText', 'update:newSubActionText', 'setRef']);
 
 defineOptions({ name: 'ActionItem' });
 </script>
@@ -28,12 +28,12 @@ defineOptions({ name: 'ActionItem' });
 <template>
     <div class="form-check hover-group mt-2">
         <div class="d-flex align-items-start">
-            <input type="checkbox" class="form-check-input actions-checkbox" :id="`action-${action.id}`" v-model="action.status"
+            <input type="checkbox" class="form-check-input actions-checkbox" :id="`action-${action.id}`" :checked="action.status"
                 @change="updateActionStatus(action)">
 
             <div class="flex-grow-1">
                 <div v-if="editingActionId === action.id">
-                    <input :ref="el => editActionInputs[action.id] = el" type="text" class="form-control form-control-sm"
+                    <input :ref="el => { if (el) emit('setRef', { type: 'edit', id: action.id, el }) }" type="text" class="form-control form-control-sm"
                         :value="editingActionText" @input="emit('update:editingActionText', $event.target.value)" 
                         @keyup.enter="saveEdit(action)" @keyup.escape="cancelEditing"
                         @blur="saveEdit(action)" placeholder="Press Enter to save, Esc to cancel">
@@ -59,7 +59,7 @@ defineOptions({ name: 'ActionItem' });
                         <div class="text-muted">
                             <i class="bi bi-arrow-return-right text-primary"></i>
                         </div>
-                        <input :ref="el => createSubActionInputs[action.id] = el" :id="`sub-action-input-${action.id}`"
+                        <input :ref="el => { if (el) emit('setRef', { type: 'subAction', id: action.id, el }) }" :id="`sub-action-input-${action.id}`"
                             :name="`sub-action-${action.id}`" type="text"
                             class="form-control border-0 border-bottom border-primary rounded-0 shadow-none max-width-400"
                             placeholder="Add a sub-action..." :value="newSubActionText[action.id]"
@@ -137,6 +137,7 @@ defineOptions({ name: 'ActionItem' });
             }" 
             @update:editingActionText="emit('update:editingActionText', $event)"
             @update:newSubActionText="emit('update:newSubActionText', $event)"
+            @setRef="emit('setRef', $event)"
             />
         </div>
     </div>

@@ -94,7 +94,7 @@ const visiblePages = computed(() => {
         }
     } else {
         let start = Math.max(1, current - Math.floor(maxVisible / 2));
-        let end = Math.min(total, start + maxVisible - 1);
+        const end = Math.min(total, start + maxVisible - 1);
         
         if (end - start + 1 < maxVisible) {
             start = Math.max(1, end - maxVisible + 1);

@@ -445,6 +445,10 @@ watch(
             }" 
             @update:editingActionText="editingActionText = $event"
             @update:newSubActionText="newSubActionText = $event"
+            @setRef="({ type, id, el }) => { 
+                if (type === 'edit') editActionInputs.value[id] = el;
+                else if (type === 'subAction') createSubActionInputs.value[id] = el;
+            }"
             />
         </div>
 

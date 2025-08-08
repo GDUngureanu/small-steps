@@ -260,7 +260,7 @@ function floorToInterval(scope, nowTZ) {
     case 'day':
       return new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
-    case 'week':
+    case 'week': {
       // Find Monday of current ISO week
       const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay(); // Sunday = 7
       const mondayOffset = dayOfWeek - 1;
@@ -268,6 +268,7 @@ function floorToInterval(scope, nowTZ) {
       monday.setDate(now.getDate() - mondayOffset);
       monday.setHours(0, 0, 0, 0);
       return monday;
+    }
     
     case 'month':
       return new Date(now.getFullYear(), now.getMonth(), 1);
@@ -311,11 +312,12 @@ function formatIntervalId(scope, intervalStart) {
     case 'day':
       return date.toISOString().split('T')[0]; // YYYY-MM-DD
     
-    case 'week':
+    case 'week': {
       // Calculate ISO week number
       const yearStart = new Date(date.getFullYear(), 0, 1);
       const weekNum = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7);
       return `${date.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`;
+    }
     
     case 'month':
       return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
@@ -338,12 +340,12 @@ function humanLabel(scope, start, end) {
         day: 'numeric' 
       });
     
-    case 'week':
+    case 'week': {
       const weekId = formatIntervalId('week', startDate);
       const weekMatch = weekId.match(/(\d{4})-W(\d{2})/);
       const weekNum = weekMatch ? weekMatch[2] : '00';
       return `W${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}–${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})`;
-    
+    }
     case 'month':
       return startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
     
