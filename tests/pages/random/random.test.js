@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { renderComponent, resolveRoute } from '../pageTestUtils.js'
+import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
 const file = 'src/pages/random/Random.vue'
 const path = '/random'

@@ -4,7 +4,7 @@ import {
   getPriorityText,
   getPriorityClass,
   PRIORITY_LEVELS,
-} from '../src/components/shared/templates/actions/utils.js'
+} from '../../../../../src/components/shared/templates/actions/utils.js'
 
 test('getPriorityText returns correct labels', () => {
   assert.equal(getPriorityText(PRIORITY_LEVELS.LOW), 'Low')
