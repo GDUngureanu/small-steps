@@ -111,7 +111,12 @@
       loading.value = true
       error.value = null
 
-      const { data, error: fetchError } = await supabase.from('actions').select('*').eq('list_id', props.listId).is('deleted_at', null).order('created_at', { ascending: false })
+      const { data, error: fetchError } = await supabase
+        .from('actions')
+        .select('id, description, status, priority, created_at, parent_id')
+        .eq('list_id', props.listId)
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
 
       if (fetchError) throw fetchError
 
@@ -141,7 +146,10 @@
         priority: PRIORITY_LEVELS.LOW,
       }
 
-      const { data, error: insertError } = await supabase.from('actions').insert([actionData]).select()
+      const { data, error: insertError } = await supabase
+        .from('actions')
+        .insert([actionData])
+        .select('id, description, status, priority, created_at, parent_id')
 
       if (insertError) throw insertError
 
