@@ -1,7 +1,7 @@
 <script setup>
   import { PRIORITY_LEVELS, getPriorityClass, getPriorityText, formatDate } from './utils.js'
 
-  const props = defineProps({
+  defineProps({
     action: { type: Object, required: true },
     editingActionId: { type: [String, Number, null], required: true },
     editingActionText: { type: String, required: true },
