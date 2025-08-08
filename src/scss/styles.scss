@@ -1,38 +1,37 @@
-@use "bootstrap/scss/bootstrap" with (
+@use 'bootstrap/scss/bootstrap' with (
   // Toggle global options
   // $enable-gradients: true,
   // $enable-shadows: true,
-  $offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175),
-
+  $offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175),
   // Customize defaults
   $body-color: #333,
   $body-bg: #fff,
-  $border-radius: .4rem,
+  $border-radius: 0.4rem,
   $success: #7952b3
 );
 
 // Custom Badge Classes for Destinations
 .badge-mint-green {
-  background-color: #22C55E !important;
+  background-color: #22c55e !important;
   color: white !important;
 }
 
 .badge-seafoam-green {
-  background-color: #2DD4BF !important;
+  background-color: #2dd4bf !important;
   color: white !important;
 }
 
 .badge-ice-blue {
-  background-color: #38BDF8 !important;
+  background-color: #38bdf8 !important;
   color: white !important;
 }
 
 .badge-sunlit-yellow {
-  background-color: #F5D90A !important;
+  background-color: #f5d90a !important;
   color: white !important;
 }
 
 .badge-mist-gray {
-  background-color: #64748B !important;
+  background-color: #64748b !important;
   color: white !important;
 }

@@ -1,14 +1,14 @@
 [
-    {
-        "status": false,
-        "action": "Make a list of culinary experiments that you would like to try :)."
-    },
-    {
-        "status": false,
-        "action": "Add a post where you mention tips (example tip, blend the sugar and fruit together)."
-    },
-    {
-        "status": false,
-        "action": "Buy some bigger glass bottles (2L/2.5L)."
-    }
+  {
+    "status": false,
+    "action": "Make a list of culinary experiments that you would like to try :)."
+  },
+  {
+    "status": false,
+    "action": "Add a post where you mention tips (example tip, blend the sugar and fruit together)."
+  },
+  {
+    "status": false,
+    "action": "Buy some bigger glass bottles (2L/2.5L)."
+  }
 ]

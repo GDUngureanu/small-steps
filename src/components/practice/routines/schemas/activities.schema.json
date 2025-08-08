@@ -1,25 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["version","activities"],
+  "required": ["version", "activities"],
   "properties": {
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
     "activities": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["habitId","scope","completedOn"],
+        "required": ["habitId", "scope", "completedOn"],
         "properties": {
           "habitId": { "type": "string", "pattern": "^h-[A-Za-z0-9_-]+$" },
-          "scope": { "enum": ["day","week","month","year"] },
+          "scope": { "enum": ["day", "week", "month", "year"] },
           "completedOn": {
             "type": "string",
-            "anyOf": [
-              { "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-              { "pattern": "^\\d{4}-W\\d{2}$" },
-              { "pattern": "^\\d{4}-\\d{2}$" },
-              { "pattern": "^\\d{4}$" }
-            ]
+            "anyOf": [{ "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }, { "pattern": "^\\d{4}-W\\d{2}$" }, { "pattern": "^\\d{4}-\\d{2}$" }, { "pattern": "^\\d{4}$" }]
           }
         },
         "additionalProperties": false

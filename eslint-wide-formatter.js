@@ -8,24 +8,22 @@
  * @returns {string}
  */
 module.exports = (results) => {
-  const lines = [];
+  const lines = []
 
   for (const result of results) {
-    if (result.messages.length === 0) continue;
+    if (result.messages.length === 0) continue
 
-    lines.push(result.filePath);
+    lines.push(result.filePath)
 
     for (const msg of result.messages) {
-      const line = String(msg.line).padStart(4);
-      const column = String(msg.column).padStart(4);
-      const type = msg.severity === 2 ? 'error' : 'warn';
-      lines.push(
-        `  ${line}:${column}  ${type.padEnd(5)}  ${msg.message}  ${msg.ruleId || ''}`.trimEnd()
-      );
+      const line = String(msg.line).padStart(4)
+      const column = String(msg.column).padStart(4)
+      const type = msg.severity === 2 ? 'error' : 'warn'
+      lines.push(`  ${line}:${column}  ${type.padEnd(5)}  ${msg.message}  ${msg.ruleId || ''}`.trimEnd())
     }
 
-    lines.push('');
+    lines.push('')
   }
 
-  return lines.join('\n');
-};
+  return lines.join('\n')
+}

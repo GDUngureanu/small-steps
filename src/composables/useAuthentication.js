@@ -30,28 +30,9 @@ watchEffect(() => {
 })
 
 // Public and restricted routes configuration
-const publicRoutes = [
-  '/',
-  '/nutrition',
-  '/nutrition/ingredients', 
-  '/literature',
-  '/books',
-  '/poems',
-  '/adventure',
-  '/adventure/destinations',
-  '/entertainment',
-  '/anime',
-  '/movies'
-]
+const publicRoutes = ['/', '/nutrition', '/nutrition/ingredients', '/literature', '/books', '/poems', '/adventure', '/adventure/destinations', '/entertainment', '/anime', '/movies']
 
-const restrictedRoutes = [
-  '/practice',
-  '/practice/routines',
-  '/ikigai',
-  '/ippo',
-  '/experiments',
-  '/random'
-]
+const restrictedRoutes = ['/practice', '/practice/routines', '/ikigai', '/ippo', '/experiments', '/random']
 
 /**
  * Manage client-side authentication state and navigation visibility.
@@ -77,7 +58,6 @@ const restrictedRoutes = [
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
-  
   const authenticate = (password) => {
     if (password === CORRECT_PASSWORD) {
       isAuthenticated.value = true
@@ -111,7 +91,7 @@ export function useAuthentication() {
       // Dropdowns will be handled in navigation component
     ]
 
-    return baseItems.filter(item => item.public || isAuthenticated.value)
+    return baseItems.filter((item) => item.public || isAuthenticated.value)
   })
 
   const dropdownSections = computed(() => {
@@ -121,48 +101,48 @@ export function useAuthentication() {
         public: true,
         items: [
           { path: '/nutrition', label: 'Overview' },
-          { path: '/nutrition/ingredients', label: 'Ingredients' }
-        ]
+          { path: '/nutrition/ingredients', label: 'Ingredients' },
+        ],
       },
       literature: {
-        label: 'Literature', 
+        label: 'Literature',
         public: true,
         items: [
           { path: '/literature', label: 'Overview' },
           { path: '/books', label: 'Books' },
-          { path: '/poems', label: 'Poems' }
-        ]
+          { path: '/poems', label: 'Poems' },
+        ],
       },
       entertainment: {
         label: 'Entertainment',
-        public: true, 
+        public: true,
         items: [
           { path: '/entertainment', label: 'Overview' },
           { path: '/anime', label: 'Anime' },
-          { path: '/movies', label: 'Movies' }
-        ]
+          { path: '/movies', label: 'Movies' },
+        ],
       },
       adventure: {
         label: 'Adventure',
         public: true,
         items: [
           { path: '/adventure', label: 'Overview' },
-          { path: '/adventure/destinations', label: 'Destinations' }
-        ]
+          { path: '/adventure/destinations', label: 'Destinations' },
+        ],
       },
       practice: {
         label: 'Practice',
         public: false,
         items: [
           { path: '/practice', label: 'Overview' },
-          { path: '/practice/routines', label: 'Routines' }
-        ]
-      }
+          { path: '/practice/routines', label: 'Routines' },
+        ],
+      },
     }
 
     // Filter sections based on authentication
     const filteredSections = {}
-    Object.keys(sections).forEach(key => {
+    Object.keys(sections).forEach((key) => {
       const section = sections[key]
       if (section.public || isAuthenticated.value) {
         filteredSections[key] = section
@@ -175,10 +155,10 @@ export function useAuthentication() {
   const standaloneItems = computed(() => {
     const items = [
       { path: '/experiments', label: 'Experiments', public: false },
-      { path: '/random', label: 'Random', public: false }
+      { path: '/random', label: 'Random', public: false },
     ]
 
-    return items.filter(item => item.public || isAuthenticated.value)
+    return items.filter((item) => item.public || isAuthenticated.value)
   })
 
   return {
@@ -190,6 +170,6 @@ export function useAuthentication() {
     canAccessRoute,
     navigationItems,
     dropdownSections,
-    standaloneItems
+    standaloneItems,
   }
 }

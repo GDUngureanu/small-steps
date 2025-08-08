@@ -19,11 +19,8 @@ const router = createAppRouter()
  * Application bootstrap. Mounts the root component with the configured
  * router and wires up Bootstrap popovers for opt-in elements.
  */
-createApp(App)
-  .use(router)
-  .mount('#app')
+createApp(App).use(router).mount('#app')
 
-document.querySelectorAll('[data-bs-toggle="popover"]')
-  .forEach(popover => {
-    new Popover(popover)
-  })
+document.querySelectorAll('[data-bs-toggle="popover"]').forEach((popover) => {
+  new Popover(popover)
+})

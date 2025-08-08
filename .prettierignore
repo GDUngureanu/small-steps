@@ -1,0 +1,7 @@
+dist/
+node_modules/
+coverage/
+.env*
+*.config.js
+*.config.cjs
+package-lock.json

@@ -1,6 +1,7 @@
 const js = require('@eslint/js')
 const pluginVue = require('eslint-plugin-vue')
 const globals = require('globals')
+const prettier = require('eslint-config-prettier')
 
 module.exports = [
   {
@@ -69,5 +70,7 @@ module.exports = [
         process: 'readonly'
       }
     }
-  }
+  },
+  // Prettier integration - must be last to override conflicting rules
+  prettier
 ]

@@ -1,49 +1,46 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Collapse } from 'bootstrap'
-import { useAuthentication } from '../../composables/useAuthentication.js'
+  import { ref, onMounted } from 'vue'
+  import { Collapse } from 'bootstrap'
+  import { useAuthentication } from '../../composables/useAuthentication.js'
 
-/**
- * Top-level navigation bar showing public and restricted sections.
- *
- * Uses `useAuthentication` to build the menu dynamically and emits a
- * `showAuthentication` event when the user requests to log in.
- */
-const { isAuthenticated, dropdownSections, standaloneItems, logout } = useAuthentication()
+  /**
+   * Top-level navigation bar showing public and restricted sections.
+   *
+   * Uses `useAuthentication` to build the menu dynamically and emits a
+   * `showAuthentication` event when the user requests to log in.
+   */
+  const { isAuthenticated, dropdownSections, standaloneItems, logout } = useAuthentication()
 
-const emit = defineEmits(['showAuthentication'])
+  const emit = defineEmits(['showAuthentication'])
 
-const showAuthenticationModal = () => {
-  emit('showAuthentication')
-}
-
-const navbarCollapse = ref(null)
-let bootstrapCollapse
-
-onMounted(() => {
-  if (navbarCollapse.value) {
-    bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
+  const showAuthenticationModal = () => {
+    emit('showAuthentication')
   }
-})
 
-const closeMenu = () => {
-  if (window.innerWidth < 992 && bootstrapCollapse) {
-    bootstrapCollapse.hide()
+  const navbarCollapse = ref(null)
+  let bootstrapCollapse
+
+  onMounted(() => {
+    if (navbarCollapse.value) {
+      bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
+    }
+  })
+
+  const closeMenu = () => {
+    if (window.innerWidth < 992 && bootstrapCollapse) {
+      bootstrapCollapse.hide()
+    }
   }
-}
 
-defineOptions({
-  name: 'NavigationTemplate'
-})
+  defineOptions({
+    name: 'NavigationTemplate',
+  })
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top d-block"
-    data-navbar-on-scroll="data-navbar-on-scroll">
+  <nav class="navbar navbar-expand-lg fixed-top d-block" data-navbar-on-scroll="data-navbar-on-scroll">
     <div class="container">
-      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-        aria-label="Toggle navigation">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
@@ -78,7 +75,7 @@ defineOptions({
             <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu">{{ item.label }}</RouterLink>
           </li>
         </ul>
-        
+
         <!-- Auth controls -->
         <ul class="navbar-nav">
           <li v-if="!isAuthenticated" class="nav-item px-2">

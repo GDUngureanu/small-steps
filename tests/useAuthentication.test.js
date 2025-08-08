@@ -46,15 +46,11 @@ test('fails fast when password variable is absent', () => {
   const env = { ...process.env }
   delete env.VITE_APP_PASSWORD
 
-  const result = spawnSync(
-    process.execPath,
-    ['--input-type=module', '--eval', "import('./src/composables/useAuthentication.js')"],
-    {
-      cwd: process.cwd(),
-      env,
-      encoding: 'utf-8'
-    }
-  )
+  const result = spawnSync(process.execPath, ['--input-type=module', '--eval', "import('./src/composables/useAuthentication.js')"], {
+    cwd: process.cwd(),
+    env,
+    encoding: 'utf-8',
+  })
 
   assert.notEqual(result.status, 0)
   assert.match(result.stderr, /VITE_APP_PASSWORD/)

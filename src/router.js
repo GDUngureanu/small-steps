@@ -21,7 +21,7 @@ export function createAppRouter(history = createWebHashHistory(), routesConfig =
 
   const auth = useAuthentication()
 
-  router.beforeEach(to => {
+  router.beforeEach((to) => {
     if (to.meta?.requiresAuth && !auth.isAuthenticated.value) {
       authEvents.dispatchEvent(new CustomEvent(AUTH_REQUIRED_EVENT, { detail: to.path }))
       return '/'

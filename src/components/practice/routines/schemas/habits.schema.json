@@ -1,18 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["version","habits"],
+  "required": ["version", "habits"],
   "properties": {
     "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
     "habits": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id","name","scope","archived"],
+        "required": ["id", "name", "scope", "archived"],
         "properties": {
           "id": { "type": "string", "pattern": "^h-[A-Za-z0-9_-]+$" },
           "name": { "type": "string", "minLength": 1 },
-          "scope": { "enum": ["day","week","month","year"] },
+          "scope": { "enum": ["day", "week", "month", "year"] },
           "archived": { "type": "boolean" },
           "sort": { "type": "number" }
         },

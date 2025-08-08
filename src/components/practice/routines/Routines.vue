@@ -1,10 +1,10 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
-import ArticleTemplate from '../../../templates/Article.vue';
-import habitsData from './habits.json';
-import activitiesData from './activities.json';
+  import { ref, reactive, computed, onMounted } from 'vue'
+  import ArticleTemplate from '../../../templates/Article.vue'
+  import habitsData from './habits.json'
+  import activitiesData from './activities.json'
 
-/*
+  /*
 SPEC—Temporal Windows (Europe/Bucharest, ISO week Monday)
 Goal: For a selected scope ∈ {day, week, month, year}, produce exactly 13 ordered intervals:
 I-10 … I-1, I0 (current), I+1 … I+2.
@@ -66,7 +66,7 @@ Test anchors (expected 13 IDs only; verify manually):
   Anchor now = 2025-08-06, scope=month → includes Oct 2024 … Oct 2025 (13 months with Aug 2025 at index 10).
 */
 
-/*
+  /*
 SPEC—Streaks (gaps ≤ 3 allowed)
 Definitions:
 - Convert each intervalId to an integer index per scope (epoch-based):
@@ -122,7 +122,7 @@ Worked examples (indices only):
   B) [40,44,49] → current=0, best=2
 */
 
-/*
+  /*
 SPEC—State Model (Ephemeral only; no localStorage/URL)
 Data sources:
 - SeedHabits: loaded from habits.json
@@ -158,7 +158,7 @@ SSR notes:
 - If SSR computes windows, embed tz="Europe/Bucharest" and generatedAt; client revalidates at hydration.
 */
 
-/*
+  /*
 SPEC—Interaction & A11y (WCAG 2.2 AA)
 Grid layout:
 - One scope visible at a time; 13 interval columns; ~20+ habit rows.
@@ -199,7 +199,7 @@ Empty/edge states:
 - Long habit names: truncate with tooltip; never truncate ARIA labels.
 */
 
-/*
+  /*
 SPEC—Dark Tokens & Palette (WCAG 2.2 AA)
 Purpose: Define color tokens usable with Bootstrap classes while ensuring AA contrast.
 
@@ -243,281 +243,271 @@ Contrast verification (AA):
   Repeat for all accents.
 */
 
-defineOptions({
-    name: 'RoutinesTemplate'
-});
+  defineOptions({
+    name: 'RoutinesTemplate',
+  })
 
-// Reactive state
-const sessionOverrides = reactive(new Map());
-const currentTime = ref(new Date());
-const allScopes = ['day', 'week', 'month', 'year'];
+  // Reactive state
+  const sessionOverrides = reactive(new Map())
+  const currentTime = ref(new Date())
+  const allScopes = ['day', 'week', 'month', 'year']
 
-// Temporal window functions
-function floorToInterval(scope, nowTZ) {
-  const now = new Date(nowTZ.toLocaleString("en-US", { timeZone: "Europe/Bucharest" }));
-  
-  switch (scope) {
-    case 'day':
-      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
-    case 'week': {
-      // Find Monday of current ISO week
-      const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay(); // Sunday = 7
-      const mondayOffset = dayOfWeek - 1;
-      const monday = new Date(now);
-      monday.setDate(now.getDate() - mondayOffset);
-      monday.setHours(0, 0, 0, 0);
-      return monday;
+  // Temporal window functions
+  function floorToInterval(scope, nowTZ) {
+    const now = new Date(nowTZ.toLocaleString('en-US', { timeZone: 'Europe/Bucharest' }))
+
+    switch (scope) {
+      case 'day':
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+      case 'week': {
+        // Find Monday of current ISO week
+        const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay() // Sunday = 7
+        const mondayOffset = dayOfWeek - 1
+        const monday = new Date(now)
+        monday.setDate(now.getDate() - mondayOffset)
+        monday.setHours(0, 0, 0, 0)
+        return monday
+      }
+
+      case 'month':
+        return new Date(now.getFullYear(), now.getMonth(), 1)
+
+      case 'year':
+        return new Date(now.getFullYear(), 0, 1)
+
+      default:
+        throw new Error(`Unknown scope: ${scope}`)
     }
-    
-    case 'month':
-      return new Date(now.getFullYear(), now.getMonth(), 1);
-    
-    case 'year':
-      return new Date(now.getFullYear(), 0, 1);
-    
-    default:
-      throw new Error(`Unknown scope: ${scope}`);
   }
-}
 
-function shiftInterval(intervalStart, scope, delta) {
-  const result = new Date(intervalStart);
-  
-  switch (scope) {
-    case 'day':
-      result.setDate(result.getDate() + delta);
-      break;
-    
-    case 'week':
-      result.setDate(result.getDate() + (delta * 7));
-      break;
-    
-    case 'month':
-      result.setMonth(result.getMonth() + delta);
-      break;
-    
-    case 'year':
-      result.setFullYear(result.getFullYear() + delta);
-      break;
-  }
-  
-  return result;
-}
+  function shiftInterval(intervalStart, scope, delta) {
+    const result = new Date(intervalStart)
 
-function formatIntervalId(scope, intervalStart) {
-  const date = new Date(intervalStart);
-  
-  switch (scope) {
-    case 'day':
-      return date.toISOString().split('T')[0]; // YYYY-MM-DD
-    
-    case 'week': {
-      // Calculate ISO week number
-      const yearStart = new Date(date.getFullYear(), 0, 1);
-      const weekNum = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7);
-      return `${date.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`;
+    switch (scope) {
+      case 'day':
+        result.setDate(result.getDate() + delta)
+        break
+
+      case 'week':
+        result.setDate(result.getDate() + delta * 7)
+        break
+
+      case 'month':
+        result.setMonth(result.getMonth() + delta)
+        break
+
+      case 'year':
+        result.setFullYear(result.getFullYear() + delta)
+        break
     }
-    
-    case 'month':
-      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
-    
-    case 'year':
-      return date.getFullYear().toString();
-  }
-}
 
-function humanLabel(scope, start, end) {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
-  
-  switch (scope) {
-    case 'day':
-      return startDate.toLocaleDateString('en-US', { 
-        weekday: 'short', 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-    
-    case 'week': {
-      const weekId = formatIntervalId('week', startDate);
-      const weekMatch = weekId.match(/(\d{4})-W(\d{2})/);
-      const weekNum = weekMatch ? weekMatch[2] : '00';
-      return `W${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}–${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})`;
+    return result
+  }
+
+  function formatIntervalId(scope, intervalStart) {
+    const date = new Date(intervalStart)
+
+    switch (scope) {
+      case 'day':
+        return date.toISOString().split('T')[0] // YYYY-MM-DD
+
+      case 'week': {
+        // Calculate ISO week number
+        const yearStart = new Date(date.getFullYear(), 0, 1)
+        const weekNum = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7)
+        return `${date.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`
+      }
+
+      case 'month':
+        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`
+
+      case 'year':
+        return date.getFullYear().toString()
     }
-    case 'month':
-      return startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
-    
-    case 'year':
-      return startDate.getFullYear().toString();
   }
-}
 
-function computeWindows(scope, nowTZ) {
-  const currentInterval = floorToInterval(scope, nowTZ);
-  const windows = [];
-  
-  // Generate I-10 to I-1
-  for (let i = 10; i >= 1; i--) {
-    const intervalStart = shiftInterval(currentInterval, scope, -i);
-    const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1));
-    intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1);
-    
+  function humanLabel(scope, start, end) {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+
+    switch (scope) {
+      case 'day':
+        return startDate.toLocaleDateString('en-US', {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })
+
+      case 'week': {
+        const weekId = formatIntervalId('week', startDate)
+        const weekMatch = weekId.match(/(\d{4})-W(\d{2})/)
+        const weekNum = weekMatch ? weekMatch[2] : '00'
+        return `W${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}–${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})`
+      }
+      case 'month':
+        return startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+
+      case 'year':
+        return startDate.getFullYear().toString()
+    }
+  }
+
+  function computeWindows(scope, nowTZ) {
+    const currentInterval = floorToInterval(scope, nowTZ)
+    const windows = []
+
+    // Generate I-10 to I-1
+    for (let i = 10; i >= 1; i--) {
+      const intervalStart = shiftInterval(currentInterval, scope, -i)
+      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
+      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
+
+      windows.push({
+        intervalId: formatIntervalId(scope, intervalStart),
+        label: humanLabel(scope, intervalStart, intervalEnd),
+        start: intervalStart,
+        end: intervalEnd,
+      })
+    }
+
+    // Add current interval I0
+    const currentEnd = new Date(shiftInterval(currentInterval, scope, 1))
+    currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1)
     windows.push({
-      intervalId: formatIntervalId(scope, intervalStart),
-      label: humanLabel(scope, intervalStart, intervalEnd),
-      start: intervalStart,
-      end: intervalEnd
-    });
-  }
-  
-  // Add current interval I0
-  const currentEnd = new Date(shiftInterval(currentInterval, scope, 1));
-  currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1);
-  windows.push({
-    intervalId: formatIntervalId(scope, currentInterval),
-    label: humanLabel(scope, currentInterval, currentEnd),
-    start: currentInterval,
-    end: currentEnd
-  });
-  
-  // Generate I+1 to I+2
-  for (let i = 1; i <= 2; i++) {
-    const intervalStart = shiftInterval(currentInterval, scope, i);
-    const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1));
-    intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1);
-    
-    windows.push({
-      intervalId: formatIntervalId(scope, intervalStart),
-      label: humanLabel(scope, intervalStart, intervalEnd),
-      start: intervalStart,
-      end: intervalEnd
-    });
-  }
-  
-  return {
-    scope,
-    currentIndex: 10,
-    windows
-  };
-}
+      intervalId: formatIntervalId(scope, currentInterval),
+      label: humanLabel(scope, currentInterval, currentEnd),
+      start: currentInterval,
+      end: currentEnd,
+    })
 
-// State management functions
-function isDone(habitId, scope, completedOn) {
-  const key = `${habitId}|${scope}|${completedOn}`;
-  
-  if (sessionOverrides.has(key)) {
-    return sessionOverrides.get(key) === 'done';
-  }
-  
-  return activitiesData.activities.some(
-    activity => activity.habitId === habitId && 
-                activity.scope === scope && 
-                activity.completedOn === completedOn
-  );
-}
+    // Generate I+1 to I+2
+    for (let i = 1; i <= 2; i++) {
+      const intervalStart = shiftInterval(currentInterval, scope, i)
+      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
+      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
 
-function toggleHabit(habitId, scope, completedOn) {
-  const key = `${habitId}|${scope}|${completedOn}`;
-  const current = isDone(habitId, scope, completedOn);
-  const next = !current;
-  
-  if (next) {
-    sessionOverrides.set(key, 'done');
-  } else {
-    // Check if it exists in seed data
-    const existsInSeed = activitiesData.activities.some(
-      activity => activity.habitId === habitId && 
-                  activity.scope === scope && 
-                  activity.completedOn === completedOn
-    );
-    
-    if (existsInSeed) {
-      sessionOverrides.set(key, 'undone');
+      windows.push({
+        intervalId: formatIntervalId(scope, intervalStart),
+        label: humanLabel(scope, intervalStart, intervalEnd),
+        start: intervalStart,
+        end: intervalEnd,
+      })
+    }
+
+    return {
+      scope,
+      currentIndex: 10,
+      windows,
+    }
+  }
+
+  // State management functions
+  function isDone(habitId, scope, completedOn) {
+    const key = `${habitId}|${scope}|${completedOn}`
+
+    if (sessionOverrides.has(key)) {
+      return sessionOverrides.get(key) === 'done'
+    }
+
+    return activitiesData.activities.some((activity) => activity.habitId === habitId && activity.scope === scope && activity.completedOn === completedOn)
+  }
+
+  function toggleHabit(habitId, scope, completedOn) {
+    const key = `${habitId}|${scope}|${completedOn}`
+    const current = isDone(habitId, scope, completedOn)
+    const next = !current
+
+    if (next) {
+      sessionOverrides.set(key, 'done')
     } else {
-      sessionOverrides.delete(key);
-    }
-  }
-}
+      // Check if it exists in seed data
+      const existsInSeed = activitiesData.activities.some((activity) => activity.habitId === habitId && activity.scope === scope && activity.completedOn === completedOn)
 
-// Completion count calculation
-function computeCompletionCount(habitId, scope) {
-  const completedIntervals = [];
-  
-  // Add from seed data (all activities are considered completed since status field removed)
-  activitiesData.activities.forEach(activity => {
-    if (activity.habitId === habitId && activity.scope === scope) {
-      completedIntervals.push(activity.completedOn);
-    }
-  });
-  
-  // Add from session overrides
-  sessionOverrides.forEach((status, key) => {
-    const [overrideHabitId, overrideScope, completedOn] = key.split('|');
-    if (overrideHabitId === habitId && overrideScope === scope && status === 'done') {
-      if (!completedIntervals.includes(completedOn)) {
-        completedIntervals.push(completedOn);
+      if (existsInSeed) {
+        sessionOverrides.set(key, 'undone')
+      } else {
+        sessionOverrides.delete(key)
       }
     }
-  });
-  
-  // Remove any intervals that are explicitly marked as undone
-  const filteredIntervals = completedIntervals.filter(completedOn => {
-    const key = `${habitId}|${scope}|${completedOn}`;
-    return sessionOverrides.get(key) !== 'undone';
-  });
-  
-  return filteredIntervals.length;
-}
+  }
 
-function getFireColor(count) {
-  if (count > 20) return 'text-primary';   // Blue
-  if (count > 10) return 'text-danger';    // Red  
-  if (count > 5) return 'text-warning';    // Yellow
-  return 'text-muted';                     // Gray for <= 5
-}
+  // Completion count calculation
+  function computeCompletionCount(habitId, scope) {
+    const completedIntervals = []
 
-// Computed properties for each scope
-const scopeData = computed(() => {
-  const data = {};
-  
-  allScopes.forEach(scope => {
-    const habits = habitsData.habits.filter(habit => 
-      habit.scope === scope && !habit.archived
-    ).sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    
-    const windows = computeWindows(scope, currentTime.value);
-    
-    const counts = {};
-    habits.forEach(habit => {
-      counts[habit.id] = computeCompletionCount(habit.id, scope);
-    });
-    
-    data[scope] = {
-      habits,
-      windows,
-      counts
-    };
-  });
-  
-  return data;
-});
+    // Add from seed data (all activities are considered completed since status field removed)
+    activitiesData.activities.forEach((activity) => {
+      if (activity.habitId === habitId && activity.scope === scope) {
+        completedIntervals.push(activity.completedOn)
+      }
+    })
 
-const scopeLabels = {
-  day: 'Daily Habits',
-  week: 'Weekly Habits', 
-  month: 'Monthly Habits',
-  year: 'Yearly Habits'
-};
+    // Add from session overrides
+    sessionOverrides.forEach((status, key) => {
+      const [overrideHabitId, overrideScope, completedOn] = key.split('|')
+      if (overrideHabitId === habitId && overrideScope === scope && status === 'done') {
+        if (!completedIntervals.includes(completedOn)) {
+          completedIntervals.push(completedOn)
+        }
+      }
+    })
 
-// Lifecycle
-onMounted(() => {
-  // Update current time every minute for day scope
-  setInterval(() => {
-    currentTime.value = new Date();
-  }, 60000);
-});
+    // Remove any intervals that are explicitly marked as undone
+    const filteredIntervals = completedIntervals.filter((completedOn) => {
+      const key = `${habitId}|${scope}|${completedOn}`
+      return sessionOverrides.get(key) !== 'undone'
+    })
+
+    return filteredIntervals.length
+  }
+
+  function getFireColor(count) {
+    if (count > 20) return 'text-primary' // Blue
+    if (count > 10) return 'text-danger' // Red
+    if (count > 5) return 'text-warning' // Yellow
+    return 'text-muted' // Gray for <= 5
+  }
+
+  // Computed properties for each scope
+  const scopeData = computed(() => {
+    const data = {}
+
+    allScopes.forEach((scope) => {
+      const habits = habitsData.habits.filter((habit) => habit.scope === scope && !habit.archived).sort((a, b) => (a.sort || 0) - (b.sort || 0))
+
+      const windows = computeWindows(scope, currentTime.value)
+
+      const counts = {}
+      habits.forEach((habit) => {
+        counts[habit.id] = computeCompletionCount(habit.id, scope)
+      })
+
+      data[scope] = {
+        habits,
+        windows,
+        counts,
+      }
+    })
+
+    return data
+  })
+
+  const scopeLabels = {
+    day: 'Daily Habits',
+    week: 'Weekly Habits',
+    month: 'Monthly Habits',
+    year: 'Yearly Habits',
+  }
+
+  // Lifecycle
+  onMounted(() => {
+    // Update current time every minute for day scope
+    setInterval(() => {
+      currentTime.value = new Date()
+    }, 60000)
+  })
 </script>
 
 <template>
@@ -528,50 +518,36 @@ onMounted(() => {
       <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
         <div class="habit-name-column"></div>
         <div class="d-flex flex-fill gap-2">
-          <div 
-            v-for="(window, index) in scopeData.day.windows.windows" 
-            :key="window.intervalId"
-            class="flex-fill text-center p-1 fw-medium text-secondary"
-            :class="{ 'text-primary fw-semibold': index === scopeData.day.windows.currentIndex }"
-            style="min-width: 60px; font-size: 1rem;"
-          >
+          <div v-for="(window, index) in scopeData.day.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.day.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
             <small>{{ window.label }}</small>
           </div>
         </div>
       </div>
-      
+
       <!-- Habit Rows -->
-      <div 
-        v-for="habit in scopeData.day.habits" 
-        :key="habit.id"
-        class="d-flex align-items-center mb-3"
-        role="row"
-        :aria-label="habit.name"
-      >
+      <div v-for="habit in scopeData.day.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
         <!-- Habit Name -->
         <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
           <div class="d-flex align-items-center gap-2 me-2">
-            <i 
-              class="bi bi-fire"
-              :class="getFireColor(scopeData.day.counts[habit.id] || 0)"
-              :title="`${scopeData.day.counts[habit.id] || 0} completions`"
-            ></i>
+            <i class="bi bi-fire" :class="getFireColor(scopeData.day.counts[habit.id] || 0)" :title="`${scopeData.day.counts[habit.id] || 0} completions`"></i>
             <span class="text-secondary fw-medium small">{{ scopeData.day.counts[habit.id] || 0 }}</span>
           </div>
           <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
         </div>
-        
+
         <!-- Interval Cells -->
         <div class="d-flex flex-fill gap-2">
-          <div 
+          <div
             v-for="(window, index) in scopeData.day.windows.windows"
             :key="`${habit.id}-${window.intervalId}`"
             class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{ 'bg-primary bg-opacity-10 rounded': index === scopeData.day.windows.currentIndex }"
-            style="min-width: 60px;"
+            :class="{
+              'bg-primary bg-opacity-10 rounded': index === scopeData.day.windows.currentIndex,
+            }"
+            style="min-width: 60px"
           >
             <div class="form-check d-flex justify-content-center">
-              <input 
+              <input
                 :id="`${habit.id}-${window.intervalId}`"
                 class="form-check-input"
                 type="checkbox"
@@ -596,50 +572,36 @@ onMounted(() => {
       <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
         <div class="habit-name-column"></div>
         <div class="d-flex flex-fill gap-2">
-          <div 
-            v-for="(window, index) in scopeData.week.windows.windows" 
-            :key="window.intervalId"
-            class="flex-fill text-center p-1 fw-medium text-secondary"
-            :class="{ 'text-primary fw-semibold': index === scopeData.week.windows.currentIndex }"
-            style="min-width: 60px; font-size: 1rem;"
-          >
+          <div v-for="(window, index) in scopeData.week.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.week.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
             <small>{{ window.label }}</small>
           </div>
         </div>
       </div>
-      
+
       <!-- Habit Rows -->
-      <div 
-        v-for="habit in scopeData.week.habits" 
-        :key="habit.id"
-        class="d-flex align-items-center mb-3"
-        role="row"
-        :aria-label="habit.name"
-      >
+      <div v-for="habit in scopeData.week.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
         <!-- Habit Name -->
         <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
           <div class="d-flex align-items-center gap-2 me-2">
-            <i 
-              class="bi bi-fire"
-              :class="getFireColor(scopeData.week.counts[habit.id] || 0)"
-              :title="`${scopeData.week.counts[habit.id] || 0} completions`"
-            ></i>
+            <i class="bi bi-fire" :class="getFireColor(scopeData.week.counts[habit.id] || 0)" :title="`${scopeData.week.counts[habit.id] || 0} completions`"></i>
             <span class="text-secondary fw-medium small">{{ scopeData.week.counts[habit.id] || 0 }}</span>
           </div>
           <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
         </div>
-        
+
         <!-- Interval Cells -->
         <div class="d-flex flex-fill gap-2">
-          <div 
+          <div
             v-for="(window, index) in scopeData.week.windows.windows"
             :key="`${habit.id}-${window.intervalId}`"
             class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{ 'bg-primary bg-opacity-10 rounded': index === scopeData.week.windows.currentIndex }"
-            style="min-width: 60px;"
+            :class="{
+              'bg-primary bg-opacity-10 rounded': index === scopeData.week.windows.currentIndex,
+            }"
+            style="min-width: 60px"
           >
             <div class="form-check d-flex justify-content-center">
-              <input 
+              <input
                 :id="`${habit.id}-${window.intervalId}`"
                 class="form-check-input"
                 type="checkbox"
@@ -664,50 +626,36 @@ onMounted(() => {
       <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
         <div class="habit-name-column"></div>
         <div class="d-flex flex-fill gap-2">
-          <div 
-            v-for="(window, index) in scopeData.month.windows.windows" 
-            :key="window.intervalId"
-            class="flex-fill text-center p-1 fw-medium text-secondary"
-            :class="{ 'text-primary fw-semibold': index === scopeData.month.windows.currentIndex }"
-            style="min-width: 60px; font-size: 1rem;"
-          >
+          <div v-for="(window, index) in scopeData.month.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.month.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
             <small>{{ window.label }}</small>
           </div>
         </div>
       </div>
-      
+
       <!-- Habit Rows -->
-      <div 
-        v-for="habit in scopeData.month.habits" 
-        :key="habit.id"
-        class="d-flex align-items-center mb-3"
-        role="row"
-        :aria-label="habit.name"
-      >
+      <div v-for="habit in scopeData.month.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
         <!-- Habit Name -->
         <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
           <div class="d-flex align-items-center gap-2 me-2">
-            <i 
-              class="bi bi-fire"
-              :class="getFireColor(scopeData.month.counts[habit.id] || 0)"
-              :title="`${scopeData.month.counts[habit.id] || 0} completions`"
-            ></i>
+            <i class="bi bi-fire" :class="getFireColor(scopeData.month.counts[habit.id] || 0)" :title="`${scopeData.month.counts[habit.id] || 0} completions`"></i>
             <span class="text-secondary fw-medium small">{{ scopeData.month.counts[habit.id] || 0 }}</span>
           </div>
           <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
         </div>
-        
+
         <!-- Interval Cells -->
         <div class="d-flex flex-fill gap-2">
-          <div 
+          <div
             v-for="(window, index) in scopeData.month.windows.windows"
             :key="`${habit.id}-${window.intervalId}`"
             class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{ 'bg-primary bg-opacity-10 rounded': index === scopeData.month.windows.currentIndex }"
-            style="min-width: 60px;"
+            :class="{
+              'bg-primary bg-opacity-10 rounded': index === scopeData.month.windows.currentIndex,
+            }"
+            style="min-width: 60px"
           >
             <div class="form-check d-flex justify-content-center">
-              <input 
+              <input
                 :id="`${habit.id}-${window.intervalId}`"
                 class="form-check-input"
                 type="checkbox"
@@ -732,50 +680,36 @@ onMounted(() => {
       <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
         <div class="habit-name-column"></div>
         <div class="d-flex flex-fill gap-2">
-          <div 
-            v-for="(window, index) in scopeData.year.windows.windows" 
-            :key="window.intervalId"
-            class="flex-fill text-center p-1 fw-medium text-secondary"
-            :class="{ 'text-primary fw-semibold': index === scopeData.year.windows.currentIndex }"
-            style="min-width: 60px; font-size: 1rem;"
-          >
+          <div v-for="(window, index) in scopeData.year.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.year.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
             <small>{{ window.label }}</small>
           </div>
         </div>
       </div>
-      
+
       <!-- Habit Rows -->
-      <div 
-        v-for="habit in scopeData.year.habits" 
-        :key="habit.id"
-        class="d-flex align-items-center mb-3"
-        role="row"
-        :aria-label="habit.name"
-      >
+      <div v-for="habit in scopeData.year.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
         <!-- Habit Name -->
         <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
           <div class="d-flex align-items-center gap-2 me-2">
-            <i 
-              class="bi bi-fire"
-              :class="getFireColor(scopeData.year.counts[habit.id] || 0)"
-              :title="`${scopeData.year.counts[habit.id] || 0} completions`"
-            ></i>
+            <i class="bi bi-fire" :class="getFireColor(scopeData.year.counts[habit.id] || 0)" :title="`${scopeData.year.counts[habit.id] || 0} completions`"></i>
             <span class="text-secondary fw-medium small">{{ scopeData.year.counts[habit.id] || 0 }}</span>
           </div>
           <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
         </div>
-        
+
         <!-- Interval Cells -->
         <div class="d-flex flex-fill gap-2">
-          <div 
+          <div
             v-for="(window, index) in scopeData.year.windows.windows"
             :key="`${habit.id}-${window.intervalId}`"
             class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{ 'bg-primary bg-opacity-10 rounded': index === scopeData.year.windows.currentIndex }"
-            style="min-width: 60px;"
+            :class="{
+              'bg-primary bg-opacity-10 rounded': index === scopeData.year.windows.currentIndex,
+            }"
+            style="min-width: 60px"
           >
             <div class="form-check d-flex justify-content-center">
-              <input 
+              <input
                 :id="`${habit.id}-${window.intervalId}`"
                 class="form-check-input"
                 type="checkbox"
@@ -795,16 +729,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Minimal custom CSS - most styling now handled by Bootstrap */
-.habit-name-column {
-  width: 200px;
-  flex-shrink: 0;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
+  /* Minimal custom CSS - most styling now handled by Bootstrap */
   .habit-name-column {
-    width: 150px;
+    width: 200px;
+    flex-shrink: 0;
   }
-}
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .habit-name-column {
+      width: 150px;
+    }
+  }
 </style>

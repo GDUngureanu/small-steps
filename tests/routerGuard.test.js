@@ -24,7 +24,7 @@ async function setup(authenticated = false) {
   const { createAppRouter } = await import('../src/router.js')
 
   // Stub components to avoid loading .vue files
-  const routes = rawRoutes.map(route => ({ ...route, component: {} }))
+  const routes = rawRoutes.map((route) => ({ ...route, component: {} }))
 
   const router = createAppRouter(createMemoryHistory(), routes)
   const auth = useAuthentication()

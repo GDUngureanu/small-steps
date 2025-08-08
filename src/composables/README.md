@@ -12,7 +12,6 @@ helpers for logging in/out and for building navigation menus.
 - **Inputs:** `authenticate(password)` expects the plain-text password.
 - **Outputs:** `isAuthenticated` flag and navigation/route guard utilities.
 
-
 ## Local Development
 
 These modules are plain JavaScript and automatically bundled. No extra build steps are needed beyond running the dev server:
