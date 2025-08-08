@@ -1,15 +1,15 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createMemoryHistory } from 'vue-router'
-import rawRoutes from '../src/routes.js'
-import { authEvents, AUTH_REQUIRED_EVENT } from '../src/authEvents.js'
-import { setupTestEnvironment, PASSWORD } from './testUtils.js'
+import rawRoutes from '../../src/routes.js'
+import { authEvents, AUTH_REQUIRED_EVENT } from '../../src/authEvents.js'
+import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t, authenticated = false) {
   setupTestEnvironment(t)
 
-  const { useAuthentication } = await import('../src/composables/useAuthentication.js')
-  const { createAppRouter } = await import('../src/router.js')
+  const { useAuthentication } = await import('../../src/composables/useAuthentication.js')
+  const { createAppRouter } = await import('../../src/router.js')
 
   // Stub components to avoid loading .vue files
   const routes = rawRoutes.map((route) => ({ ...route, component: {} }))
