@@ -1,6 +1,6 @@
 <script setup>
   import ArticleTemplate from '@/components/shared/templates/Article.vue'
-  import ActionsTemplate from '@/components/shared/templates/Actions.vue'
+  import ActionsTemplate from '@/components/shared/templates/actions/Actions.vue'
   import SuggestionsTemplate from '@/components/shared/templates/Suggestions.vue'
   import suggestions from './suggestions.json'
 

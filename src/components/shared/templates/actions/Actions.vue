@@ -1,9 +1,9 @@
 <script setup>
   import { ref, watch, computed, nextTick } from 'vue'
   import { supabase } from '@/configuration/supabase.js'
-  import ActionItem from './actions/ActionItem.vue'
-  import DeleteModal from './actions/DeleteModal.vue'
-  import { PRIORITY_LEVELS } from './actions/utils.js'
+  import ActionItem from './ActionItem.vue'
+  import ActionDeleteModal from './ActionDeleteModal.vue'
+  import { PRIORITY_LEVELS } from './utils.js'
 
   // Cache utilities using sessionStorage to persist across module reloads
   const getCachedActions = (listId) => {
@@ -492,7 +492,7 @@
       />
     </div>
 
-    <DeleteModal :show="showDeleteModal" :loading="loading" :action="deleteModalAction" @cancel="cancelDelete" @confirm="deleteAction(deleteModalAction?.id)" />
+    <ActionDeleteModal :show="showDeleteModal" :loading="loading" :action="deleteModalAction" @cancel="cancelDelete" @confirm="deleteAction(deleteModalAction?.id)" />
   </div>
 </template>
 

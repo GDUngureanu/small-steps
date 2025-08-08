@@ -7,11 +7,11 @@ vi.mock('@/configuration/supabase.js', () => ({
 
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import ActionsTemplate from '@/components/shared/templates/Actions.vue'
+import ActionsTemplate from '@/components/shared/templates/actions/Actions.vue'
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0))
 
-const stubs = { ActionItem: true, DeleteModal: true }
+const stubs = { ActionItem: true, ActionDeleteModal: true }
 
 let storage
 beforeEach(() => {
