@@ -1,7 +1,8 @@
+import { env } from '../src/configuration/env.js'
+
 export const PASSWORD = 'secret'
 
-export function setupTestEnvironment(t) {
-  const originalEnv = { ...process.env }
+export function setupTestEnvironment(t, { password = PASSWORD } = {}) {
   const originalSessionStorage = global.sessionStorage
   const store = {}
 
@@ -15,10 +16,10 @@ export function setupTestEnvironment(t) {
     },
   }
 
-  process.env = { ...process.env, VITE_APP_PASSWORD: PASSWORD }
+  const passwordMock = t.mock.method(env, 'getViteAppPassword', () => password)
 
   t.after(() => {
     global.sessionStorage = originalSessionStorage
-    process.env = originalEnv
+    passwordMock.mock.restore()
   })
 }
