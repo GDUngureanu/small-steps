@@ -2,29 +2,18 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import routes from '../src/routes.js'
+import { setupTestEnvironment, PASSWORD } from './testUtils.js'
 
-const PASSWORD = 'secret'
-
-async function setup() {
-  const store = {}
-  global.sessionStorage = {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => {
-      store[key] = value
-    },
-    removeItem: (key) => {
-      delete store[key]
-    },
-  }
-  process.env.VITE_APP_PASSWORD = PASSWORD
+async function setup(t) {
+  setupTestEnvironment(t)
   const { useAuthentication } = await import('../src/composables/useAuthentication.js')
   const auth = useAuthentication()
   auth.logout()
   return auth
 }
 
-test('authenticate and logout flow', async () => {
-  const auth = await setup()
+test('authenticate and logout flow', async (t) => {
+  const auth = await setup(t)
   assert.equal(auth.isAuthenticated.value, false)
   assert.equal(auth.authenticate('wrong'), false)
   assert.equal(auth.isAuthenticated.value, false)
@@ -34,8 +23,8 @@ test('authenticate and logout flow', async () => {
   assert.equal(auth.isAuthenticated.value, false)
 })
 
-test('route access control', async () => {
-  const auth = await setup()
+test('route access control', async (t) => {
+  const auth = await setup(t)
   const publicPath = routes.find((r) => !r.meta?.requiresAuth)?.path
   const restrictedPath = routes.find((r) => r.meta?.requiresAuth)?.path
   assert.equal(auth.isRoutePublic(publicPath), true)
