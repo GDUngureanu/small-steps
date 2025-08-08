@@ -264,7 +264,7 @@
             </td>
             <th scope="row">{{ item.ingredient }}</th>
             <td class="d-none d-sm-table-cell">{{ item.portion }}g</td>
-            <td class="d-none d-md-table-cell">{{ item.format }}</td>
+            <td class="d-none d-md-table-cell">{{ item.form }}</td>
             <td class="d-none d-sm-table-cell">{{ item.type }}</td>
             <td :class="getNutritionalValueClass(calculateProteinScore(item.protein))">{{ calculateProteinScore(item.protein) }} ({{ item.protein }}g)</td>
             <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(item.unsaturated_fats))">{{ calculateUnsaturatedFatsScore(item.unsaturated_fats) }} ({{ item.unsaturated_fats }}g)</td>
