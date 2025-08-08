@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/configuration/routes.js'
-import { authEvents, AUTH_REQUIRED_EVENT } from '../../src/configuration/authentication/authEvents.js'
+import { authenticationEvents, AUTH_REQUIRED_EVENT } from '../../src/configuration/authentication/authenticationEvents.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t, authenticated = false) {
@@ -25,15 +25,15 @@ async function setup(t, authenticated = false) {
 const protectedPaths = rawRoutes.filter((r) => r.meta?.requiresAuth).map((r) => r.path)
 
 for (const path of protectedPaths) {
-  test(`emits auth-required and redirects unauthenticated users from ${path}`, async (t) => {
+  test(`emits authentication-required and redirects unauthenticated users from ${path}`, async (t) => {
     const router = await setup(t, false)
 
     let eventDetail
     const handler = (e) => {
       eventDetail = e.detail
     }
-    authEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
-    t.after(() => authEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
+    authenticationEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
+    t.after(() => authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
 
     await router.push(path)
 
@@ -48,7 +48,7 @@ for (const path of protectedPaths) {
   })
 }
 
-test('navigating to a public route does not emit auth-required event', async (t) => {
+test('navigating to a public route does not emit authentication-required event', async (t) => {
   const router = await setup(t)
   const publicPath = rawRoutes.find((r) => !r.meta?.requiresAuth)?.path
 
@@ -56,8 +56,8 @@ test('navigating to a public route does not emit auth-required event', async (t)
   const handler = () => {
     triggered = true
   }
-  authEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
-  t.after(() => authEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
+  authenticationEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
+  t.after(() => authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
 
   await router.push(publicPath)
 

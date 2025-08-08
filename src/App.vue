@@ -5,7 +5,7 @@
   import AppHeader from '@/components/layout/header/AppHeader.vue'
   import AppFooter from '@/components/layout/footer/AppFooter.vue'
   import PasswordModal from '@/configuration/authentication/components/PasswordModal.vue'
-  import { authEvents, AUTH_REQUIRED_EVENT } from '@/configuration/authentication/authEvents.js'
+  import { authenticationEvents, AUTH_REQUIRED_EVENT } from '@/configuration/authentication/authenticationEvents.js'
 
   /**
    * Root application shell. Renders navigation, header, footer and the active
@@ -24,11 +24,11 @@
   }
 
   onMounted(() => {
-    authEvents.addEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
+    authenticationEvents.addEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
   })
 
   onBeforeUnmount(() => {
-    authEvents.removeEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
+    authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handleAuthRequired)
   })
 
   // Handle successful authentication

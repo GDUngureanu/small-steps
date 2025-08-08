@@ -37,6 +37,7 @@ module.exports = [
       'vue/no-console': 'warn',
       'vue/no-v-html': 'off', // Disabled - needed for rich content
       'vue/v-bind-style': 'off', // Disabled - allow both v-bind and : syntax
+      'vue/require-default-prop': 'off', // Disabled - props can be optional without defaults
       
       // Relax formatting rules for Phase 1
       'vue/max-attributes-per-line': 'off',

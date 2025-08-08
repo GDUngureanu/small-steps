@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import routes from './routes.js'
 import { useAuthentication } from './authentication/useAuthentication.js'
-import { authEvents, AUTH_REQUIRED_EVENT } from './authentication/authEvents.js'
+import { authenticationEvents, AUTH_REQUIRED_EVENT } from './authentication/authenticationEvents.js'
 
 /**
  * Create a Vue Router instance with a simple authentication guard.
@@ -23,7 +23,7 @@ export function createAppRouter(history = createWebHashHistory(), routesConfig =
 
   router.beforeEach((to) => {
     if (to.meta?.requiresAuth && !auth.isAuthenticated.value) {
-      authEvents.dispatchEvent(new CustomEvent(AUTH_REQUIRED_EVENT, { detail: to.path }))
+      authenticationEvents.dispatchEvent(new CustomEvent(AUTH_REQUIRED_EVENT, { detail: to.path }))
       return '/'
     }
   })
