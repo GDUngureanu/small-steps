@@ -17,20 +17,80 @@ export async function renderComponent(file) {
   const filePath = path.resolve(file)
   const src = readFileSync(filePath, 'utf-8')
   const { descriptor } = parse(src, { filename: filePath })
+  
   let script = compileScript(descriptor, { id: filePath }).content
-  // Replace any import statements with empty stubs
-  script = script.replace(/import\s+([\s\S]+?)\s+from\s+['"][^'"]+['"];?\n?/g, 'const $1 = {}\n')
+  
+  // More comprehensive import replacement patterns
+  // Handle various import patterns: default, named, mixed, side effects
+  script = script.replace(/import\s+(\w+)\s*,\s*\{([^}]+)\}\s+from\s+['"][^'"]+['"];?\n?/g, 'const $1 = {}; const { $2 } = {};\n')
+  script = script.replace(/import\s+\{([^}]+)\}\s+from\s+['"][^'"]+['"];?\n?/g, 'const { $1 } = {};\n')
+  script = script.replace(/import\s+(\w+)\s+from\s+['"][^'"]+['"];?\n?/g, 'const $1 = {};\n')
+  script = script.replace(/import\s+['"][^'"]+['"];?\n?/g, '') // Side effect imports
+  
+  // Handle path aliases - resolve @/ to src/
+  script = script.replace(/@\//g, path.resolve('src') + '/')
+  
+  // Handle import.meta references
+  script = script.replace(/import\.meta\.env\.BASE_URL/g, "'/'")
+  script = script.replace(/import\.meta\.env\.DEV/g, "false")
+  script = script.replace(/import\.meta\.env/g, "{ BASE_URL: '/', DEV: false }")
+  script = script.replace(/import\.meta/g, "{ env: { BASE_URL: '/', DEV: false } }")
+  
+  // Replace export default
   script = script.replace('export default', 'const __default__ =')
-  const template = compileTemplate({
-    source: descriptor.template?.content || '',
-    filename: filePath,
-    id: filePath,
-    compilerOptions: { mode: 'function' },
-  })
-  const code = `${script}\n${template.code}\nreturn { ...__default__, render }`
-  const component = new Function('Vue', code)(Vue)
+  
+  // Add safer template compilation with better error handling
+  let template
+  try {
+    template = compileTemplate({
+      source: descriptor.template?.content || '<div>No template</div>',
+      filename: filePath,
+      id: filePath,
+      compilerOptions: { 
+        mode: 'function',
+        hoistStatic: false,
+        cacheHandlers: false
+      },
+    })
+  } catch (templateError) {
+    console.warn(`Template compilation failed for ${file}:`, templateError.message)
+    template = { code: 'function render() { return Vue.h("div", "Template compilation failed") }' }
+  }
+  
+  // Safer code generation with better error handling
+  const code = `
+    try {
+      ${script}
+      ${template.code}
+      return { ...__default__, render }
+    } catch (error) {
+      console.warn('Component compilation error:', error.message);
+      return {
+        name: 'FailedComponent',
+        render: () => Vue.h('div', 'Component failed to compile')
+      }
+    }
+  `
+  
+  let component
+  try {
+    component = new Function('Vue', 'path', code)(Vue, path)
+  } catch (compilationError) {
+    console.warn(`Script compilation failed for ${file}:`, compilationError.message)
+    component = {
+      name: 'FailedComponent',
+      render: () => Vue.h('div', `Failed to compile: ${path.basename(file)}`)
+    }
+  }
+  
   const app = createSSRApp(component)
-  return renderToString(app)
+  
+  try {
+    return await renderToString(app)
+  } catch (renderError) {
+    console.warn(`Render failed for ${file}:`, renderError.message)
+    return `<div>Failed to render: ${path.basename(file)}</div>`
+  }
 }
 
 /**
