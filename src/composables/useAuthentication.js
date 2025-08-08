@@ -1,4 +1,5 @@
 import { ref, computed, watchEffect } from 'vue'
+import routes from '../routes.js'
 
 // Password from environment variable (fallback to process.env for tests)
 const CORRECT_PASSWORD = import.meta.env?.VITE_APP_PASSWORD || globalThis.process?.env?.VITE_APP_PASSWORD
@@ -9,6 +10,12 @@ if (!CORRECT_PASSWORD) {
 
 // Reactive authentication state
 const isAuthenticated = ref(false)
+
+// Build a lookup of route metadata for quick access checks
+const routeMeta = routes.reduce((acc, route) => {
+  acc[route.path] = route.meta || {}
+  return acc
+}, {})
 
 // Check sessionStorage on composable creation and watch for changes
 if (typeof sessionStorage !== 'undefined') {
@@ -29,11 +36,6 @@ watchEffect(() => {
   }
 })
 
-// Public and restricted routes configuration
-const publicRoutes = ['/', '/nutrition', '/nutrition/ingredients', '/literature', '/books', '/poems', '/adventure', '/adventure/destinations', '/entertainment', '/anime', '/movies']
-
-const restrictedRoutes = ['/practice', '/practice/routines', '/ikigai', '/ippo', '/experiments', '/random']
-
 /**
  * Manage client-side authentication state and navigation visibility.
  *
@@ -43,7 +45,7 @@ const restrictedRoutes = ['/practice', '/practice/routines', '/ikigai', '/ippo',
  *   matches the configured value
  * - `logout()` to clear the session
  * - route helpers: `isRouteRestricted`, `isRoutePublic`, `canAccessRoute`
- * - navigation builders: `navigationItems`, `dropdownSections`, `standaloneItems`
+ * - navigation builders: `navigationItems`, `dropdownSections`
  *
  * @returns {{
  *  isAuthenticated: import('vue').ComputedRef<boolean>,
@@ -53,8 +55,7 @@ const restrictedRoutes = ['/practice', '/practice/routines', '/ikigai', '/ippo',
  *  isRoutePublic: (path: string) => boolean,
  *  canAccessRoute: (path: string) => boolean,
  *  navigationItems: import('vue').ComputedRef<Array>,
- *  dropdownSections: import('vue').ComputedRef<Record<string, any>>,
- *  standaloneItems: import('vue').ComputedRef<Array>
+ *  dropdownSections: import('vue').ComputedRef<Record<string, any>>
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
@@ -71,76 +72,47 @@ export function useAuthentication() {
   }
 
   const isRouteRestricted = (path) => {
-    return restrictedRoutes.includes(path)
+    return Boolean(routeMeta[path]?.requiresAuth)
   }
 
   const isRoutePublic = (path) => {
-    return publicRoutes.includes(path)
+    return !isRouteRestricted(path)
   }
 
   const canAccessRoute = (path) => {
     return isRoutePublic(path) || isAuthenticated.value
   }
 
-  // Navigation items configuration
+  // Build navigation items from route metadata
   const navigationItems = computed(() => {
-    const baseItems = [
-      { path: '/', label: 'Home', public: true },
-      { path: '/ikigai', label: 'Ikigai', public: false },
-      { path: '/ippo', label: 'Ippo', public: false },
-      // Dropdowns will be handled in navigation component
-    ]
-
-    return baseItems.filter((item) => item.public || isAuthenticated.value)
+    return routes
+      .filter(route => !route.meta?.group)
+      .map(route => ({
+        path: route.path,
+        label: route.meta?.label || route.path,
+        public: !route.meta?.requiresAuth,
+      }))
+      .filter(item => item.public || isAuthenticated.value)
   })
 
   const dropdownSections = computed(() => {
-    const sections = {
-      nutrition: {
-        label: 'Nutrition',
-        public: true,
-        items: [
-          { path: '/nutrition', label: 'Overview' },
-          { path: '/nutrition/ingredients', label: 'Ingredients' },
-        ],
-      },
-      literature: {
-        label: 'Literature',
-        public: true,
-        items: [
-          { path: '/literature', label: 'Overview' },
-          { path: '/books', label: 'Books' },
-          { path: '/poems', label: 'Poems' },
-        ],
-      },
-      entertainment: {
-        label: 'Entertainment',
-        public: true,
-        items: [
-          { path: '/entertainment', label: 'Overview' },
-          { path: '/anime', label: 'Anime' },
-          { path: '/movies', label: 'Movies' },
-        ],
-      },
-      adventure: {
-        label: 'Adventure',
-        public: true,
-        items: [
-          { path: '/adventure', label: 'Overview' },
-          { path: '/adventure/destinations', label: 'Destinations' },
-        ],
-      },
-      practice: {
-        label: 'Practice',
-        public: false,
-        items: [
-          { path: '/practice', label: 'Overview' },
-          { path: '/practice/routines', label: 'Routines' },
-        ],
-      },
-    }
+    const sections = {}
+    routes.forEach(route => {
+      const meta = route.meta || {}
+      if (!meta.group) return
 
-    // Filter sections based on authentication
+      if (!sections[meta.group]) {
+        sections[meta.group] = {
+          label: meta.group.charAt(0).toUpperCase() + meta.group.slice(1),
+          public: !meta.requiresAuth,
+          items: [],
+        }
+      }
+
+      sections[meta.group].public = sections[meta.group].public && !meta.requiresAuth
+      sections[meta.group].items.push({ path: route.path, label: meta.label })
+    })
+
     const filteredSections = {}
     Object.keys(sections).forEach((key) => {
       const section = sections[key]
@@ -152,15 +124,6 @@ export function useAuthentication() {
     return filteredSections
   })
 
-  const standaloneItems = computed(() => {
-    const items = [
-      { path: '/experiments', label: 'Experiments', public: false },
-      { path: '/random', label: 'Random', public: false },
-    ]
-
-    return items.filter((item) => item.public || isAuthenticated.value)
-  })
-
   return {
     isAuthenticated: computed(() => isAuthenticated.value),
     authenticate,
@@ -170,6 +133,5 @@ export function useAuthentication() {
     canAccessRoute,
     navigationItems,
     dropdownSections,
-    standaloneItems,
   }
 }
