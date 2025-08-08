@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 
 const PASSWORD = 'secret'
 
@@ -39,4 +40,22 @@ test('route access control', async () => {
   assert.equal(auth.canAccessRoute('/practice'), false)
   auth.authenticate(PASSWORD)
   assert.equal(auth.canAccessRoute('/practice'), true)
+})
+
+test('fails fast when password variable is absent', () => {
+  const env = { ...process.env }
+  delete env.VITE_APP_PASSWORD
+
+  const result = spawnSync(
+    process.execPath,
+    ['--input-type=module', '--eval', "import('./src/composables/useAuthentication.js')"],
+    {
+      cwd: process.cwd(),
+      env,
+      encoding: 'utf-8'
+    }
+  )
+
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /VITE_APP_PASSWORD/)
 })
