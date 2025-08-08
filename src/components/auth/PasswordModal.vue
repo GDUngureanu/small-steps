@@ -2,6 +2,17 @@
 import { ref, nextTick, watch, computed } from 'vue'
 import { useAuthentication } from '../../composables/useAuthentication.js'
 
+/**
+ * Modal dialog prompting for a password before navigating to a restricted
+ * route.
+ *
+ * Props:
+ * - `show` toggles modal visibility
+ * - `targetRoute` optional path to redirect to after successful auth
+ *
+ * Emits `authenticated` with the target route on success and `hide` when the
+ * modal is dismissed.
+ */
 const props = defineProps({
   show: Boolean,
   targetRoute: String

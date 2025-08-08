@@ -15,6 +15,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 // Create the router instance using centralized routes and auth guard
 const router = createAppRouter()
 
+/**
+ * Application bootstrap. Mounts the root component with the configured
+ * router and wires up Bootstrap popovers for opt-in elements.
+ */
 createApp(App)
   .use(router)
   .mount('#app')

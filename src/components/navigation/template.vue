@@ -3,6 +3,12 @@ import { ref, onMounted } from 'vue'
 import { Collapse } from 'bootstrap'
 import { useAuthentication } from '../../composables/useAuthentication.js'
 
+/**
+ * Top-level navigation bar showing public and restricted sections.
+ *
+ * Uses `useAuthentication` to build the menu dynamically and emits a
+ * `showAuthentication` event when the user requests to log in.
+ */
 const { isAuthenticated, dropdownSections, standaloneItems, logout } = useAuthentication()
 
 const emit = defineEmits(['showAuthentication'])

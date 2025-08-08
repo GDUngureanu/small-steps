@@ -4,6 +4,17 @@ import ActionItem from './ActionItem.vue'
 import { defineProps } from 'vue'
 
 /**
+ * Render and manage a hierarchical action list.
+ *
+ * Expects a `state` object from `useActions` containing the action data and
+ * CRUD helpers. The component itself does not emit events; instead it delegates
+ * all mutations to the provided state methods.
+ *
+ * @prop {ActionsState} state reactive collection of actions and helper
+ *   functions returned by `useActions`
+ */
+
+/**
  * Actions state returned by `useActions` composable.
  *
  * Properties include:
