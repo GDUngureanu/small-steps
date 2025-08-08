@@ -7,6 +7,12 @@ import AppFooter from './components/footer/template.vue'
 import PasswordModal from './components/auth/PasswordModal.vue'
 import { useAuthentication } from './composables/useAuthentication.js'
 
+/**
+ * Root application shell. Renders navigation, header, footer and the active
+ * route content. It also guards restricted routes by showing a password modal
+ * when unauthenticated users attempt to access them.
+ */
+
 const router = useRouter()
 const route = useRoute()
 const { canAccessRoute, isRouteRestricted } = useAuthentication()

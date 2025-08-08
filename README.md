@@ -5,7 +5,8 @@ A Vue 3 single-page application that serves as a personal passion project focuse
 ## Features
 
 - Interactive checklists and suggestions for various life areas
-- Multiple sections: Ikigai, Ippo, Anime, Books, Poems, Experiments, and Random
+- Multiple sections: Home, Ikigai, Ippo, Literature (Books, Poems), Entertainment (Anime, Movies), Nutrition, Adventure, Practice, Experiments, and Random
+- Password-protected sections for personal content
 - Responsive design using Bootstrap 5.3+
 - Client-side routing with Vue Router
 - GitHub Pages deployment ready
@@ -39,7 +40,7 @@ npm start
 | `npm run preview` | Preview production build on port 4173 |
 | `npm run lint` | Run ESLint on .vue, .js files |
 | `npm run fix` | Fix linting issues automatically |
-| `npm run test` | Run build and lint steps (no unit tests included) |
+| `npm run test` | Run Node.js unit tests with coverage + ESLint |
 | `npm run deploy` | Deploy to GitHub Pages |
 
 ## Project Structure
@@ -69,6 +70,27 @@ npm run deploy
 ```
 
 This builds the project and deploys it to the `gh-pages` branch.
+
+## Documentation
+
+- **Project documentation**: Available in the [`docs/`](docs) directory
+- **Component documentation**: Per-module `README.md` files in `src/components/`
+- **Development guidelines**: See `CLAUDE.md` for detailed development instructions
+
+## Authentication
+
+Some sections require password authentication:
+- `/experiments` - Personal experiments and projects
+- `/practice` - Personal routines and habits tracking
+
+Authentication is handled via Supabase integration.
+
+## Testing
+
+The project uses Node.js built-in test runner:
+- Unit tests: Located in `/tests` directory
+- Coverage reporting: Enabled via `--experimental-test-coverage`
+- Test files: Follow `.test.js` and `.spec.js` naming conventions
 
 ## License
 

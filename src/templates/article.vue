@@ -1,8 +1,14 @@
 <script setup>
-    defineProps({
-        title: String,
-        meta: String
-    });
+/**
+ * Basic article layout with a header and body slot.
+ *
+ * @prop {string} title heading text displayed above the content slot
+ * @prop {string} meta small subtitle or metadata string
+ */
+defineProps({
+    title: String,
+    meta: String
+});
 </script>
 
 <template>

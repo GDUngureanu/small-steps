@@ -1,70 +1,24 @@
 // Vue imports
 import { createApp } from 'vue'
-import { createWebHashHistory, createRouter } from 'vue-router'
 
 // Third-party library imports
-import { Popover } from 'bootstrap';
+import { Popover } from 'bootstrap'
 
 // Local component imports
 import App from './application.vue'
-import Home from './components/home/template.vue'
-import Ikigai from './components/ikigai/template.vue'
-import Ippo from './components/ippo/template.vue'
-import Experiments from './components/experiments/template.vue'
-import Random from './components/random/template.vue'
-
-// Literature Components
-import Literature from './components/literature/overview/template.vue'
-import Books from './components/literature/books/template.vue'
-import Poems from './components/literature/poems/template.vue'
-
-// Entertainment Components
-import Entertainment from './components/entertainment/overview/template.vue'
-import Anime from './components/entertainment/anime/template.vue'
-import Movies from './components/entertainment/movies/template.vue'
-
-// Nutrition Components
-import Nutrition from './components/nutrition/overview/template.vue'
-import Ingredients from './components/nutrition/ingredients/template.vue'
-
-// Adventure Components
-import Adventure from './components/adventure/overview/template.vue'
-import Destinations from './components/adventure/destinations/template.vue'
-
-// Practice Components
-import Practice from './components/practice/overview/template.vue'
-import Routines from './components/practice/routines/template.vue'
+import { createAppRouter } from './router.js'
 
 // Styles
 import './scss/styles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-// Define the routes for the application
-const routes = [
-  { path: '/', component: Home },
-  { path: '/ikigai', component: Ikigai },
-  { path: '/ippo', component: Ippo },
-  { path: '/literature', component: Literature },
-  { path: '/books', component: Books },
-  { path: '/poems', component: Poems },
-  { path: '/entertainment', component: Entertainment },
-  { path: '/anime', component: Anime },
-  { path: '/movies', component: Movies },
-  { path: '/experiments', component: Experiments },
-  { path: '/random', component: Random },
-  { path: '/nutrition', component: Nutrition },
-  { path: '/nutrition/ingredients', component: Ingredients },
-  { path: '/adventure', component: Adventure },
-  { path: '/adventure/destinations', component: Destinations },
-  { path: '/practice', component: Practice },
-  { path: '/practice/routines', component: Routines },
-]
+// Create the router instance using centralized routes and auth guard
+const router = createAppRouter()
 
-const router = createRouter({
-  history: createWebHashHistory(),
-  routes,
-})
-
+/**
+ * Application bootstrap. Mounts the root component with the configured
+ * router and wires up Bootstrap popovers for opt-in elements.
+ */
 createApp(App)
   .use(router)
   .mount('#app')

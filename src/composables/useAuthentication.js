@@ -49,6 +49,29 @@ const restrictedRoutes = [
   '/random'
 ]
 
+/**
+ * Manage client-side authentication state and navigation visibility.
+ *
+ * Returned helpers include:
+ * - `isAuthenticated` reactive boolean flag
+ * - `authenticate(password)` to set the flag when the supplied password
+ *   matches the configured value
+ * - `logout()` to clear the session
+ * - route helpers: `isRouteRestricted`, `isRoutePublic`, `canAccessRoute`
+ * - navigation builders: `navigationItems`, `dropdownSections`, `standaloneItems`
+ *
+ * @returns {{
+ *  isAuthenticated: import('vue').ComputedRef<boolean>,
+ *  authenticate: (password: string) => boolean,
+ *  logout: () => void,
+ *  isRouteRestricted: (path: string) => boolean,
+ *  isRoutePublic: (path: string) => boolean,
+ *  canAccessRoute: (path: string) => boolean,
+ *  navigationItems: import('vue').ComputedRef<Array>,
+ *  dropdownSections: import('vue').ComputedRef<Record<string, any>>,
+ *  standaloneItems: import('vue').ComputedRef<Array>
+ * }} reactive auth helpers and route guards
+ */
 export function useAuthentication() {
   
   const authenticate = (password) => {
