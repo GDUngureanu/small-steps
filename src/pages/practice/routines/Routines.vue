@@ -465,6 +465,41 @@ Contrast verification (AA):
     return count
   }
 
+  // eslint-disable-next-line vue/no-export-in-script-setup
+  export function computeStreaks(doneIndicesSorted, currentIndex) {
+    if (!doneIndicesSorted || doneIndicesSorted.length === 0) {
+      return { current: 0, best: 0 }
+    }
+
+    let bestLen = 1
+    let bestEnd = doneIndicesSorted[0]
+    let currLen = 1
+
+    for (let i = 1; i < doneIndicesSorted.length; i++) {
+      const gap = doneIndicesSorted[i] - doneIndicesSorted[i - 1] - 1
+      if (gap <= 3) {
+        currLen++
+      } else {
+        if (currLen > bestLen || (currLen === bestLen && doneIndicesSorted[i - 1] > bestEnd)) {
+          bestLen = currLen
+          bestEnd = doneIndicesSorted[i - 1]
+        }
+        currLen = 1
+      }
+    }
+
+    const last = doneIndicesSorted[doneIndicesSorted.length - 1]
+    if (currLen > bestLen || (currLen === bestLen && last > bestEnd)) {
+      bestLen = currLen
+      bestEnd = last
+    }
+
+    const gapToNow = currentIndex - last - 1
+    const current = gapToNow <= 3 ? currLen : 0
+
+    return { current, best: bestLen }
+  }
+
   function getFireColor(count) {
     if (count > 20) return 'text-primary' // Blue
     if (count > 10) return 'text-danger' // Red
