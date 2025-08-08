@@ -30,3 +30,5 @@ export function createAppRouter(history = createWebHashHistory(), routesConfig =
 
   return router
 }
+
+export { routes }

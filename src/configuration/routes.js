@@ -33,6 +33,8 @@ const Destinations = () => import('@/pages/adventure/destinations/Destinations.v
 // Practice Components
 const Practice = () => import('@/pages/practice/Practice.vue')
 const Routines = () => import('@/pages/practice/routines/Routines.vue')
+// Not Found
+const NotFound = () => import('@/pages/NotFound.vue')
 
 export default [
   { path: '/', component: Home, meta: { label: 'Home', group: null, requiresAuth: false } },
@@ -52,4 +54,5 @@ export default [
   { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
   { path: '/practice', component: Practice, meta: { label: 'Overview', group: 'practice', requiresAuth: true } },
   { path: '/practice/routines', component: Routines, meta: { label: 'Routines', group: 'practice', requiresAuth: true } },
+  { path: '/:pathMatch(.*)*', component: NotFound },
 ]
