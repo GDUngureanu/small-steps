@@ -1,31 +1,6 @@
 import { ref, watch, computed, nextTick } from 'vue'
 import { supabase } from '../config/supabase.js'
 
-/**
- * Provides reactive state and helper methods for working with an actions list
- * stored in Supabase.
- *
- * Features:
- * - local sessionStorage caching with expiry
- * - hierarchical parent/child actions
- * - optimistic updates and rollback on failure
- * - helper getters for root actions and sub-actions
- *
- * @param {import('vue').Ref<string>} listIdRef reactive identifier for the
- *   current action list
- * @returns {{
- *   actions: import('vue').Ref<Array>,
- *   rootActions: import('vue').ComputedRef<Array>,
- *   fetchActions: () => Promise<void>,
- *   addAction: (parentId?: string) => Promise<void>,
- *   updateActionStatus: (action: any) => Promise<void>,
- *   updateActionDescription: (action: any, text: string) => Promise<void>,
- *   updateActionPriority: (action: any, priority: number) => Promise<void>,
- *   deleteAction: (id: string) => Promise<void>,
- *   clearCachedActions: () => void,
- *   /* plus additional reactive properties omitted for brevity */
- * }} state, getters and mutation functions for the list
- */
 export function useActions(listIdRef) {
   // Cache utilities using sessionStorage to persist across module reloads
   const getCachedActions = () => {
@@ -33,16 +8,27 @@ export function useActions(listIdRef) {
     const cached = sessionStorage.getItem(`actions_${listId}`)
     if (!cached) return null
 
-    const cacheData = JSON.parse(cached)
-
-    // Check if cache has expired (1 hour = 3600000ms)
-    if (cacheData.timestamp && (Date.now() - cacheData.timestamp) > 3600000) {
+    let cacheData
+    try {
+      cacheData = JSON.parse(cached)
+    } catch {
       sessionStorage.removeItem(`actions_${listId}`)
       return null
     }
 
-    // Return data if cache structure exists, otherwise treat as legacy cache
-    return cacheData.data || cacheData
+    // Invalidate legacy caches without timestamp
+    if (!cacheData.timestamp) {
+      sessionStorage.removeItem(`actions_${listId}`)
+      return null
+    }
+
+    // Check if cache has expired (1 hour = 3600000ms)
+    if ((Date.now() - cacheData.timestamp) > 3600000) {
+      sessionStorage.removeItem(`actions_${listId}`)
+      return null
+    }
+
+    return cacheData.data
   }
 
   const setCachedActions = (actions) => {
@@ -144,11 +130,10 @@ export function useActions(listIdRef) {
 
   // API Functions
   const fetchActions = async () => {
-    // Check cache first
+    // Load from cache first (stale-while-revalidate)
     const cachedData = getCachedActions()
     if (cachedData) {
       actions.value = cachedData
-      return
     }
 
     try {

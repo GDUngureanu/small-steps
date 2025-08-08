@@ -4,17 +4,6 @@ import ActionItem from './ActionItem.vue'
 import { defineProps } from 'vue'
 
 /**
- * Render and manage a hierarchical action list.
- *
- * Expects a `state` object from `useActions` containing the action data and
- * CRUD helpers. The component itself does not emit events; instead it delegates
- * all mutations to the provided state methods.
- *
- * @prop {ActionsState} state reactive collection of actions and helper
- *   functions returned by `useActions`
- */
-
-/**
  * Actions state returned by `useActions` composable.
  *
  * Properties include:
@@ -86,7 +75,7 @@ const { state } = defineProps({
             <h5 class="modal-title">
               Are you sure you want to delete this action?
             </h5>
-            <button type="button" class="btn-close" @click="state.cancelDelete" aria-label="Close"></button>
+            <button type="button" class="btn-close" @click="state.cancelDelete()" aria-label="Close"></button>
           </div>
           <div class="modal-body" v-if="state.deleteModalAction">
             <div class="bg-gray rounded">
@@ -94,7 +83,7 @@ const { state } = defineProps({
             </div>
           </div>
           <div class="modal-footer border-0">
-            <button type="button" class="btn btn-outline-secondary" @click="state.cancelDelete">Cancel</button>
+            <button type="button" class="btn btn-outline-secondary" @click="state.cancelDelete()">Cancel</button>
             <button type="button" class="btn btn-danger" @click="state.deleteAction(state.deleteModalAction?.id)" :disabled="state.loading">
               <span v-if="state.loading" class="spinner-border spinner-border-sm me-1" role="status"></span>
               <i v-else class="bi bi-trash me-1"></i>
@@ -105,7 +94,7 @@ const { state } = defineProps({
       </div>
     </div>
 
-    <div class="modal-backdrop fade" :class="{ show: state.showDeleteModal }" v-if="state.showDeleteModal" @click="state.cancelDelete"></div>
+    <div class="modal-backdrop fade" :class="{ show: state.showDeleteModal }" v-if="state.showDeleteModal" @click="state.cancelDelete()"></div>
   </div>
 </template>
 
