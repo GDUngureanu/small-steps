@@ -15,6 +15,6 @@ npm start
 
 ## Entry Points
 
-- `article.vue` – basic article layout with title and metadata slots
-- `actions.vue` – interactive task management template with Supabase integration
-- `suggestions.vue` – renders a checklist from JSON data
+- `Article.vue` – basic article layout with title and metadata slots
+- `Actions.vue` – interactive task management template with Supabase integration
+- `Suggestions.vue` – renders a checklist from JSON data

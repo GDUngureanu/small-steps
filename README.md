@@ -48,9 +48,9 @@ npm start
 ```
 src/
 ├── components/           # Page components organized by feature
-├── templates/           # Reusable templates (article.vue, suggestions.vue)
+├── templates/           # Reusable templates (Article.vue, Suggestions.vue, Actions.vue)
 ├── scss/               # Custom Bootstrap styling
-├── application.vue     # Root component
+├── App.vue             # Root component
 └── main.js            # Application entry point
 ```
 
@@ -58,7 +58,7 @@ src/
 
 The application uses Vue 3's Composition API and follows component-based architecture. Each page section is organized in `src/components/[name]/` with:
 
-- `template.vue` - Main component template
+- `ComponentName.vue` - Main component
 - `suggestions.json` - Interactive checklist data (where applicable)
 
 ## Deployment

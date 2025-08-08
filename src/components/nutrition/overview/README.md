@@ -3,4 +3,4 @@
 Introduction to nutrition features.
 
 ## Component
-- `template.vue` – static content outlining nutrition goals.
+- `Overview.vue` – static content outlining nutrition goals.

@@ -3,4 +3,4 @@
 Curated poem selections.
 
 ## Component
-- `template.vue` – lists poems. No props or events.
+- `Poems.vue` – lists poems. No props or events.

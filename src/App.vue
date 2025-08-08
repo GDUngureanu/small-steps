@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import AppNavigation from './components/navigation/template.vue'
-import AppHeader from './components/header/template.vue'
-import AppFooter from './components/footer/template.vue'
+import AppNavigation from './components/navigation/AppNavigation.vue'
+import AppHeader from './components/header/AppHeader.vue'
+import AppFooter from './components/footer/AppFooter.vue'
 import PasswordModal from './components/auth/PasswordModal.vue'
 import { authEvents, AUTH_REQUIRED_EVENT } from './authEvents.js'
 
