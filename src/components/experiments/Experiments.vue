@@ -1,7 +1,7 @@
 <script setup>
-import ArticleTemplate from '../../templates/article.vue';
-import SuggestionsTemplate from '../../templates/suggestions.vue';
-import ActionsTemplate from '../../templates/actions.vue';
+import ArticleTemplate from '../../templates/Article.vue';
+import SuggestionsTemplate from '../../templates/Suggestions.vue';
+import ActionsTemplate from '../../templates/Actions.vue';
 import suggestions from './suggestions.json';
 import experiment1 from './assets/Visinata_Experient_1_2025-06-28.jpeg'
 import experiment2 from './assets/Visinata_Experient_2_2025-06-28.jpeg'

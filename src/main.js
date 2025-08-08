@@ -5,7 +5,7 @@ import { createApp } from 'vue'
 import { Popover } from 'bootstrap'
 
 // Local component imports
-import App from './application.vue'
+import App from './App.vue'
 import { createAppRouter } from './router.js'
 
 // Styles

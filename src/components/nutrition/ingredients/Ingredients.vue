@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
-import ArticleTemplate from '../../../templates/article.vue';
-import ActionsTemplate from '../../../templates/actions.vue';
+import ArticleTemplate from '../../../templates/Article.vue';
+import ActionsTemplate from '../../../templates/Actions.vue';
 import ingredients from './ingredients.json';
 
 defineOptions({

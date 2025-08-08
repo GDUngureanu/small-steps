@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue';
-import ArticleTemplate from '../../../templates/article.vue';
+import ArticleTemplate from '../../../templates/Article.vue';
 import habitsData from './habits.json';
 import activitiesData from './activities.json';
 
