@@ -42,9 +42,9 @@
             class="form-control form-control-sm"
             :value="editingActionText"
             @input="emit('update:editingActionText', $event.target.value)"
-            @keyup.enter="saveEdit(action)"
-            @keyup.escape="cancelEditing"
-            @blur="saveEdit(action)"
+              @keyup.enter="saveEdit(action)"
+              @keyup.escape="cancelEditing(action)"
+              @blur="saveEdit(action)"
             placeholder="Press Enter to save, Esc to cancel"
           />
         </div>
