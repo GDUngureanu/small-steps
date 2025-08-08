@@ -5,11 +5,12 @@ const file = 'src/pages/practice/routines/Routines.vue'
 const path = '/practice/routines'
 
 test('Routines page renders without errors', async () => {
-  const html = await renderComponent(file)
-  expect(html.length).toBeGreaterThan(0)
+  const wrapper = await renderComponent(file)
+  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Routines route resolves', async () => {
+test('Routines route resolves correctly with authentication', async () => {
   const resolved = await resolveRoute(path, true)
   expect(resolved).toBe(path)
 })

@@ -1,22 +1,58 @@
-import path from 'node:path'
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/configuration/routes.js'
-import { createMemoryHistory } from 'vue-router'
 
 /**
- * Render a Vue component using shallowMount with child components stubbed.
+ * Render a Vue component using Vue Test Utils with proper router and global setup.
  * @param {string} file - Path to the .vue file relative to project root.
- * @returns {Promise<string>} rendered HTML string
+ * @returns {Promise<import('@vue/test-utils').VueWrapper>} Vue wrapper for testing
  */
 export async function renderComponent(file) {
-  const filePath = path.resolve(file)
-  const component = (await import(filePath)).default
-  const wrapper = shallowMount(component, {
-    global: {
-      stubs: { RouterLink: true, RouterView: true }
-    }
+  // Mock sessionStorage for components that use authentication
+  const mockStorage = {}
+  Object.defineProperty(global, 'sessionStorage', {
+    value: {
+      getItem: (key) => mockStorage[key] || null,
+      setItem: (key, value) => { mockStorage[key] = value },
+      removeItem: (key) => { delete mockStorage[key] },
+    },
+    configurable: true
   })
-  return wrapper.html()
+
+  // Set up environment variables
+  process.env.VITE_APP_PASSWORD = 'secret'
+
+  const component = (await import(`../../${file}`)).default
+  
+  // Create a router with stubbed components for testing
+  const routes = rawRoutes.map((route) => ({ 
+    ...route, 
+    component: { template: '<div>Stubbed Component</div>' }
+  }))
+  
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes,
+  })
+
+  const wrapper = mount(component, {
+    global: {
+      plugins: [router],
+      stubs: {
+        RouterLink: true,
+        RouterView: true,
+        // Stub shared templates to avoid deep dependencies
+        'ArticleTemplate': true,
+        'ActionsTemplate': true,
+        'SuggestionsTemplate': true,
+      },
+      mocks: {
+        // Mock any global properties if needed
+      }
+    },
+  })
+
+  return wrapper
 }
 
 /**
@@ -27,25 +63,33 @@ export async function renderComponent(file) {
  * @returns {Promise<string>} resolved path
  */
 export async function resolveRoute(pathName, authenticated = false) {
-  const store = {}
-  global.sessionStorage = {
-    getItem: (k) => store[k] || null,
-    setItem: (k, v) => {
-      store[k] = v
+  // Mock sessionStorage for authentication
+  const mockStorage = {}
+  Object.defineProperty(global, 'sessionStorage', {
+    value: {
+      getItem: (key) => mockStorage[key] || null,
+      setItem: (key, value) => { mockStorage[key] = value },
+      removeItem: (key) => { delete mockStorage[key] },
     },
-    removeItem: (k) => {
-      delete store[k]
-    },
-  }
+    configurable: true
+  })
+  
   process.env.VITE_APP_PASSWORD = 'secret'
 
-  const routes = rawRoutes.map((r) => ({ ...r, component: {} }))
+  const routes = rawRoutes.map((r) => ({ 
+    ...r, 
+    component: { template: '<div>Test Route</div>' }
+  }))
+  
   const { createAppRouter } = await import('../../src/configuration/router.js')
   const router = createAppRouter(createMemoryHistory(), routes)
-  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
-  const auth = useAuthentication()
-  auth.logout()
-  if (authenticated) auth.authenticate('secret')
+  
+  if (authenticated) {
+    const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
+    const auth = useAuthentication()
+    auth.authenticate('secret')
+  }
+  
   await router.push(pathName)
   await router.isReady()
   return router.currentRoute.value.fullPath

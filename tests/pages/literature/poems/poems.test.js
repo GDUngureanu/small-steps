@@ -5,8 +5,9 @@ const file = 'src/pages/literature/poems/Poems.vue'
 const path = '/poems'
 
 test('Poems page renders without errors', async () => {
-  const html = await renderComponent(file)
-  expect(html.length).toBeGreaterThan(0)
+  const wrapper = await renderComponent(file)
+  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
 test('Poems route resolves', async () => {

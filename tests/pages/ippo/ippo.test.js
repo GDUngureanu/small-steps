@@ -5,8 +5,9 @@ const file = 'src/pages/ippo/Ippo.vue'
 const path = '/ippo'
 
 test('Ippo page renders without errors', async () => {
-  const html = await renderComponent(file)
-  expect(html.length).toBeGreaterThan(0)
+  const wrapper = await renderComponent(file)
+  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
 test('Ippo route resolves', async () => {

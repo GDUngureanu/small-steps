@@ -17,7 +17,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "fix": "npm run lint:fix && npm run format",
-    "test": "node --test --experimental-test-coverage tests/components/**/*.js tests/composables/**/*.js tests/router/**/*.js && vitest run tests/pages/**/*.test.js && npm run lint",
+    "test:components": "node --test --experimental-test-coverage tests/components/**/*.js",
+    "test:composables": "node --test --experimental-test-coverage tests/composables/**/*.js",
+    "test:router": "node --test --experimental-test-coverage tests/router/**/*.js",
+    "test:pages": "vitest run --dir tests/pages",
+    "test:unit": "npm run test:components && npm run test:composables && npm run test:router",
+    "test": "npm run test:unit && npm run test:pages && npm run lint",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -32,16 +37,17 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.4.5",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-vue": "^10.1.0",
     "gh-pages": "^6.3.0",
+    "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "sass": "^1.89.0",
     "sass-loader": "^16.0.5",
     "vite": "^6.3.5",
-    "vue-loader": "^17.4.2",
-    "@vue/test-utils": "^2.4.5",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "vue-loader": "^17.4.2"
   }
 }

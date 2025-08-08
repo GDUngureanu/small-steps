@@ -5,11 +5,12 @@ const file = 'src/pages/nutrition/ingredients/Ingredients.vue'
 const path = '/nutrition/ingredients'
 
 test('Ingredients page renders without errors', async () => {
-  const html = await renderComponent(file)
-  expect(html.length).toBeGreaterThan(0)
+  const wrapper = await renderComponent(file)
+  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Ingredients route resolves', async () => {
+test('Ingredients route resolves correctly', async () => {
   const resolved = await resolveRoute(path)
   expect(resolved).toBe(path)
 })

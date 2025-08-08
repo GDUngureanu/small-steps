@@ -5,8 +5,9 @@ const file = 'src/pages/literature/books/Books.vue'
 const path = '/books'
 
 test('Books page renders without errors', async () => {
-  const html = await renderComponent(file)
-  expect(html.length).toBeGreaterThan(0)
+  const wrapper = await renderComponent(file)
+  expect(wrapper.exists()).toBe(true)
+  expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
 test('Books route resolves', async () => {
