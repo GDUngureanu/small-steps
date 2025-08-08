@@ -3,6 +3,10 @@ import { ref, computed, watchEffect } from 'vue'
 // Password from environment variable (fallback to process.env for tests)
 const CORRECT_PASSWORD = import.meta.env?.VITE_APP_PASSWORD || globalThis.process?.env?.VITE_APP_PASSWORD
 
+if (!CORRECT_PASSWORD) {
+  throw new Error('VITE_APP_PASSWORD environment variable is not configured')
+}
+
 // Reactive authentication state
 const isAuthenticated = ref(false)
 
