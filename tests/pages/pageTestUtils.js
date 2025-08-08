@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/configuration/routes.js'
 import { vi } from 'vitest'
+import { h } from 'vue'
 
 vi.mock('../../src/configuration/env.js', () => ({
   env: {
@@ -19,7 +20,7 @@ vi.mock('../../src/configuration/env.js', () => ({
  * @param {string} file - Path to the .vue file relative to project root.
  * @returns {Promise<import('@vue/test-utils').VueWrapper>} Vue wrapper for testing
  */
-export async function renderComponent(file) {
+export async function renderComponent(file, options = {}) {
   // Mock sessionStorage for components that use authentication
   const mockStorage = {}
   Object.defineProperty(global, 'sessionStorage', {
@@ -45,18 +46,25 @@ export async function renderComponent(file) {
   })
 
   const wrapper = mount(component, {
+    ...options,
     global: {
-      plugins: [router],
+      plugins: [router, ...((options.global && options.global.plugins) || [])],
       stubs: {
         RouterLink: true,
         RouterView: true,
         // Stub shared templates to avoid deep dependencies
-        'ArticleTemplate': true,
+        'ArticleTemplate': {
+          render() {
+            return h('article-template-stub', this.$slots.default ? this.$slots.default() : [])
+          }
+        },
         'ActionsTemplate': true,
         'SuggestionsTemplate': true,
+        ...((options.global && options.global.stubs) || {}),
       },
       mocks: {
         // Mock any global properties if needed
+        ...((options.global && options.global.mocks) || {}),
       }
     },
   })
