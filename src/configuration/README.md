@@ -17,7 +17,7 @@ The `authentication/` directory contains the complete authentication system:
 
 - `useAuthentication.js` - Core authentication logic and password validation
 - `authenticationEvents.js` - Event system for authentication state management  
-- `components/PasswordModal.vue` - Password input modal component
+- `components/AccessModal.vue` - Password input modal component
 
 ## Router and Routes
 

@@ -8,4 +8,4 @@ Responsive site navigation bar.
 
 ## Props & Events
 
-No props. Emits `showAuthentication` to trigger the password modal.
+No props. Emits `showAuthentication` to trigger the access modal.
