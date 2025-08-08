@@ -1,12 +1,12 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import routes from '../src/routes.js'
-import { setupTestEnvironment, PASSWORD } from './testUtils.js'
+import routes from '../../src/routes.js'
+import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t) {
   setupTestEnvironment(t)
-  const { useAuthentication } = await import('../src/composables/useAuthentication.js')
+  const { useAuthentication } = await import('../../src/composables/useAuthentication.js')
   const auth = useAuthentication()
   auth.logout()
   return auth
