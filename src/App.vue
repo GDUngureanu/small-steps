@@ -1,11 +1,11 @@
 <script setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { useRouter } from 'vue-router'
-  import AppNavigation from './components/layout/navigation/AppNavigation.vue'
-  import AppHeader from './components/layout/header/AppHeader.vue'
-  import AppFooter from './components/layout/footer/AppFooter.vue'
-  import PasswordModal from './components/shared/auth/PasswordModal.vue'
-  import { authEvents, AUTH_REQUIRED_EVENT } from './authEvents.js'
+  import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
+  import AppHeader from '@/components/layout/header/AppHeader.vue'
+  import AppFooter from '@/components/layout/footer/AppFooter.vue'
+  import PasswordModal from '@/components/shared/auth/PasswordModal.vue'
+  import { authEvents, AUTH_REQUIRED_EVENT } from '@/authEvents.js'
 
   /**
    * Root application shell. Renders navigation, header, footer and the active

@@ -1,6 +1,6 @@
 <script setup>
   import { ref, reactive, computed, onMounted } from 'vue'
-  import ArticleTemplate from '../../../components/shared/templates/Article.vue'
+  import ArticleTemplate from '@/components/shared/templates/Article.vue'
   import habitsData from './habits.json'
   import activitiesData from './activities.json'
 

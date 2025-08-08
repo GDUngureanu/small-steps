@@ -2,8 +2,8 @@
   import { onMounted, ref, nextTick, computed } from 'vue'
   import L from 'leaflet'
   import 'leaflet/dist/leaflet.css'
-  import ArticleTemplate from '../../../components/shared/templates/Article.vue'
-  import ActionsTemplate from '../../../components/shared/templates/Actions.vue'
+  import ArticleTemplate from '@/components/shared/templates/Article.vue'
+  import ActionsTemplate from '@/components/shared/templates/Actions.vue'
   import destinationsData from './destinations.json'
 
   defineOptions({
