@@ -1,19 +1,36 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import ArticleTemplate from '@/components/shared/templates/Article.vue'
-import habitsData from './habits.json'
-import activitiesData from './activities.json'
+import { useHabits } from '@/composables/useHabits.js'
+import { useActivities } from '@/composables/useActivities.js'
 
 
 defineOptions({
   name: 'RoutinesTemplate',
 })
 
+// Initialize composables
+const { habitsData, loading: habitsLoading, error: habitsError, deleteHabit: archiveHabit, createHabit } = useHabits()
+const {
+  loading: activitiesLoading,
+  error: activitiesError,
+  isActivityDone: isDoneFromComposable,
+  upsertActivity,
+  getKeysForHabit
+} = useActivities()
+
 // Reactive state
-const sessionOverrides = reactive(new Map())
-const activitiesMap = reactive(new Map())
-const seedActivityKeys = new Set()
 const currentTime = ref(new Date())
+
+// New habit form state
+const newHabitForm = reactive({
+  name: '',
+  scope: 'day',
+  category: ''
+})
+const formLoading = ref(false)
+const formError = ref(null)
+const formSuccess = ref(false)
 const allScopes = ['day', 'week', 'month', 'year']
 const TIMEZONE = 'Europe/Bucharest'
 
@@ -86,22 +103,7 @@ function shiftInterval(intervalStart, scope, delta) {
   return result
 }
 
-// Upsert activity to prevent duplicates on write (for future persistence)
-function upsertActivity(habitId, periodKey, done) {
-  const key = `${habitId}|${periodKey}`
-  if (done) {
-    activitiesMap.set(key, true)
-    sessionOverrides.set(key, 'done')
-  } else {
-    activitiesMap.delete(key)
-    if (seedActivityKeys.has(key)) {
-      // was part of initial seed; remember the explicit undo
-      sessionOverrides.set(key, 'undone')
-    } else {
-      sessionOverrides.delete(key)
-    }
-  }
-}
+// upsertActivity is now provided by useActivities composable
 // One function for all period keys
 function formatPeriodKey(scope, inputDate = new Date()) {
   switch (scope) {
@@ -230,20 +232,81 @@ function computeWindows(scope, nowTZ) {
   }
 }
 
-// State management functions
+// State management functions (now using composables)
 function isDone(habitId, periodKey) {
-  const key = `${habitId}|${periodKey}`
-
-  if (sessionOverrides.has(key)) {
-    return sessionOverrides.get(key) === 'done'
-  }
-  return activitiesMap.has(key)
+  return isDoneFromComposable(habitId, periodKey)
 }
 
 function toggleHabit(habitId, periodKey) {
   const next = !isDone(habitId, periodKey)
   upsertActivity(habitId, periodKey, next)
 }
+
+// Delete habit function (now uses Supabase)
+function deleteHabit(habitId) {
+  archiveHabit(habitId)
+}
+
+// Add new habit function
+async function addNewHabit() {
+  if (!newHabitForm.name.trim() || !newHabitForm.category.trim()) {
+    formError.value = 'Please fill in all required fields'
+    return
+  }
+
+  try {
+    formLoading.value = true
+    formError.value = null
+
+    const newHabit = await createHabit({
+      name: newHabitForm.name.trim(),
+      scope: newHabitForm.scope,
+      category: newHabitForm.category.trim(),
+      archived: false
+    })
+
+    if (newHabit) {
+      // Success - reset form
+      resetForm()
+      formSuccess.value = true
+
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        formSuccess.value = false
+      }, 3000)
+    } else {
+      formError.value = 'Failed to create habit. Please try again.'
+    }
+  } catch (error) {
+    formError.value = error.message || 'An unexpected error occurred'
+  } finally {
+    formLoading.value = false
+  }
+}
+
+// Reset form function
+function resetForm() {
+  newHabitForm.name = ''
+  newHabitForm.scope = 'day'
+  newHabitForm.category = ''
+  formError.value = null
+}
+
+// Form is now always visible, so no toggle needed
+
+// Get all unique categories for dropdown
+const allCategories = computed(() => {
+  if (!habitsData.value?.habits) return []
+
+  const categories = new Set()
+  habitsData.value.habits.forEach(habit => {
+    if (habit.category) {
+      categories.add(habit.category)
+    }
+  })
+
+  return Array.from(categories).sort()
+})
 
 // Streak calculation using streakStats
 function computeStreakStats(habitId, scope) {
@@ -261,8 +324,12 @@ function getFireColor(streak) {
 
 // Get available categories for a scope
 const getScopeCategories = (scope) => {
+  if (habitsLoading.value || !habitsData.value) {
+    return ['All']
+  }
+
   const categories = new Set()
-  habitsData.habits
+  habitsData.value.habits
     .filter((habit) => habit.scope === scope && !habit.archived)
     .forEach((habit) => categories.add(habit.category))
   return ['All', ...Array.from(categories).sort()]
@@ -273,7 +340,18 @@ const scopeData = computed(() => {
   const scopeDetails = {}
 
   allScopes.forEach((scope) => {
-    let habits = habitsData.habits
+    // Return empty data while loading
+    if (habitsLoading.value || activitiesLoading.value || !habitsData.value) {
+      scopeDetails[scope] = {
+        habits: [],
+        windows: { windows: [], currentIndex: 10 },
+        streaks: {},
+        availableCategories: ['All']
+      }
+      return
+    }
+
+    let habits = habitsData.value.habits
       .filter((habit) => habit.scope === scope && !habit.archived)
 
     // Apply category filter
@@ -351,28 +429,15 @@ function streakStats(scope, periodKeys, gap = 3) {
 }
 
 
-// Helper function to get period keys for a habit
-function getKeysForHabit(habitId) {
-  const prefix = `${habitId}|`
-  const keys = []
-  activitiesMap.forEach((_, key) => {
-    if (key.startsWith(prefix)) {
-      keys.push(key.slice(prefix.length))
-    }
-  })
-  return keys
-}
+// Helper function now provided by composable
+// getKeysForHabit is imported from useActivities
 
 
 let timerId = null
 
 onMounted(() => {
-  activitiesData.activities.forEach((activity) => {
-    const key = `${activity.habitId}|${activity.periodKey}`
-    activitiesMap.set(key, true)
-    seedActivityKeys.add(key)
-  })
-
+  // Composables handle data loading automatically
+  // Just set up the timer for current time updates
   timerId = setInterval(() => { currentTime.value = new Date() }, 60000)
 })
 
@@ -380,6 +445,70 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 </script>
 
 <template>
+  <!-- Add New Habit Section -->
+  <ArticleTemplate title="Add New Habit" meta="Create custom habits for your routine">
+    <!-- Add Habit Form -->
+    <div class="border rounded p-3 bg-light">
+      <!-- Success Message -->
+      <div v-if="formSuccess" class="alert alert-success d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        Habit created successfully!
+      </div>
+
+      <!-- Error Message -->
+      <div v-if="formError" class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ formError }}
+      </div>
+
+      <form @submit.prevent="addNewHabit" class="row g-3">
+        <!-- Habit Name -->
+        <div class="col-md-6">
+          <label for="habit-name" class="form-label fw-medium">Habit Name <span class="text-danger">*</span></label>
+          <input id="habit-name" v-model="newHabitForm.name" type="text" class="form-control" placeholder="e.g., Morning Exercise" maxlength="100" required :disabled="formLoading">
+        </div>
+
+        <!-- Scope Selection -->
+        <div class="col-md-3">
+          <label for="habit-scope" class="form-label fw-medium">Frequency</label>
+          <select id="habit-scope" v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
+            <option value="day">Daily</option>
+            <option value="week">Weekly</option>
+            <option value="month">Monthly</option>
+            <option value="year">Yearly</option>
+          </select>
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-3">
+          <label for="habit-category" class="form-label fw-medium">Category <span class="text-danger">*</span></label>
+          <div class="d-flex gap-2">
+            <input id="habit-category" v-model="newHabitForm.category" type="text" class="form-control" placeholder="e.g., Health" maxlength="50" list="category-suggestions"
+              required :disabled="formLoading">
+            <datalist id="category-suggestions">
+              <option v-for="category in allCategories" :key="category" :value="category"></option>
+            </datalist>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 d-flex gap-2 justify-content-end">
+          <button type="button" @click="resetForm" class="btn btn-outline-secondary btn-sm" :disabled="formLoading">
+            <i class="bi bi-arrow-clockwise me-1"></i>
+            Reset
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+            :disabled="formLoading || !newHabitForm.name.trim() || !newHabitForm.category.trim()">
+            <div v-if="formLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+            <i v-else class="bi bi-plus-lg"></i>
+            {{ formLoading ? 'Creating...' : 'Create Habit' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </ArticleTemplate>
+
+  <!-- Existing Habits Sections -->
   <div v-for="(scope, index) in allScopes" :key="scope">
     <!-- Add separator between sections -->
     <div v-if="index > 0" style="margin-top: 2rem; margin-bottom: 2rem">
@@ -387,7 +516,20 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
     </div>
 
     <ArticleTemplate :title="scopeConfig[scope].title" meta="Aug 6, 2025 by G. D. Ungureanu">
-      <div class="small" v-if="scopeData[scope].habits.length > 0 || categoryFilters[scope] !== 'All'">
+      <!-- Loading State -->
+      <div v-if="habitsLoading || activitiesLoading" class="d-flex justify-content-center align-items-center py-4">
+        <div class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-hidden="true"></div>
+        <span class="text-muted small">Loading {{ scopeConfig[scope].plural }} habits...</span>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="habitsError || activitiesError" class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Error loading data: {{ habitsError || activitiesError }}
+      </div>
+
+      <!-- Content -->
+      <div v-else-if="scopeData[scope].habits.length > 0 || categoryFilters[scope] !== 'All'" class="small">
         <!-- Column Headers -->
         <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
           <div class="habit-name-column d-flex flex-column gap-1">
@@ -399,7 +541,7 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
                 </option>
               </select>
               <span class="text-muted" style="font-size: 0.65rem" v-if="categoryFilters[scope] !== 'All'">
-                {{ scopeData[scope].habits.length }} of {{habitsData.habits.filter(h => h.scope === scope && !h.archived).length}} habits
+                {{ scopeData[scope].habits.length }} of {{habitsData.value?.habits?.filter(h => h.scope === scope && !h.archived).length || 0}} habits
               </span>
             </div>
             <div v-else class="text-secondary fw-medium text-center" style="font-size: 0.75rem; padding-top: 1rem">
@@ -422,7 +564,11 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
               <i class="bi bi-fire" :class="getFireColor(scopeData[scope].streaks[habit.id])"></i>
               <span class="text-secondary fw-medium small">{{ scopeData[scope].streaks[habit.id] }}</span>
             </div>
-            <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
+            <div class="text-truncate fw-medium text-dark-emphasis small flex-grow-1">{{ habit.name }}</div>
+            <button @click="deleteHabit(habit.id)" class="btn btn-sm p-1 ms-2 text-danger opacity-75 hover-opacity-100" :aria-label="`Delete habit: ${habit.name}`"
+              title="Delete habit" style="border: none; background: none; font-size: 0.75rem; line-height: 1;">
+              <i class="bi bi-x-lg"></i>
+            </button>
           </div>
 
           <!-- Interval Cells -->
@@ -430,7 +576,7 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
             <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" :key="`${habit.id}-${window.intervalId}`"
               class="flex-fill d-flex align-items-center justify-content-center p" :class="{
                 'bg-primary bg-opacity-10 rounded': windowIndex === scopeData[scope].windows.currentIndex,
-              }" style="min-width: 60px">
+              }" style="min-width: 30px">
               <div class="form-check d-flex justify-content-center">
                 <input :id="`${habit.id}-${window.intervalId}`" class="form-check-input" type="checkbox" role="switch" :aria-checked="isDone(habit.id, window.intervalId)"
                   :checked="isDone(habit.id, window.intervalId)" @change="toggleHabit(habit.id, window.intervalId)"
@@ -454,6 +600,25 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
   width: 200px;
   flex-shrink: 0;
   min-height: 30px;
+}
+
+/* Delete button hover effects */
+.hover-opacity-100:hover {
+  opacity: 1 !important;
+}
+
+/* Add habit form styling */
+.bg-light {
+  background-color: var(--bs-gray-50) !important;
+}
+
+/* Form validation styling */
+.form-control:invalid {
+  border-color: #dc3545;
+}
+
+.form-control:valid {
+  border-color: #198754;
 }
 
 /* Responsive design */
