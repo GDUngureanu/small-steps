@@ -322,30 +322,28 @@ function todayOrdinal(scope, now = new Date()) {
   if (scope === 'month') return now.getFullYear() * 12 + now.getMonth();
   return now.getFullYear();
 }
-function streakStats(scope, periodKeys, gap = 3, now = new Date()) {
-  // no data → no streak
+function streakStats(scope, periodKeys, gap = 3) {
   if (!periodKeys || periodKeys.length === 0) return 0
 
-  // unique + convert to ordinals, then sort DESC so we can walk backward only as long as needed
+  // unique → ordinals → sort DESC (most recent first)
   const ords = [...new Set(periodKeys)]
     .map((k) => parsePeriodKey(scope, k))
+    .filter(Number.isFinite)
     .sort((a, b) => b - a)
 
-  const today = todayOrdinal(scope, now)
+  if (ords.length === 0) return 0
 
-  // If the last completion is too far in the past, streak is broken
-  if (today - ords[0] > gap) return 0
-
-  // Count backwards while gaps are within the grace window
-  let current = 1
+  // Walk backward from the most recent completion while gaps are within the grace window
+  let latest = 1
   for (let i = 1; i < ords.length; i++) {
-    const step = ords[i - 1] - ords[i]
-    if (step <= gap + 1) current++
+    const step = ords[i - 1] - ords[i]   // intervals between completions
+    if (step <= gap + 1) latest++
     else break
   }
 
-  return current
+  return latest
 }
+
 
 // Helper function to get period keys for a habit
 function getKeysForHabit(habitId) {

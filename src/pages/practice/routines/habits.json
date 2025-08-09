@@ -1,81 +1,30 @@
 {
   "version": "1.0",
   "habits": [
-    { "id": "h-001", "name": "Morning Walk", "scope": "day", "archived": false, "sort": 10 },
-    { "id": "h-002", "name": "Read 20 minutes", "scope": "day", "archived": false, "sort": 20 },
-    { "id": "h-003", "name": "Meditation", "scope": "day", "archived": false, "sort": 30 },
-    {
-      "id": "h-004",
-      "name": "Drink 8 glasses water",
-      "scope": "day",
-      "archived": false,
-      "sort": 40
-    },
-    { "id": "h-005", "name": "Journal Writing", "scope": "day", "archived": false, "sort": 50 },
-    { "id": "h-006", "name": "Language Practice", "scope": "day", "archived": false, "sort": 60 },
-    { "id": "h-007", "name": "Gym Workout", "scope": "week", "archived": false, "sort": 70 },
-    { "id": "h-008", "name": "Meal Prep", "scope": "week", "archived": false, "sort": 80 },
-    {
-      "id": "h-009",
-      "name": "Deep Learning Session",
-      "scope": "week",
-      "archived": false,
-      "sort": 90
-    },
-    { "id": "h-010", "name": "Social Connection", "scope": "week", "archived": false, "sort": 100 },
-    { "id": "h-011", "name": "Outdoor Adventure", "scope": "week", "archived": false, "sort": 110 },
-    { "id": "h-012", "name": "Creative Project", "scope": "week", "archived": false, "sort": 120 },
-    { "id": "h-013", "name": "Budget Review", "scope": "month", "archived": false, "sort": 130 },
-    { "id": "h-014", "name": "Health Checkup", "scope": "month", "archived": false, "sort": 140 },
-    {
-      "id": "h-015",
-      "name": "Home Organization",
-      "scope": "month",
-      "archived": false,
-      "sort": 150
-    },
-    { "id": "h-016", "name": "Skill Assessment", "scope": "month", "archived": false, "sort": 160 },
-    {
-      "id": "h-017",
-      "name": "Digital Detox Weekend",
-      "scope": "month",
-      "archived": false,
-      "sort": 170
-    },
-    {
-      "id": "h-018",
-      "name": "Goal Setting & Review",
-      "scope": "year",
-      "archived": false,
-      "sort": 180
-    },
-    {
-      "id": "h-019",
-      "name": "Annual Health Assessment",
-      "scope": "year",
-      "archived": false,
-      "sort": 190
-    },
-    {
-      "id": "h-020",
-      "name": "Major Skill Certification",
-      "scope": "year",
-      "archived": false,
-      "sort": 200
-    },
-    {
-      "id": "h-021",
-      "name": "Financial Planning Review",
-      "scope": "year",
-      "archived": false,
-      "sort": 210
-    },
-    {
-      "id": "h-022",
-      "name": "Travel & Exploration",
-      "scope": "year",
-      "archived": false,
-      "sort": 220
-    }
+    { "id": "h-001", "name": "Morning Walk", "scope": "day", "category": "Health", "archived": false, "sort": 10 },
+    { "id": "h-002", "name": "Read 20 minutes", "scope": "day", "category": "Learning", "archived": false, "sort": 20 },
+    { "id": "h-003", "name": "Meditation", "scope": "day", "category": "Mindfulness", "archived": false, "sort": 30 },
+    { "id": "h-004", "name": "Drink 8 glasses water", "scope": "day", "category": "Health", "archived": false, "sort": 40 },
+    { "id": "h-005", "name": "Journal Writing", "scope": "day", "category": "Personal Growth", "archived": false, "sort": 50 },
+    { "id": "h-006", "name": "Language Practice", "scope": "day", "category": "Learning", "archived": false, "sort": 60 },
+
+    { "id": "h-007", "name": "Gym Workout", "scope": "week", "category": "Health", "archived": false, "sort": 70 },
+    { "id": "h-008", "name": "Meal Prep", "scope": "week", "category": "Nutrition", "archived": false, "sort": 80 },
+    { "id": "h-009", "name": "Deep Learning Session", "scope": "week", "category": "Learning", "archived": false, "sort": 90 },
+    { "id": "h-010", "name": "Social Connection", "scope": "week", "category": "Social", "archived": false, "sort": 100 },
+    { "id": "h-011", "name": "Outdoor Adventure", "scope": "week", "category": "Recreation", "archived": false, "sort": 110 },
+    { "id": "h-012", "name": "Creative Project", "scope": "week", "category": "Creativity", "archived": false, "sort": 120 },
+
+    { "id": "h-013", "name": "Budget Review", "scope": "month", "category": "Finance", "archived": false, "sort": 130 },
+    { "id": "h-014", "name": "Health Checkup", "scope": "month", "category": "Health", "archived": false, "sort": 140 },
+    { "id": "h-015", "name": "Home Organization", "scope": "month", "category": "Home", "archived": false, "sort": 150 },
+    { "id": "h-016", "name": "Skill Assessment", "scope": "month", "category": "Career", "archived": false, "sort": 160 },
+    { "id": "h-017", "name": "Digital Detox Weekend", "scope": "month", "category": "Wellness", "archived": false, "sort": 170 },
+
+    { "id": "h-018", "name": "Goal Setting & Review", "scope": "year", "category": "Planning", "archived": false, "sort": 180 },
+    { "id": "h-019", "name": "Annual Health Assessment", "scope": "year", "category": "Health", "archived": false, "sort": 190 },
+    { "id": "h-020", "name": "Major Skill Certification", "scope": "year", "category": "Career", "archived": false, "sort": 200 },
+    { "id": "h-021", "name": "Financial Planning Review", "scope": "year", "category": "Finance", "archived": false, "sort": 210 },
+    { "id": "h-022", "name": "Travel & Exploration", "scope": "year", "category": "Leisure", "archived": false, "sort": 220 }
   ]
 }
