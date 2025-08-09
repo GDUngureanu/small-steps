@@ -71,3 +71,35 @@ test('menu items react to authentication state and prefetch on hover', async () 
 
   vi.useRealTimers()
 })
+
+test('clears prefetch timer and invokes cancelPrefetch on unmount', () => {
+  vi.useFakeTimers()
+
+  const wrapper = mount(AppNavigation, {
+    global: {
+      stubs: {
+        RouterLink: { template: '<a><slot /></a>' },
+      },
+    },
+  })
+
+  const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout')
+
+  // start a prefetch timer
+  wrapper.vm.prefetch('/public')
+
+  // reset spies to track unmount cleanup
+  clearTimeoutSpy.mockClear()
+  componentSpy.mockClear()
+
+  wrapper.unmount()
+
+  // clearTimeout should run once directly and once via cancelPrefetch
+  expect(clearTimeoutSpy).toHaveBeenCalledTimes(2)
+
+  // ensure the scheduled prefetch never runs
+  vi.runAllTimers()
+  expect(componentSpy).not.toHaveBeenCalled()
+
+  vi.useRealTimers()
+})

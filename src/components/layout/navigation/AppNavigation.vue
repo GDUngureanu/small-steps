@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, onBeforeUnmount } from 'vue'
   import { useRouter } from 'vue-router'
   import { Collapse } from 'bootstrap'
   import { useAuthentication } from '@/configuration/authentication/useAuthentication.js'
@@ -49,6 +49,11 @@
     if (navbarCollapse.value) {
       bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
     }
+  })
+
+  onBeforeUnmount(() => {
+    clearTimeout(prefetchTimer)
+    cancelPrefetch()
   })
 
   const closeMenu = () => {
