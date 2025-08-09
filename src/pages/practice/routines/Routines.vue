@@ -17,6 +17,14 @@ const currentTime = ref(new Date())
 const allScopes = ['day', 'week', 'month', 'year']
 const TIMEZONE = 'Europe/Bucharest'
 
+// Category filter state (independent per scope)
+const categoryFilters = reactive({
+  day: 'All',
+  week: 'All',
+  month: 'All',
+  year: 'All'
+})
+
 // Scope configuration for template display
 const scopeConfig = {
   day: { title: 'Daily Habits', plural: 'daily' },
@@ -24,7 +32,7 @@ const scopeConfig = {
   month: { title: 'Monthly Habits', plural: 'monthly' },
   year: { title: 'Yearly Habits', plural: 'yearly' }
 }
-const LOCALE = 'en-US'   
+const LOCALE = 'en-US'
 
 // Temporal window functions
 function floorToInterval(scope, nowTZ) {
@@ -97,24 +105,24 @@ function upsertActivity(habitId, periodKey, done) {
 // One function for all period keys
 function formatPeriodKey(scope, inputDate = new Date()) {
   switch (scope) {
-    case 'day':{
-  const y = inputDate.getFullYear()
-  const m = String(inputDate.getMonth() + 1).padStart(2, '0')
-  const d = String(inputDate.getDate()).padStart(2, '0')
-  return `${y}-${m}-${d}`               // YYYY-MM-DD in local time
-}
+    case 'day': {
+      const y = inputDate.getFullYear()
+      const m = String(inputDate.getMonth() + 1).padStart(2, '0')
+      const d = String(inputDate.getDate()).padStart(2, '0')
+      return `${y}-${m}-${d}`               // YYYY-MM-DD in local time
+    }
 
     case 'week':
       return isoWeekId(inputDate); // <-- use the helper below
 
     case 'month': {
-  const y = inputDate.getFullYear()
-  const m = String(inputDate.getMonth() + 1).padStart(2, '0')
-  return `${y}-${m}`
-}
+      const y = inputDate.getFullYear()
+      const m = String(inputDate.getMonth() + 1).padStart(2, '0')
+      return `${y}-${m}`
+    }
 
     case 'year':
-  return String(inputDate.getFullYear())
+      return String(inputDate.getFullYear())
 
     default:
       throw new Error(`Unknown scope: ${scope}`);
@@ -146,9 +154,8 @@ function isoWeekId(inputDate) {
 }
 
 
-function humanLabel(scope, start, end) {
+function humanLabel(scope, start) {
   const startDate = new Date(start)
-  const endDate = new Date(end)
 
   switch (scope) {
     case 'day':
@@ -186,7 +193,7 @@ function computeWindows(scope, nowTZ) {
 
     windows.push({
       intervalId: formatPeriodKey(scope, intervalStart),
-      label: humanLabel(scope, intervalStart, intervalEnd),
+      label: humanLabel(scope, intervalStart),
       start: intervalStart,
       end: intervalEnd,
     })
@@ -197,7 +204,7 @@ function computeWindows(scope, nowTZ) {
   currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1)
   windows.push({
     intervalId: formatPeriodKey(scope, currentInterval),
-    label: humanLabel(scope, currentInterval, currentEnd),
+    label: humanLabel(scope, currentInterval),
     start: currentInterval,
     end: currentEnd,
   })
@@ -210,7 +217,7 @@ function computeWindows(scope, nowTZ) {
 
     windows.push({
       intervalId: formatPeriodKey(scope, intervalStart),
-      label: humanLabel(scope, intervalStart, intervalEnd),
+      label: humanLabel(scope, intervalStart),
       start: intervalStart,
       end: intervalEnd,
     })
@@ -252,16 +259,32 @@ function getFireColor(streak) {
   return 'text-muted' // Gray for <= 5
 }
 
+// Get available categories for a scope
+const getScopeCategories = (scope) => {
+  const categories = new Set()
+  habitsData.habits
+    .filter((habit) => habit.scope === scope && !habit.archived)
+    .forEach((habit) => categories.add(habit.category))
+  return ['All', ...Array.from(categories).sort()]
+}
+
 // Computed properties for each scope
 const scopeData = computed(() => {
   const scopeDetails = {}
 
   allScopes.forEach((scope) => {
-    const habits = habitsData.habits
+    let habits = habitsData.habits
       .filter((habit) => habit.scope === scope && !habit.archived)
-      .sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
+
+    // Apply category filter
+    if (categoryFilters[scope] !== 'All') {
+      habits = habits.filter((habit) => habit.category === categoryFilters[scope])
+    }
+
+    habits = habits.sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
 
     const windows = computeWindows(scope, currentTime.value)
+    const availableCategories = getScopeCategories(scope)
 
     const streaks = {}
     habits.forEach((habit) => {
@@ -272,6 +295,7 @@ const scopeData = computed(() => {
       habits,
       windows,
       streaks,
+      availableCategories,
     }
   })
 
@@ -304,24 +328,6 @@ function parsePeriodKey(scope, key) {
   return Number(key); // year ordinal
 }
 
-function todayOrdinal(scope, now = new Date()) {
-  // compute using the browser's local time (so your keys match what you record)
-  if (scope === 'day') {
-    return Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / MS_DAY;
-  }
-  if (scope === 'week') {
-    // get ISO week of today, then convert to week ordinal
-    const tmp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-    const dayNr = (tmp.getUTCDay() + 6) % 7; // Mon=0
-    tmp.setUTCDate(tmp.getUTCDate() - dayNr + 3); // Thursday of ISO week
-    const year = tmp.getUTCFullYear();
-    const firstThu = new Date(Date.UTC(year, 0, 4));
-    const week = 1 + Math.round((+tmp - +firstThu) / (7 * MS_DAY));
-    return isoWeekStartUTC(year, week) / MS_DAY / 7;
-  }
-  if (scope === 'month') return now.getFullYear() * 12 + now.getMonth();
-  return now.getFullYear();
-}
 function streakStats(scope, periodKeys, gap = 3) {
   if (!periodKeys || periodKeys.length === 0) return 0
 
@@ -381,27 +387,35 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
     </div>
 
     <ArticleTemplate :title="scopeConfig[scope].title" meta="Aug 6, 2025 by G. D. Ungureanu">
-      <div class="small" v-if="scopeData[scope].habits.length > 0">
+      <div class="small" v-if="scopeData[scope].habits.length > 0 || categoryFilters[scope] !== 'All'">
         <!-- Column Headers -->
         <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
-          <div class="habit-name-column"></div>
+          <div class="habit-name-column d-flex flex-column gap-1">
+            <!-- Category Filter Header -->
+            <div v-if="scopeData[scope].availableCategories.length > 2" class="d-flex flex-column gap-1">
+              <select :id="`category-filter-${scope}`" v-model="categoryFilters[scope]" class="form-select form-select-sm" style="font-size: 0.75rem">
+                <option v-for="category in scopeData[scope].availableCategories" :key="category" :value="category">
+                  {{ category }}
+                </option>
+              </select>
+              <span class="text-muted" style="font-size: 0.65rem" v-if="categoryFilters[scope] !== 'All'">
+                {{ scopeData[scope].habits.length }} of {{habitsData.habits.filter(h => h.scope === scope && !h.archived).length}} habits
+              </span>
+            </div>
+            <div v-else class="text-secondary fw-medium text-center" style="font-size: 0.75rem; padding-top: 1rem">
+              Habits
+            </div>
+          </div>
           <div class="d-flex flex-fill gap-2">
-            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" 
-                 :key="window.intervalId" 
-                 class="flex-fill text-center p-1 fw-medium text-secondary"
-                 :class="{ 'text-primary fw-semibold': windowIndex === scopeData[scope].windows.currentIndex }" 
-                 style="min-width: 60px; font-size: 1rem">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary"
+              :class="{ 'text-primary fw-semibold': windowIndex === scopeData[scope].windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
               <small>{{ window.label }}</small>
             </div>
           </div>
         </div>
 
         <!-- Habit Rows -->
-        <div v-for="habit in scopeData[scope].habits" 
-             :key="habit.id" 
-             class="d-flex align-items-center mb-3" 
-             role="row" 
-             :aria-label="habit.name">
+        <div v-for="habit in scopeData[scope].habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
           <!-- Habit Name -->
           <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
             <div class="d-flex align-items-center gap-2 me-2">
@@ -413,29 +427,23 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 
           <!-- Interval Cells -->
           <div class="d-flex flex-fill gap-2">
-            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" 
-                 :key="`${habit.id}-${window.intervalId}`"
-                 class="flex-fill d-flex align-items-center justify-content-center p" 
-                 :class="{
-                   'bg-primary bg-opacity-10 rounded': windowIndex === scopeData[scope].windows.currentIndex,
-                 }" 
-                 style="min-width: 60px">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" :key="`${habit.id}-${window.intervalId}`"
+              class="flex-fill d-flex align-items-center justify-content-center p" :class="{
+                'bg-primary bg-opacity-10 rounded': windowIndex === scopeData[scope].windows.currentIndex,
+              }" style="min-width: 60px">
               <div class="form-check d-flex justify-content-center">
-                <input :id="`${habit.id}-${window.intervalId}`" 
-                       class="form-check-input" 
-                       type="checkbox" 
-                    role="switch"
-                    :aria-checked="isDone(habit.id, window.intervalId)"
-                       :checked="isDone(habit.id, window.intervalId)"
-                       @change="toggleHabit(habit.id, window.intervalId)"
-                       :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, window.intervalId) ? 'Done' : 'Not done'}`" />
+                <input :id="`${habit.id}-${window.intervalId}`" class="form-check-input" type="checkbox" role="switch" :aria-checked="isDone(habit.id, window.intervalId)"
+                  :checked="isDone(habit.id, window.intervalId)" @change="toggleHabit(habit.id, window.intervalId)"
+                  :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, window.intervalId) ? 'Done' : 'Not done'}`" />
               </div>
             </div>
           </div>
         </div>
       </div>
       <div v-else class="text-muted">
-        <p>No {{ scopeConfig[scope].plural }} habits configured.</p>
+        <p v-if="categoryFilters[scope] === 'All'">No {{ scopeConfig[scope].plural }} habits configured.</p>
+        <p v-else>No {{ scopeConfig[scope].plural }} habits found for category "{{ categoryFilters[scope] }}". <button @click="categoryFilters[scope] = 'All'"
+            class="btn btn-link btn-sm p-0 text-decoration-underline">Show all</button></p>
       </div>
     </ArticleTemplate>
   </div>
@@ -446,12 +454,15 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 .habit-name-column {
   width: 200px;
   flex-shrink: 0;
+  min-height: 60px;
+  /* Ensure consistent height for filter area */
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .habit-name-column {
-    width: 150px;
+    width: 180px;
+    /* Slightly wider on mobile to accommodate filter */
   }
 }
 </style>
