@@ -417,7 +417,7 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
         <!-- Habit Rows -->
         <div v-for="habit in scopeData[scope].habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
           <!-- Habit Name -->
-          <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
+          <div class="d-flex align-items-center p-2 border rounded habit-name-column">
             <div class="d-flex align-items-center gap-2 me-2">
               <i class="bi bi-fire" :class="getFireColor(scopeData[scope].streaks[habit.id])"></i>
               <span class="text-secondary fw-medium small">{{ scopeData[scope].streaks[habit.id] }}</span>
@@ -450,19 +450,16 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 </template>
 
 <style scoped>
-/* Minimal custom CSS - most styling now handled by Bootstrap */
 .habit-name-column {
   width: 200px;
   flex-shrink: 0;
-  min-height: 60px;
-  /* Ensure consistent height for filter area */
+  min-height: 30px;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .habit-name-column {
     width: 180px;
-    /* Slightly wider on mobile to accommodate filter */
   }
 }
 </style>
