@@ -5,7 +5,7 @@ A Vue 3 single-page application that serves as a personal passion project focuse
 ## Features
 
 - Interactive checklists and suggestions for various life areas
-- Multiple sections: Home, Ikigai, Ippo, Literature (Books, Poems), Entertainment (Anime, Movies), Nutrition, Adventure, Practice, Experiments, and Random
+- Multiple sections: Home, Ikigai, Ippo, Literature (Books, Poems), Entertainment (Anime, Movies), Nutrition, Adventure, Habits, Experiments, and Random
 - Password-protected sections for personal content
 - Responsive design using Bootstrap 5.3+
 - Client-side routing with Vue Router
@@ -82,7 +82,7 @@ This builds the project and deploys it to the `gh-pages` branch.
 Some sections require password authentication:
 
 - `/experiments` - Personal experiments and projects
-- `/practice` - Personal routines and habits tracking
+- `/habits` - Personal routines and habits tracking
 
 Authentication is handled via Supabase integration.
 
