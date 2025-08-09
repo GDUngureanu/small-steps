@@ -19,9 +19,9 @@
       .replace(/ț/g, 't')
   }
 
-  const searchIndex = ingredients.map((item) => ({
-    ...item,
-    search: normalizeRomanianText(Object.values(item).join(' ')),
+  const searchIndex = ingredients.map((ingredient) => ({
+    ...ingredient,
+    search: normalizeRomanianText(Object.values(ingredient).join(' ')),
   }))
 
   // Table filtering and sorting
@@ -40,41 +40,41 @@
     // Apply search filter
     if (searchFilter.value) {
       const normalizedSearch = normalizeRomanianText(searchFilter.value)
-      filtered = filtered.filter((item) => item.search.includes(normalizedSearch))
+      filtered = filtered.filter((ingredient) => ingredient.search.includes(normalizedSearch))
     }
 
     // Apply preferred filter
     if (preferatFilter.value !== '') {
       const showPreferred = preferatFilter.value === 'true'
-      filtered = filtered.filter((item) => Boolean(item.preferred) === showPreferred)
+      filtered = filtered.filter((ingredient) => Boolean(ingredient.preferred) === showPreferred)
     }
 
     // Apply sorting
     if (sortColumn.value) {
-      filtered.sort((a, b) => {
-        let aVal = a[sortColumn.value]
-        let bVal = b[sortColumn.value]
+      filtered.sort((firstIngredient, secondIngredient) => {
+        let firstValue = firstIngredient[sortColumn.value]
+        let secondValue = secondIngredient[sortColumn.value]
 
         // Handle boolean sorting for preferred field
         if (sortColumn.value === 'preferred') {
-          aVal = Boolean(aVal)
-          bVal = Boolean(bVal)
-          const result = aVal === bVal ? 0 : aVal ? 1 : -1
+          firstValue = Boolean(firstValue)
+          secondValue = Boolean(secondValue)
+          const result = firstValue === secondValue ? 0 : firstValue ? 1 : -1
           return sortDirection.value === 'asc' ? result : -result
         }
 
         // Handle numeric sorting for nutritional value fields
         if (['protein', 'soluble_fiber', 'insoluble_fiber', 'unsaturated_fats'].includes(sortColumn.value)) {
-          aVal = Number(aVal) || 0
-          bVal = Number(bVal) || 0
-          const result = aVal - bVal
+          firstValue = Number(firstValue) || 0
+          secondValue = Number(secondValue) || 0
+          const result = firstValue - secondValue
           return sortDirection.value === 'asc' ? result : -result
         }
 
         // Handle string sorting for other fields
-        aVal = String(aVal || '')
-        bVal = String(bVal || '')
-        const result = aVal.localeCompare(bVal)
+        firstValue = String(firstValue || '')
+        secondValue = String(secondValue || '')
+        const result = firstValue.localeCompare(secondValue)
         return sortDirection.value === 'asc' ? result : -result
       })
     }
@@ -99,8 +99,8 @@
     const current = currentPage.value
 
     if (total <= maxVisible) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i)
+      for (let pageNumber = 1; pageNumber <= total; pageNumber++) {
+        pages.push(pageNumber)
       }
     } else {
       let start = Math.max(1, current - Math.floor(maxVisible / 2))
@@ -110,8 +110,8 @@
         start = Math.max(1, end - maxVisible + 1)
       }
 
-      for (let i = start; i <= end; i++) {
-        pages.push(i)
+      for (let page = start; page <= end; page++) {
+        pages.push(page)
       }
     }
 
@@ -268,23 +268,34 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          <tr v-for="(item, index) in paginatedIngredients" :key="`${sortColumn}-${sortDirection}-${index}-${item.ingredient}`">
+          <tr
+            v-for="(ingredient, index) in paginatedIngredients"
+            :key="`${sortColumn}-${sortDirection}-${index}-${ingredient.ingredient}`"
+          >
             <td class="text-center">
-              <i v-if="item.preferred" class="bi bi-star-fill text-warning" title="Preferat"></i>
+              <i v-if="ingredient.preferred" class="bi bi-star-fill text-warning" title="Preferat"></i>
               <i v-else class="bi bi-star text-muted" title="Nu este preferat"></i>
             </td>
-            <th scope="row">{{ item.ingredient }}</th>
-            <td class="d-none d-sm-table-cell">{{ item.portion }}g</td>
-            <td class="d-none d-md-table-cell">{{ item.form }}</td>
-            <td class="d-none d-sm-table-cell">{{ item.type }}</td>
-            <td :class="getNutritionalValueClass(calculateProteinScore(item.protein))">{{ calculateProteinScore(item.protein) }} ({{ item.protein }}g)</td>
-            <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(item.unsaturated_fats))">{{ calculateUnsaturatedFatsScore(item.unsaturated_fats) }} ({{ item.unsaturated_fats }}g)</td>
-            <td :class="getNutritionalValueClass(calculateSolubleFiberScore(item.soluble_fiber))">{{ calculateSolubleFiberScore(item.soluble_fiber) }} ({{ item.soluble_fiber }}g)</td>
-            <td :class="getNutritionalValueClass(calculateInsolubleFiberScore(item.insoluble_fiber))">{{ calculateInsolubleFiberScore(item.insoluble_fiber) }} ({{ item.insoluble_fiber }}g)</td>
-            <td :class="getNutritionalValueClass(item.vitamins_minerals)">
-              {{ item.vitamins_minerals }}
+            <th scope="row">{{ ingredient.ingredient }}</th>
+            <td class="d-none d-sm-table-cell">{{ ingredient.portion }}g</td>
+            <td class="d-none d-md-table-cell">{{ ingredient.form }}</td>
+            <td class="d-none d-sm-table-cell">{{ ingredient.type }}</td>
+            <td :class="getNutritionalValueClass(calculateProteinScore(ingredient.protein))">
+              {{ calculateProteinScore(ingredient.protein) }} ({{ ingredient.protein }}g)
             </td>
-            <td class="d-none d-md-table-cell">{{ item.notes || '—' }}</td>
+            <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(ingredient.unsaturated_fats))">
+              {{ calculateUnsaturatedFatsScore(ingredient.unsaturated_fats) }} ({{ ingredient.unsaturated_fats }}g)
+            </td>
+            <td :class="getNutritionalValueClass(calculateSolubleFiberScore(ingredient.soluble_fiber))">
+              {{ calculateSolubleFiberScore(ingredient.soluble_fiber) }} ({{ ingredient.soluble_fiber }}g)
+            </td>
+            <td :class="getNutritionalValueClass(calculateInsolubleFiberScore(ingredient.insoluble_fiber))">
+              {{ calculateInsolubleFiberScore(ingredient.insoluble_fiber) }} ({{ ingredient.insoluble_fiber }}g)
+            </td>
+            <td :class="getNutritionalValueClass(ingredient.vitamins_minerals)">
+              {{ ingredient.vitamins_minerals }}
+            </td>
+            <td class="d-none d-md-table-cell">{{ ingredient.notes || '—' }}</td>
           </tr>
         </tbody>
       </table>

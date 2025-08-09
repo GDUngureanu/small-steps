@@ -120,7 +120,7 @@
 
   // Helper function to find destination data by ISO code with computed status
   const findDestination = (iso) => {
-    return processedDestinations.find((d) => d.iso === iso)
+    return processedDestinations.find((destination) => destination.iso === iso)
   }
 
   // Variables for destinations list functionality
@@ -139,30 +139,30 @@
 
   // Group destinations by computed status and sort by priority then alphabetically
   const destinationsByStatus = computed(() => {
-    const sortByPriorityThenAlpha = (a, b) => {
+    const sortByPriorityThenAlpha = (firstDestination, secondDestination) => {
       // First sort by priority (highest first)
-      if (b.priority !== a.priority) {
-        return b.priority - a.priority
+      if (secondDestination.priority !== firstDestination.priority) {
+        return secondDestination.priority - firstDestination.priority
       }
       // Then sort alphabetically
-      return a.country.localeCompare(b.country)
+      return firstDestination.country.localeCompare(secondDestination.country)
     }
 
     return {
       completed: processedDestinations
-        .filter((d) => d.status === 'epic-adventure-done')
+        .filter((destination) => destination.status === 'epic-adventure-done')
         .sort(sortByPriorityThenAlpha),
       inProgress: processedDestinations
-        .filter((d) => d.status === 'halfway-there')
+        .filter((destination) => destination.status === 'halfway-there')
         .sort(sortByPriorityThenAlpha),
       adventureAwaits: processedDestinations
-        .filter((d) => d.status === 'adventure-awaits')
+        .filter((destination) => destination.status === 'adventure-awaits')
         .sort(sortByPriorityThenAlpha),
       questForFun: processedDestinations
-        .filter((d) => d.status === 'quest-for-fun')
+        .filter((destination) => destination.status === 'quest-for-fun')
         .sort(sortByPriorityThenAlpha),
       postponed: processedDestinations
-        .filter((d) => d.status === 'journey-postponed')
+        .filter((destination) => destination.status === 'journey-postponed')
         .sort(sortByPriorityThenAlpha),
     }
   })

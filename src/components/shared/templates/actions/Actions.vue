@@ -111,7 +111,7 @@
       loading.value = true
       error.value = null
 
-      const { data, error: fetchError } = await supabase
+      const { data: fetchedActions, error: fetchError } = await supabase
         .from('actions')
         .select('id, description, status, priority, created_at, parent_id')
         .eq('list_id', props.listId)
@@ -120,7 +120,7 @@
 
       if (fetchError) throw fetchError
 
-      actions.value = data || []
+      actions.value = fetchedActions || []
       setCachedActions(props.listId, actions.value)
     } catch (exception) {
       error.value = exception.message
@@ -146,15 +146,15 @@
         priority: PRIORITY_LEVELS.LOW,
       }
 
-      const { data, error: insertError } = await supabase
+      const { data: insertedActions, error: insertError } = await supabase
         .from('actions')
         .insert([actionData])
         .select('id, description, status, priority, created_at, parent_id')
 
       if (insertError) throw insertError
 
-      if (data?.[0]) {
-        actions.value.unshift(data[0])
+      if (insertedActions?.[0]) {
+        actions.value.unshift(insertedActions[0])
         // Update cache
         setCachedActions(props.listId, actions.value)
       }
@@ -218,9 +218,9 @@
           if (childUpdateError) throw childUpdateError
 
           const idSet = new Set(childIds)
-          actions.value.forEach((a) => {
-            if (idSet.has(a.id)) a.status = true
-          })
+      actions.value.forEach((actionItem) => {
+        if (idSet.has(actionItem.id)) actionItem.status = true
+      })
         }
       }
 
@@ -261,8 +261,8 @@
   }
 
   const confirmDeleteAction = (actionId) => {
-    const action = actions.value.find((a) => a.id === actionId)
-    deleteModalAction.value = action
+    const existingAction = actions.value.find((actionItem) => actionItem.id === actionId)
+    deleteModalAction.value = existingAction
     showDeleteModal.value = true
   }
 
@@ -271,13 +271,13 @@
       loading.value = true
       error.value = null
 
-      const collectIds = (id) => {
-        const children = getSubActions(id)
-        let ids = [id]
+      const collectIds = (actionIdentifier) => {
+        const children = getSubActions(actionIdentifier)
+        let identifiers = [actionIdentifier]
         for (const child of children) {
-          ids = ids.concat(collectIds(child.id))
+          identifiers = identifiers.concat(collectIds(child.id))
         }
-        return ids
+        return identifiers
       }
 
       const idsToDelete = collectIds(actionId)
