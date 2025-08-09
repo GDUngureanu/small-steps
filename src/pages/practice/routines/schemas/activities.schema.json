@@ -8,11 +8,10 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["habitId", "scope", "completedOn"],
+        "required": ["habitId", "periodKey"],
         "properties": {
           "habitId": { "type": "string", "pattern": "^h-[A-Za-z0-9_-]+$" },
-          "scope": { "enum": ["day", "week", "month", "year"] },
-          "completedOn": {
+          "periodKey": {
             "type": "string",
             "anyOf": [{ "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }, { "pattern": "^\\d{4}-W\\d{2}$" }, { "pattern": "^\\d{4}-\\d{2}$" }, { "pattern": "^\\d{4}$" }]
           }

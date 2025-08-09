@@ -1,738 +1,459 @@
 <script setup>
-  import { ref, reactive, computed, onMounted } from 'vue'
-  import ArticleTemplate from '@/components/shared/templates/Article.vue'
-  import habitsData from './habits.json'
-  import activitiesData from './activities.json'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import ArticleTemplate from '@/components/shared/templates/Article.vue'
+import habitsData from './habits.json'
+import activitiesData from './activities.json'
 
-  /*
-SPEC—Temporal Windows (Europe/Bucharest, ISO week Monday)
-Goal: For a selected scope ∈ {day, week, month, year}, produce exactly 13 ordered intervals:
-I-10 … I-1, I0 (current), I+1 … I+2.
 
-Interval IDs (deterministic):
-- day:   YYYY-MM-DD
-- week:  YYYY-Www  (ISO week-year, ww zero-padded)
-- month: YYYY-MM
-- year:  YYYY
+defineOptions({
+  name: 'RoutinesTemplate',
+})
 
-Functions (pseudocode signatures & behavior):
-- floorToInterval(scope, nowTZ):
-  day   → start: 00:00 local; end: 23:59:59.999
-  week  → start: Monday 00:00 of ISO week containing now; end: Sunday 23:59:59.999
-  month → start: 1st 00:00; end: last day 23:59:59.999
-  year  → start: Jan 1 00:00; end: Dec 31 23:59:59.999
+// Reactive state
+const sessionOverrides = reactive(new Map())
+const activitiesMap = reactive(new Map())
+const seedActivityKeys = new Set()
+const currentTime = ref(new Date())
+const allScopes = ['day', 'week', 'month', 'year']
+const TIMEZONE = 'Europe/Bucharest'
 
-- shiftInterval(intervalStart, scope, delta):
-  Move by N units (N = delta), respecting:
-    • ISO week-year rollover (e.g., 2015-W53 → 2016-W01)
-    • variable month lengths
-    • leap years for Feb 29
+// Scope configuration for template display
+const scopeConfig = {
+  day: { title: 'Daily Habits', plural: 'daily' },
+  week: { title: 'Weekly Habits', plural: 'weekly' },
+  month: { title: 'Monthly Habits', plural: 'monthly' },
+  year: { title: 'Yearly Habits', plural: 'yearly' }
+}
+const LOCALE = 'en-US'   
 
-- formatIntervalId(scope, intervalStart):
-  day   → YYYY-MM-DD
-  week  → ISO week-year of Monday(start) + "-W" + 2-digit week number
-  month → YYYY-MM of start
-  year  → YYYY of start
+// Temporal window functions
+function floorToInterval(scope, nowTZ) {
+  const now = new Date(nowTZ.toLocaleString(LOCALE, { timeZone: TIMEZONE }))
 
-- humanLabel(scope, start, end):
-  day   → "Wed, Aug 6, 2025"
-  week  → "W32 (Aug 4–Aug 10, 2025)"
-  month → "August 2025"
-  year  → "2025"
+  switch (scope) {
+    case 'day':
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-Algorithm:
-computeWindows(scope, nowTZ):
-  I0 = floorToInterval(scope, nowTZ)
-  list = []
-  for i=10..1: list.push(shiftInterval(I0, scope, -i))
-  list.push(I0)
-  for i=1..2: list.push(shiftInterval(I0, scope, +i))
+    case 'week': {
+      // Monday (ISO) of the current week in Europe/Bucharest
+      const monday = new Date(now)          // copy
+      monday.setHours(0, 0, 0, 0)           // local midnight
+      const isoDow = monday.getDay() || 7   // Sun=0 -> 7
+      monday.setDate(monday.getDate() - (isoDow - 1))
+      return monday                         // <-- return a Date, not a string
+    }
+
+    case 'month':
+      return new Date(now.getFullYear(), now.getMonth(), 1)
+
+    case 'year':
+      return new Date(now.getFullYear(), 0, 1)
+
+    default:
+      throw new Error(`Unknown scope: ${scope}`)
+  }
+}
+
+function shiftInterval(intervalStart, scope, delta) {
+  const result = new Date(intervalStart)
+
+  switch (scope) {
+    case 'day':
+      result.setDate(result.getDate() + delta)
+      break
+
+    case 'week':
+      result.setDate(result.getDate() + delta * 7)
+      break
+
+    case 'month':
+      result.setMonth(result.getMonth() + delta)
+      break
+
+    case 'year':
+      result.setFullYear(result.getFullYear() + delta)
+      break
+  }
+
+  return result
+}
+
+// Upsert activity to prevent duplicates on write (for future persistence)
+function upsertActivity(habitId, periodKey, done) {
+  const key = `${habitId}|${periodKey}`
+  if (done) {
+    activitiesMap.set(key, true)
+    sessionOverrides.set(key, 'done')
+  } else {
+    activitiesMap.delete(key)
+    if (seedActivityKeys.has(key)) {
+      // was part of initial seed; remember the explicit undo
+      sessionOverrides.set(key, 'undone')
+    } else {
+      sessionOverrides.delete(key)
+    }
+  }
+}
+// One function for all period keys
+function formatPeriodKey(scope, inputDate = new Date()) {
+  switch (scope) {
+    case 'day':{
+  const y = inputDate.getFullYear()
+  const m = String(inputDate.getMonth() + 1).padStart(2, '0')
+  const d = String(inputDate.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`               // YYYY-MM-DD in local time
+}
+
+    case 'week':
+      return isoWeekId(inputDate); // <-- use the helper below
+
+    case 'month': {
+  const y = inputDate.getFullYear()
+  const m = String(inputDate.getMonth() + 1).padStart(2, '0')
+  return `${y}-${m}`
+}
+
+    case 'year':
+  return String(inputDate.getFullYear())
+
+    default:
+      throw new Error(`Unknown scope: ${scope}`);
+  }
+}
+
+// ISO week id in UTC: "YYYY-Www"
+function isoWeekId(inputDate) {
+  // normalize to UTC midnight for stability
+  const d = new Date(Date.UTC(
+    inputDate.getFullYear(),
+    inputDate.getMonth(),
+    inputDate.getDate()
+  ));
+
+  // ISO: week starts Monday. Convert Sunday(0) to 7.
+  const day = d.getUTCDay() || 7;
+
+  // Move to Thursday of this week (ISO anchor)
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+
+  const weekYear = d.getUTCFullYear();
+
+  // Week 1 is the week with Jan 4 in it (equivalently, the first Thursday)
+  const yearStart = new Date(Date.UTC(weekYear, 0, 1));
+  const weekNum = Math.ceil((((d - yearStart) / MS_DAY) + 1) / 7)
+
+  return `${weekYear}-W${String(weekNum).padStart(2, '0')}`;
+}
+
+
+function humanLabel(scope, start, end) {
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+
+  switch (scope) {
+    case 'day':
+      return new Intl.DateTimeFormat(LOCALE, {
+        timeZone: TIMEZONE, weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+      }).format(startDate)
+
+    case 'week': {
+      const weekId = formatPeriodKey('week', startDate)
+      const m = weekId.match(/(\d{4})-W(\d{2})/)
+      const num = m ? m[2] : '00'
+      const endOfWeek = new Date(startDate)
+      endOfWeek.setDate(endOfWeek.getDate() + 6)
+      const fmt = new Intl.DateTimeFormat(LOCALE, { timeZone: TIMEZONE, month: 'short', day: 'numeric' })
+      return `W${num} (${fmt.format(startDate)}–${fmt.format(endOfWeek)})`
+    }
+    case 'month':
+      return new Intl.DateTimeFormat(LOCALE, { timeZone: TIMEZONE, year: 'numeric', month: 'long' }).format(startDate)
+
+
+    case 'year':
+      return startDate.getFullYear().toString()
+  }
+}
+
+function computeWindows(scope, nowTZ) {
+  const currentInterval = floorToInterval(scope, nowTZ)
+  const windows = []
+
+  // Generate I-10 to I-1
+  for (let offset = 10; offset >= 1; offset--) {
+    const intervalStart = shiftInterval(currentInterval, scope, -offset)
+    const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
+    intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
+
+    windows.push({
+      intervalId: formatPeriodKey(scope, intervalStart),
+      label: humanLabel(scope, intervalStart, intervalEnd),
+      start: intervalStart,
+      end: intervalEnd,
+    })
+  }
+
+  // Add current interval I0
+  const currentEnd = new Date(shiftInterval(currentInterval, scope, 1))
+  currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1)
+  windows.push({
+    intervalId: formatPeriodKey(scope, currentInterval),
+    label: humanLabel(scope, currentInterval, currentEnd),
+    start: currentInterval,
+    end: currentEnd,
+  })
+
+  // Generate I+1 to I+2
+  for (let offset = 1; offset <= 2; offset++) {
+    const intervalStart = shiftInterval(currentInterval, scope, offset)
+    const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
+    intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
+
+    windows.push({
+      intervalId: formatPeriodKey(scope, intervalStart),
+      label: humanLabel(scope, intervalStart, intervalEnd),
+      start: intervalStart,
+      end: intervalEnd,
+    })
+  }
+
   return {
     scope,
     currentIndex: 10,
-    windows: list.map(s => ({
-      intervalId: formatIntervalId(scope, s),
-      label: humanLabel(scope, s, sEnd),
-      start: s, end: corresponding end
-    }))
+    windows,
   }
+}
 
-Test anchors (expected 13 IDs only; verify manually):
-- Around New Year week-year rollover:
-  Anchor now = 2015-12-31 (Thu), scope=week → expect window containing 2015-W53 and next 2016-W01.
-- Leap year:
-  Anchor now = 2024-02-29, scope=day → includes Feb 19…Mar 12.
-- Month end:
-  Anchor now = 2025-08-06, scope=month → includes Oct 2024 … Oct 2025 (13 months with Aug 2025 at index 10).
-*/
+// State management functions
+function isDone(habitId, periodKey) {
+  const key = `${habitId}|${periodKey}`
 
-  /*
-SPEC—Streaks (gaps ≤ 3 allowed)
-Definitions:
-- Convert each intervalId to an integer index per scope (epoch-based):
-  day   → days since 1970-01-01 (Europe/Bucharest)
-  week  → ISO weeks since 1970-W01 (derived from ISO date)
-  month → months since 1970-01
-  year  → years since 1970
-- Sort unique indices ascending. Let C = current interval index.
-
-Link rule:
-Two done indices a, b are linked iff (b - a - 1) ≤ 3. (Gap is missing intervals count between them.)
-
-Current streak:
-Let L be the most recent done index. If (C - L - 1) ≤ 3, current streak = length of the linked group ending at L; else 0.
-
-Historical best:
-Maximum length across all linked groups; tie-breaker = most recent end index.
-
-Algorithm (O(n) time, O(1) extra):
-computeStreaks(doneIndicesSorted, currentIndex):
-  if empty → {current:0, best:0}
-  bestLen=1; bestEnd=done[0]; currLen=1
-  for i in 1..n-1:
-    gap = done[i]-done[i-1]-1
-    if gap ≤ 3: currLen++
-    else:
-      if (currLen > bestLen) or (currLen==bestLen and done[i-1]>bestEnd):
-        bestLen=currLen; bestEnd=done[i-1]
-      currLen=1
-  // finalize
-  if (currLen > bestLen) or (currLen==bestLen and done[n-1]>bestEnd):
-    bestLen=currLen; bestEnd=done[n-1]
-  // current
-  gapToNow = (currentIndex - done[n-1]) - 1
-  if gapToNow ≤ 3:
-    currentLen=1; i=n-1
-    while i>0 and (done[i]-done[i-1]-1) ≤ 3: currentLen++; i--
-    curr=currentLen
-  else curr=0
-  return { current: curr, best: bestLen }
-
-Worked examples (indices only):
-- Day, C=1000:
-  A) [995,996,999] → gaps 0,2; gapToNow (1000-999)-1=0 → current=3, best=3
-  B) [980,983,986,990,1000] → gaps 2,2,3,9; gapToNow from 1000=-1 → current=1, best=4
-- Week, C=100:
-  A) [92,95,98,101] → gaps 2,2,2; gapToNow (100-101)-1=-2 → current=4, best=4
-- Month, C=200:
-  A) [196,197,199] → current=3, best=3
-  B) [180,184,188,192] → gapToNow=7 → current=0, best=4
-- Year, C=55:
-  A) [50,52,55] → current=3, best=3
-  B) [40,44,49] → current=0, best=2
-*/
-
-  /*
-SPEC—State Model (Ephemeral only; no localStorage/URL)
-Data sources:
-- SeedHabits: loaded from habits.json
-- SeedActivities: loaded from activities.json (sparse; only "done")
-- SessionOverrides: Map key = `${habitId}|${scope}|${intervalId}`, value = "done"|"undone"
-
-Derived:
-- isDone(habitId, scope, intervalId):
-    if key in SessionOverrides → that value
-    else if exists in SeedActivities → "done"
-    else → "undone"
-
-Events:
-- TOGGLE(habitId, scope, intervalId):
-    current = isDone(...)
-    next = (current == "done") ? "undone" : "done"
-    if next == "done": set override to "done"
-    else if next == "undone":
-       if entry exists in SeedActivities: set override "undone"
-       else: remove override (implicit undone)
-    push to UndoStack (max 20), clear RedoStack
-- UNDO / REDO: inverse of last action; bounded stacks.
-
-Recompute:
-- On any TOGGLE affecting habit H at scope S:
-    recompute streaks for H,S using the set of intervalIds whose status resolves to "done".
-- Windows memoized per scope until interval rollover.
-
-Reset:
-- On full refresh/navigation, SessionOverrides and undo/redo stacks are cleared by design.
-
-SSR notes:
-- If SSR computes windows, embed tz="Europe/Bucharest" and generatedAt; client revalidates at hydration.
-*/
-
-  /*
-SPEC—Interaction & A11y (WCAG 2.2 AA)
-Grid layout:
-- One scope visible at a time; 13 interval columns; ~20+ habit rows.
-
-Roles:
-- Container: role="grid" aria-rowcount (habits) aria-colcount=13
-- Row: role="row" with aria-label = habit name
-- Cell: role="gridcell" containing role="checkbox" with aria-checked
-- Live region: aria-live="polite" for announcements
-
-Keyboard:
-- Roving tabindex: only one cell focusable.
-- ArrowLeft/Right: move interval
-- ArrowUp/Down: move habit
-- Home/End: first/last interval in row
-- Space/Enter: toggle
-- Ctrl/Cmd+Z: undo; Ctrl/Cmd+Shift+Z: redo
-- Focus always visibly indicated (>= 3:1 contrast ring)
-
-ARIA labels & announcements:
-- Checkbox aria-label: `${habitName} — ${intervalHumanLabel} — ${Done|Not done}`
-- On toggle, announce: `Marked ${habitName} as Done for ${intervalHumanLabel}` or `Reverted to Not done`.
-
-Tooltips (hover/focus):
-- "Toggle ${habitName} for ${intervalHumanLabel} (Space)"
-
-Streak feedback:
-- After toggle, recompute and update badges:
-  • Current: "Current: N"
-  • Best: "Best: M"
-- Current streak cells get a high-contrast outline pill; do not rely on color alone.
-
-Pointer:
-- Click cell toggles; drag-range selection is out of scope for v1.
-
-Empty/edge states:
-- If no habits match scope, show guidance text.
-- Long habit names: truncate with tooltip; never truncate ARIA labels.
-*/
-
-  /*
-SPEC—Dark Tokens & Palette (WCAG 2.2 AA)
-Purpose: Define color tokens usable with Bootstrap classes while ensuring AA contrast.
-
-Core tokens (dark):
-- --surface:    #0F1115
-- --surface-2:  #151821
-- --text:       #EAEFF7
-- --muted:      #9AA4B2
-- --border:     #2A2F3A
-- --focus:      #A0C2FF   (>= 3:1 vs --surface)
-- --on-accent:  #0B0F14   (text on accent fills; ensure AA)
-
-Habit accents (controlled palette; choose any subset, document mapping):
-- accent-1: #7DD3FC   (on-accent must be #0B0F14)  // cyan 300
-- accent-2: #A7F3D0   (on-accent #0B0F14)          // emerald 200
-- accent-3: #FDE68A   (on-accent #0B0F14)          // amber 200
-- accent-4: #FCA5A5   (on-accent #0B0F14)          // rose 300
-- accent-5: #C4B5FD   (on-accent #0B0F14)          // violet 300
-- accent-6: #93C5FD   (on-accent #0B0F14)          // blue 300
-- accent-7: #F9A8D4   (on-accent #0B0F14)          // pink 300
-- accent-8: #86EFAC   (on-accent #0B0F14)          // green 300
-
-State visuals:
-- Cell "none": background --surface-2; text --text; border --border.
-- Cell "done": background = habit accent; text/icon = --on-accent.
-- Hover: subtle elevation + border brighten; Focus: 2px outline --focus.
-- Streak current: 2px outline pill around linked cells using --focus (or #E5B8FF for alternative high-contrast).
-
-Bootstrap mapping guidance:
-- Map accents to utility classes via CSS variables or custom utilities; ensure final contrast ratios:
-  • On-accent text vs accent fill ≥ 4.5:1
-  • Text vs surfaces ≥ 4.5:1
-  • Focus ring vs surroundings ≥ 3:1
-
-Non-color affordances:
-- Do not rely on color alone to convey "done" or "in streak"; include icon (✓) and outline.
-
-Contrast verification (AA):
-- Verify with automated checker; log ratios in a table:
-  Accent-1 (#7DD3FC) vs On-accent (#0B0F14) → ratio ≥ 7:1 (pass)
-  Repeat for all accents.
-*/
-
-  defineOptions({
-    name: 'RoutinesTemplate',
-  })
-
-  // Reactive state
-  const sessionOverrides = reactive(new Map())
-  const activitiesMap = reactive(new Map())
-  const seedActivityKeys = new Set()
-  const currentTime = ref(new Date())
-  const allScopes = ['day', 'week', 'month', 'year']
-
-  // Temporal window functions
-  function floorToInterval(scope, nowTZ) {
-    const now = new Date(nowTZ.toLocaleString('en-US', { timeZone: 'Europe/Bucharest' }))
-
-    switch (scope) {
-      case 'day':
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-      case 'week': {
-        // Find Monday of current ISO week
-        const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay() // Sunday = 7
-        const mondayOffset = dayOfWeek - 1
-        const monday = new Date(now)
-        monday.setDate(now.getDate() - mondayOffset)
-        monday.setHours(0, 0, 0, 0)
-        return monday
-      }
-
-      case 'month':
-        return new Date(now.getFullYear(), now.getMonth(), 1)
-
-      case 'year':
-        return new Date(now.getFullYear(), 0, 1)
-
-      default:
-        throw new Error(`Unknown scope: ${scope}`)
-    }
+  if (sessionOverrides.has(key)) {
+    return sessionOverrides.get(key) === 'done'
   }
+  return activitiesMap.has(key)
+}
 
-  function shiftInterval(intervalStart, scope, delta) {
-    const result = new Date(intervalStart)
+function toggleHabit(habitId, periodKey) {
+  const next = !isDone(habitId, periodKey)
+  upsertActivity(habitId, periodKey, next)
+}
 
-    switch (scope) {
-      case 'day':
-        result.setDate(result.getDate() + delta)
-        break
-
-      case 'week':
-        result.setDate(result.getDate() + delta * 7)
-        break
-
-      case 'month':
-        result.setMonth(result.getMonth() + delta)
-        break
-
-      case 'year':
-        result.setFullYear(result.getFullYear() + delta)
-        break
-    }
-
-    return result
-  }
-
-  function formatIntervalId(scope, intervalStart) {
-    const date = new Date(intervalStart)
-
-    switch (scope) {
-      case 'day':
-        return date.toISOString().split('T')[0] // YYYY-MM-DD
-
-      case 'week': {
-        // Calculate ISO week number and associated week-year
-        const weekCalculationDate = new Date(date)
-        weekCalculationDate.setHours(0, 0, 0, 0)
-        const isoWeekDay = weekCalculationDate.getDay() || 7 // ISO: Mon=1, Sun=7
-        weekCalculationDate.setDate(weekCalculationDate.getDate() + 4 - isoWeekDay) // Move to Thursday to determine week-year
-        const weekYear = weekCalculationDate.getFullYear()
-        const yearStart = new Date(weekYear, 0, 1)
-        const weekNum = Math.ceil(((weekCalculationDate - yearStart) / 86400000 + 1) / 7)
-        return `${weekYear}-W${weekNum.toString().padStart(2, '0')}`
-      }
-
-      case 'month':
-        return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`
-
-      case 'year':
-        return date.getFullYear().toString()
-    }
-  }
+// Streak calculation using streakStats
+function computeStreakStats(habitId, scope) {
+  const periodKeys = getKeysForHabit(habitId)
+  return streakStats(scope, periodKeys, 3)
+}
 
 
-  function humanLabel(scope, start, end) {
-    const startDate = new Date(start)
-    const endDate = new Date(end)
+function getFireColor(streak) {
+  if (streak > 20) return 'text-primary' // Blue
+  if (streak > 10) return 'text-danger' // Red
+  if (streak > 5) return 'text-warning' // Yellow
+  return 'text-muted' // Gray for <= 5
+}
 
-    switch (scope) {
-      case 'day':
-        return startDate.toLocaleDateString('en-US', {
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
+// Computed properties for each scope
+const scopeData = computed(() => {
+  const scopeDetails = {}
 
-      case 'week': {
-        const weekId = formatIntervalId('week', startDate)
-        const weekMatch = weekId.match(/(\d{4})-W(\d{2})/)
-        const weekNum = weekMatch ? weekMatch[2] : '00'
-        return `W${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}–${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})`
-      }
-      case 'month':
-        return startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
+  allScopes.forEach((scope) => {
+    const habits = habitsData.habits
+      .filter((habit) => habit.scope === scope && !habit.archived)
+      .sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
 
-      case 'year':
-        return startDate.getFullYear().toString()
-    }
-  }
+    const windows = computeWindows(scope, currentTime.value)
 
-  function computeWindows(scope, nowTZ) {
-    const currentInterval = floorToInterval(scope, nowTZ)
-    const windows = []
-
-    // Generate I-10 to I-1
-    for (let offset = 10; offset >= 1; offset--) {
-      const intervalStart = shiftInterval(currentInterval, scope, -offset)
-      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
-      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
-
-      windows.push({
-        intervalId: formatIntervalId(scope, intervalStart),
-        label: humanLabel(scope, intervalStart, intervalEnd),
-        start: intervalStart,
-        end: intervalEnd,
-      })
-    }
-
-    // Add current interval I0
-    const currentEnd = new Date(shiftInterval(currentInterval, scope, 1))
-    currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1)
-    windows.push({
-      intervalId: formatIntervalId(scope, currentInterval),
-      label: humanLabel(scope, currentInterval, currentEnd),
-      start: currentInterval,
-      end: currentEnd,
+    const streaks = {}
+    habits.forEach((habit) => {
+      streaks[habit.id] = computeStreakStats(habit.id, scope)
     })
 
-    // Generate I+1 to I+2
-    for (let offset = 1; offset <= 2; offset++) {
-      const intervalStart = shiftInterval(currentInterval, scope, offset)
-      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
-      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
-
-      windows.push({
-        intervalId: formatIntervalId(scope, intervalStart),
-        label: humanLabel(scope, intervalStart, intervalEnd),
-        start: intervalStart,
-        end: intervalEnd,
-      })
-    }
-
-    return {
-      scope,
-      currentIndex: 10,
+    scopeDetails[scope] = {
+      habits,
       windows,
+      streaks,
     }
-  }
-
-  // State management functions
-  function isDone(habitId, scope, completedOn) {
-    const key = `${habitId}|${scope}|${completedOn}`
-
-    if (sessionOverrides.has(key)) {
-      return sessionOverrides.get(key) === 'done'
-    }
-
-    return activitiesMap.has(key)
-  }
-
-  function toggleHabit(habitId, scope, completedOn) {
-    const key = `${habitId}|${scope}|${completedOn}`
-    const current = isDone(habitId, scope, completedOn)
-    const next = !current
-
-    if (next) {
-        activitiesMap.set(key, true)
-        sessionOverrides.set(key, 'done')
-      } else {
-        activitiesMap.delete(key)
-        if (seedActivityKeys.has(key)) {
-          sessionOverrides.set(key, 'undone')
-        } else {
-          sessionOverrides.delete(key)
-        }
-      }
-  }
-
-  // Completion count calculation
-  function computeCompletionCount(habitId, scope) {
-    const prefix = `${habitId}|${scope}|`
-    let count = 0
-
-    activitiesMap.forEach((_, key) => {
-      if (key.startsWith(prefix)) {
-        count++
-      }
-    })
-
-    return count
-  }
-
-
-  function getFireColor(count) {
-    if (count > 20) return 'text-primary' // Blue
-    if (count > 10) return 'text-danger' // Red
-    if (count > 5) return 'text-warning' // Yellow
-    return 'text-muted' // Gray for <= 5
-  }
-
-  // Computed properties for each scope
-  const scopeData = computed(() => {
-    const scopeDetails = {}
-
-    allScopes.forEach((scope) => {
-      const habits = habitsData.habits
-        .filter((habit) => habit.scope === scope && !habit.archived)
-        .sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
-
-      const windows = computeWindows(scope, currentTime.value)
-
-      const counts = {}
-      habits.forEach((habit) => {
-        counts[habit.id] = computeCompletionCount(habit.id, scope)
-      })
-
-      scopeDetails[scope] = {
-        habits,
-        windows,
-        counts,
-      }
-    })
-
-    return scopeDetails
   })
 
+  return scopeDetails
+})
 
-  // Lifecycle
-  onMounted(() => {
-      activitiesData.activities.forEach((activity) => {
-        const key = `${activity.habitId}|${activity.scope}|${activity.completedOn}`
-        activitiesMap.set(key, true)
-        seedActivityKeys.add(key)
-      })
+const MS_DAY = 86_400_000;
 
-      // Update current time every minute for day scope
-      setInterval(() => {
-        currentTime.value = new Date()
-      }, 60000)
-    })
+function isoWeekStartUTC(year, week) {
+  // ISO week 1 is the week with Jan 4. Find its Monday (UTC) and offset by (week-1)*7 days.
+  const jan4 = Date.UTC(year, 0, 4);
+  const jan4DowMon0 = (new Date(jan4).getUTCDay() + 6) % 7; // Mon=0..Sun=6
+  const week1Mon = jan4 - jan4DowMon0 * MS_DAY;
+  return week1Mon + (week - 1) * 7 * MS_DAY;
+}
+
+function parsePeriodKey(scope, key) {
+  if (scope === 'day') {
+    const [y, m, d] = key.split('-').map(Number);
+    return Date.UTC(y, m - 1, d) / MS_DAY; // day ordinal
+  }
+  if (scope === 'week') {
+    const [y, wRaw] = key.split('-W').map(Number);
+    return isoWeekStartUTC(y, wRaw) / MS_DAY / 7; // week ordinal
+  }
+  if (scope === 'month') {
+    const [y, m] = key.split('-').map(Number);
+    return y * 12 + (m - 1); // month ordinal
+  }
+  return Number(key); // year ordinal
+}
+
+function todayOrdinal(scope, now = new Date()) {
+  // compute using the browser's local time (so your keys match what you record)
+  if (scope === 'day') {
+    return Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / MS_DAY;
+  }
+  if (scope === 'week') {
+    // get ISO week of today, then convert to week ordinal
+    const tmp = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNr = (tmp.getUTCDay() + 6) % 7; // Mon=0
+    tmp.setUTCDate(tmp.getUTCDate() - dayNr + 3); // Thursday of ISO week
+    const year = tmp.getUTCFullYear();
+    const firstThu = new Date(Date.UTC(year, 0, 4));
+    const week = 1 + Math.round((+tmp - +firstThu) / (7 * MS_DAY));
+    return isoWeekStartUTC(year, week) / MS_DAY / 7;
+  }
+  if (scope === 'month') return now.getFullYear() * 12 + now.getMonth();
+  return now.getFullYear();
+}
+function streakStats(scope, periodKeys, gap = 3, now = new Date()) {
+  // no data → no streak
+  if (!periodKeys || periodKeys.length === 0) return 0
+
+  // unique + convert to ordinals, then sort DESC so we can walk backward only as long as needed
+  const ords = [...new Set(periodKeys)]
+    .map((k) => parsePeriodKey(scope, k))
+    .sort((a, b) => b - a)
+
+  const today = todayOrdinal(scope, now)
+
+  // If the last completion is too far in the past, streak is broken
+  if (today - ords[0] > gap) return 0
+
+  // Count backwards while gaps are within the grace window
+  let current = 1
+  for (let i = 1; i < ords.length; i++) {
+    const step = ords[i - 1] - ords[i]
+    if (step <= gap + 1) current++
+    else break
+  }
+
+  return current
+}
+
+// Helper function to get period keys for a habit
+function getKeysForHabit(habitId) {
+  const prefix = `${habitId}|`
+  const keys = []
+  activitiesMap.forEach((_, key) => {
+    if (key.startsWith(prefix)) {
+      keys.push(key.slice(prefix.length))
+    }
+  })
+  return keys
+}
+
+
+let timerId = null
+
+onMounted(() => {
+  activitiesData.activities.forEach((activity) => {
+    const key = `${activity.habitId}|${activity.periodKey}`
+    activitiesMap.set(key, true)
+    seedActivityKeys.add(key)
+  })
+
+  timerId = setInterval(() => { currentTime.value = new Date() }, 60000)
+})
+
+onUnmounted(() => { if (timerId) clearInterval(timerId) })
 </script>
 
 <template>
-  <!-- Daily Habits -->
-  <ArticleTemplate title="Daily Habits" meta="Aug 6, 2025 by G. D. Ungureanu">
-    <div class="small" v-if="scopeData.day.habits.length > 0">
-      <!-- Column Headers -->
-      <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
-        <div class="habit-name-column"></div>
-        <div class="d-flex flex-fill gap-2">
-          <div v-for="(window, index) in scopeData.day.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.day.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
-            <small>{{ window.label }}</small>
+  <div v-for="(scope, index) in allScopes" :key="scope">
+    <!-- Add separator between sections -->
+    <div v-if="index > 0" style="margin-top: 2rem; margin-bottom: 2rem">
+      <hr />
+    </div>
+
+    <ArticleTemplate :title="scopeConfig[scope].title" meta="Aug 6, 2025 by G. D. Ungureanu">
+      <div class="small" v-if="scopeData[scope].habits.length > 0">
+        <!-- Column Headers -->
+        <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
+          <div class="habit-name-column"></div>
+          <div class="d-flex flex-fill gap-2">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" 
+                 :key="window.intervalId" 
+                 class="flex-fill text-center p-1 fw-medium text-secondary"
+                 :class="{ 'text-primary fw-semibold': windowIndex === scopeData[scope].windows.currentIndex }" 
+                 style="min-width: 60px; font-size: 1rem">
+              <small>{{ window.label }}</small>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Habit Rows -->
-      <div v-for="habit in scopeData.day.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
-        <!-- Habit Name -->
-        <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
-          <div class="d-flex align-items-center gap-2 me-2">
-            <i class="bi bi-fire" :class="getFireColor(scopeData.day.counts[habit.id] || 0)" :title="`${scopeData.day.counts[habit.id] || 0} completions`"></i>
-            <span class="text-secondary fw-medium small">{{ scopeData.day.counts[habit.id] || 0 }}</span>
+        <!-- Habit Rows -->
+        <div v-for="habit in scopeData[scope].habits" 
+             :key="habit.id" 
+             class="d-flex align-items-center mb-3" 
+             role="row" 
+             :aria-label="habit.name">
+          <!-- Habit Name -->
+          <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
+            <div class="d-flex align-items-center gap-2 me-2">
+              <i class="bi bi-fire" :class="getFireColor(scopeData[scope].streaks[habit.id])"></i>
+              <span class="text-secondary fw-medium small">{{ scopeData[scope].streaks[habit.id] }}</span>
+            </div>
+            <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
           </div>
-          <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
-        </div>
 
-        <!-- Interval Cells -->
-        <div class="d-flex flex-fill gap-2">
-          <div
-            v-for="(window, index) in scopeData.day.windows.windows"
-            :key="`${habit.id}-${window.intervalId}`"
-            class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{
-              'bg-primary bg-opacity-10 rounded': index === scopeData.day.windows.currentIndex,
-            }"
-            style="min-width: 60px"
-          >
-            <div class="form-check d-flex justify-content-center">
-              <input
-                :id="`${habit.id}-${window.intervalId}`"
-                class="form-check-input"
-                type="checkbox"
-                :checked="isDone(habit.id, 'day', window.intervalId)"
-                @change="toggleHabit(habit.id, 'day', window.intervalId)"
-                :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, 'day', window.intervalId) ? 'Done' : 'Not done'}`"
-              />
+          <!-- Interval Cells -->
+          <div class="d-flex flex-fill gap-2">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" 
+                 :key="`${habit.id}-${window.intervalId}`"
+                 class="flex-fill d-flex align-items-center justify-content-center p" 
+                 :class="{
+                   'bg-primary bg-opacity-10 rounded': windowIndex === scopeData[scope].windows.currentIndex,
+                 }" 
+                 style="min-width: 60px">
+              <div class="form-check d-flex justify-content-center">
+                <input :id="`${habit.id}-${window.intervalId}`" 
+                       class="form-check-input" 
+                       type="checkbox" 
+                    role="switch"
+                    :aria-checked="isDone(habit.id, window.intervalId)"
+                       :checked="isDone(habit.id, window.intervalId)"
+                       @change="toggleHabit(habit.id, window.intervalId)"
+                       :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, window.intervalId) ? 'Done' : 'Not done'}`" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else class="text-muted">
-      <p>No daily habits configured.</p>
-    </div>
-  </ArticleTemplate>
-
-  <!-- Weekly Habits -->
-  <ArticleTemplate title="Weekly Habits" meta="Aug 6, 2025 by G. D. Ungureanu">
-    <div class="small" v-if="scopeData.week.habits.length > 0">
-      <!-- Column Headers -->
-      <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
-        <div class="habit-name-column"></div>
-        <div class="d-flex flex-fill gap-2">
-          <div v-for="(window, index) in scopeData.week.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.week.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
-            <small>{{ window.label }}</small>
-          </div>
-        </div>
+      <div v-else class="text-muted">
+        <p>No {{ scopeConfig[scope].plural }} habits configured.</p>
       </div>
-
-      <!-- Habit Rows -->
-      <div v-for="habit in scopeData.week.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
-        <!-- Habit Name -->
-        <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
-          <div class="d-flex align-items-center gap-2 me-2">
-            <i class="bi bi-fire" :class="getFireColor(scopeData.week.counts[habit.id] || 0)" :title="`${scopeData.week.counts[habit.id] || 0} completions`"></i>
-            <span class="text-secondary fw-medium small">{{ scopeData.week.counts[habit.id] || 0 }}</span>
-          </div>
-          <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
-        </div>
-
-        <!-- Interval Cells -->
-        <div class="d-flex flex-fill gap-2">
-          <div
-            v-for="(window, index) in scopeData.week.windows.windows"
-            :key="`${habit.id}-${window.intervalId}`"
-            class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{
-              'bg-primary bg-opacity-10 rounded': index === scopeData.week.windows.currentIndex,
-            }"
-            style="min-width: 60px"
-          >
-            <div class="form-check d-flex justify-content-center">
-              <input
-                :id="`${habit.id}-${window.intervalId}`"
-                class="form-check-input"
-                type="checkbox"
-                :checked="isDone(habit.id, 'week', window.intervalId)"
-                @change="toggleHabit(habit.id, 'week', window.intervalId)"
-                :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, 'week', window.intervalId) ? 'Done' : 'Not done'}`"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="text-muted">
-      <p>No weekly habits configured.</p>
-    </div>
-  </ArticleTemplate>
-
-  <!-- Monthly Habits -->
-  <ArticleTemplate title="Monthly Habits" meta="Aug 6, 2025 by G. D. Ungureanu">
-    <div class="small" v-if="scopeData.month.habits.length > 0">
-      <!-- Column Headers -->
-      <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
-        <div class="habit-name-column"></div>
-        <div class="d-flex flex-fill gap-2">
-          <div v-for="(window, index) in scopeData.month.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.month.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
-            <small>{{ window.label }}</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- Habit Rows -->
-      <div v-for="habit in scopeData.month.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
-        <!-- Habit Name -->
-        <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
-          <div class="d-flex align-items-center gap-2 me-2">
-            <i class="bi bi-fire" :class="getFireColor(scopeData.month.counts[habit.id] || 0)" :title="`${scopeData.month.counts[habit.id] || 0} completions`"></i>
-            <span class="text-secondary fw-medium small">{{ scopeData.month.counts[habit.id] || 0 }}</span>
-          </div>
-          <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
-        </div>
-
-        <!-- Interval Cells -->
-        <div class="d-flex flex-fill gap-2">
-          <div
-            v-for="(window, index) in scopeData.month.windows.windows"
-            :key="`${habit.id}-${window.intervalId}`"
-            class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{
-              'bg-primary bg-opacity-10 rounded': index === scopeData.month.windows.currentIndex,
-            }"
-            style="min-width: 60px"
-          >
-            <div class="form-check d-flex justify-content-center">
-              <input
-                :id="`${habit.id}-${window.intervalId}`"
-                class="form-check-input"
-                type="checkbox"
-                :checked="isDone(habit.id, 'month', window.intervalId)"
-                @change="toggleHabit(habit.id, 'month', window.intervalId)"
-                :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, 'month', window.intervalId) ? 'Done' : 'Not done'}`"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="text-muted">
-      <p>No monthly habits configured.</p>
-    </div>
-  </ArticleTemplate>
-
-  <!-- Yearly Habits -->
-  <ArticleTemplate title="Yearly Habits" meta="Aug 6, 2025 by G. D. Ungureanu">
-    <div class="small" v-if="scopeData.year.habits.length > 0">
-      <!-- Column Headers -->
-      <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
-        <div class="habit-name-column"></div>
-        <div class="d-flex flex-fill gap-2">
-          <div v-for="(window, index) in scopeData.year.windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary" :class="{ 'text-primary fw-semibold': index === scopeData.year.windows.currentIndex }" style="min-width: 60px; font-size: 1rem">
-            <small>{{ window.label }}</small>
-          </div>
-        </div>
-      </div>
-
-      <!-- Habit Rows -->
-      <div v-for="habit in scopeData.year.habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
-        <!-- Habit Name -->
-        <div class="d-flex align-items-center p-2 me-3 border rounded habit-name-column">
-          <div class="d-flex align-items-center gap-2 me-2">
-            <i class="bi bi-fire" :class="getFireColor(scopeData.year.counts[habit.id] || 0)" :title="`${scopeData.year.counts[habit.id] || 0} completions`"></i>
-            <span class="text-secondary fw-medium small">{{ scopeData.year.counts[habit.id] || 0 }}</span>
-          </div>
-          <div class="text-truncate fw-medium text-dark-emphasis small">{{ habit.name }}</div>
-        </div>
-
-        <!-- Interval Cells -->
-        <div class="d-flex flex-fill gap-2">
-          <div
-            v-for="(window, index) in scopeData.year.windows.windows"
-            :key="`${habit.id}-${window.intervalId}`"
-            class="flex-fill d-flex align-items-center justify-content-center p"
-            :class="{
-              'bg-primary bg-opacity-10 rounded': index === scopeData.year.windows.currentIndex,
-            }"
-            style="min-width: 60px"
-          >
-            <div class="form-check d-flex justify-content-center">
-              <input
-                :id="`${habit.id}-${window.intervalId}`"
-                class="form-check-input"
-                type="checkbox"
-                :checked="isDone(habit.id, 'year', window.intervalId)"
-                @change="toggleHabit(habit.id, 'year', window.intervalId)"
-                :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, 'year', window.intervalId) ? 'Done' : 'Not done'}`"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else class="text-muted">
-      <p>No yearly habits configured.</p>
-    </div>
-  </ArticleTemplate>
+    </ArticleTemplate>
+  </div>
 </template>
 
 <style scoped>
-  /* Minimal custom CSS - most styling now handled by Bootstrap */
-  .habit-name-column {
-    width: 200px;
-    flex-shrink: 0;
-  }
+/* Minimal custom CSS - most styling now handled by Bootstrap */
+.habit-name-column {
+  width: 200px;
+  flex-shrink: 0;
+}
 
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .habit-name-column {
-      width: 150px;
-    }
+/* Responsive design */
+@media (max-width: 768px) {
+  .habit-name-column {
+    width: 150px;
   }
+}
 </style>
