@@ -17,7 +17,6 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "fix": "npm run lint:fix && npm run format",
-    "check:variables": "node scripts/checkVariableNames.js",
     "test:components": "vitest run --dir tests/components",
     "test:composables": "node --test --experimental-test-coverage tests/composables/**/*.js",
     "test:router": "node --test --experimental-test-coverage tests/router/**/*.js",
