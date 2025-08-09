@@ -14,7 +14,7 @@
     <ActionsTemplate list-id="15558a7c-1af5-4c35-9207-488c8742b99b" />
   </ArticleTemplate>
 
-  <ArticleTemplate title="Notes" meta="Jav 7, 2025 by G. D. Ungureanu">
+  <ArticleTemplate title="Notes" meta="Jun 7, 2025 by G. D. Ungureanu">
     <SuggestionsTemplate :suggestions="suggestions" />
   </ArticleTemplate>
 
