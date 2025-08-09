@@ -267,10 +267,26 @@
     }
   }
 
-  onMounted(async () => {
-    const { default: L } = await import('leaflet')
-    await import('leaflet/dist/leaflet.css')
-    await initializeMap(L)
+  onMounted(() => {
+    const loadMap = async () => {
+      const { default: L } = await import('leaflet')
+      await import('leaflet/dist/leaflet.css')
+      await initializeMap(L)
+    }
+
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(async (entries, obs) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          obs.disconnect()
+          await loadMap()
+        }
+      })
+      if (mapElement.value) {
+        observer.observe(mapElement.value)
+      }
+    } else {
+      loadMap()
+    }
   })
 </script>
 
@@ -506,7 +522,7 @@
   <ArticleTemplate title="Destinations Map" meta="August 4, 2025 by G. D. Ungureanu">
     <div class="mb-4">
       <!-- Loading State -->
-      <div v-if="isLoading" class="map-container mb-4 d-flex align-items-center justify-content-center">
+      <div v-if="isLoading" ref="mapElement" class="map-container mb-4 d-flex align-items-center justify-content-center">
         <div class="text-center">
           <div class="spinner-border text-primary mb-2" role="status" aria-live="polite" aria-label="Loading map data">
             <span class="visually-hidden">Loading...</span>
@@ -516,7 +532,7 @@
       </div>
 
       <!-- Error State -->
-      <div v-else-if="loadError" class="map-container mb-4 d-flex align-items-center justify-content-center">
+      <div v-else-if="loadError" ref="mapElement" class="map-container mb-4 d-flex align-items-center justify-content-center">
         <div class="text-center">
           <i class="bi bi-exclamation-triangle text-warning fs-1 mb-2"></i>
           <p class="text-danger">Failed to load map data</p>
