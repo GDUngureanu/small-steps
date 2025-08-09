@@ -367,8 +367,8 @@ Contrast verification (AA):
     const windows = []
 
     // Generate I-10 to I-1
-    for (let i = 10; i >= 1; i--) {
-      const intervalStart = shiftInterval(currentInterval, scope, -i)
+    for (let offset = 10; offset >= 1; offset--) {
+      const intervalStart = shiftInterval(currentInterval, scope, -offset)
       const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
       intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
 
@@ -391,8 +391,8 @@ Contrast verification (AA):
     })
 
     // Generate I+1 to I+2
-    for (let i = 1; i <= 2; i++) {
-      const intervalStart = shiftInterval(currentInterval, scope, i)
+    for (let offset = 1; offset <= 2; offset++) {
+      const intervalStart = shiftInterval(currentInterval, scope, offset)
       const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
       intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
 
@@ -464,10 +464,12 @@ Contrast verification (AA):
 
   // Computed properties for each scope
   const scopeData = computed(() => {
-    const data = {}
+    const scopeDetails = {}
 
     allScopes.forEach((scope) => {
-      const habits = habitsData.habits.filter((habit) => habit.scope === scope && !habit.archived).sort((a, b) => (a.sort || 0) - (b.sort || 0))
+      const habits = habitsData.habits
+        .filter((habit) => habit.scope === scope && !habit.archived)
+        .sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
 
       const windows = computeWindows(scope, currentTime.value)
 
@@ -476,14 +478,14 @@ Contrast verification (AA):
         counts[habit.id] = computeCompletionCount(habit.id, scope)
       })
 
-      data[scope] = {
+      scopeDetails[scope] = {
         habits,
         windows,
         counts,
       }
     })
 
-    return data
+    return scopeDetails
   })
 
 
