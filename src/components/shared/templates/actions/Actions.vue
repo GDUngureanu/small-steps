@@ -63,10 +63,10 @@
   // Computed properties for better performance
   const rootActions = computed(() => {
     const filtered = actions.value.filter((action) => !action.parent_id)
-    // Sort by status (incomplete first), then by creation date (oldest first)
+    // Sort by completed status (incomplete first), then by creation date (oldest first)
     return filtered.sort((action_a, action_b) => {
-      if (action_a.status !== action_b.status) {
-        return action_a.status ? 1 : -1 // Incomplete (false) first, completed (true) last
+      if (action_a.completed !== action_b.completed) {
+        return action_a.completed ? 1 : -1 // Incomplete (false) first, completed (true) last
       }
       return new Date(action_a.created_at) - new Date(action_b.created_at) // Oldest first within each group
     })
@@ -86,8 +86,8 @@
     // Sort sub-actions within each parent group
     map.forEach((subActions) => {
       subActions.sort((action_a, action_b) => {
-        if (action_a.status !== action_b.status) {
-          return action_a.status ? 1 : -1 // Incomplete first, completed last
+        if (action_a.completed !== action_b.completed) {
+          return action_a.completed ? 1 : -1 // Incomplete first, completed last
         }
         return new Date(action_a.created_at) - new Date(action_b.created_at) // Oldest first within each group
       })
@@ -111,11 +111,16 @@
       loading.value = true
       error.value = null
 
+      const oneWeekAgo = new Date()
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+      const oneWeekAgoISO = oneWeekAgo.toISOString()
+
       const { data: fetchedActions, error: fetchError } = await supabase
         .from('actions')
-        .select('id, description, status, priority, created_at, parent_id')
+        .select('id, description, completed, priority, created_at, completed_at, parent_id')
         .eq('list_id', props.listId)
-        .is('deleted_at', null)
+        .eq('archived', false)
+        .or(`completed.eq.false,completed_at.is.null,completed_at.gte.${oneWeekAgoISO}`)
         .order('created_at', { ascending: false })
 
       if (fetchError) throw fetchError
@@ -142,14 +147,14 @@
         description: text.trim(),
         list_id: props.listId,
         parent_id: parentId,
-        status: false,
+        completed: false,
         priority: PRIORITY_LEVELS.LOW,
       }
 
       const { data: insertedActions, error: insertError } = await supabase
         .from('actions')
         .insert([actionData])
-        .select('id, description, status, priority, created_at, parent_id')
+        .select('id, description, completed, priority, created_at, completed_at, parent_id')
 
       if (insertError) throw insertError
 
@@ -180,28 +185,47 @@
     }
   }
 
-  const updateActionStatus = async (action) => {
-    // Store original status for rollback
-    const originalStatus = action.status
+  const updateActionStatus = async (actionOrId) => {
+    // Handle both action object and action ID
+    const action = typeof actionOrId === 'string' 
+      ? actions.value.find(a => a.id === actionOrId)
+      : actionOrId
+
+    if (!action) return
+
+    // Toggle the completed status
+    const newCompleted = !action.completed
+    
+    // Store original completed status for rollback
+    const originalCompleted = action.completed
+
+    // Optimistically update the UI
+    action.completed = newCompleted
 
     // Track optimistic update
     optimisticUpdates.value.set(action.id, {
-      type: 'status',
-      originalValue: originalStatus,
+      type: 'completed',
+      originalValue: originalCompleted,
     })
 
+    const now = new Date().toISOString()
+    const updateData = {
+      completed: newCompleted,
+      completed_at: newCompleted ? now : null
+    }
+
     try {
-      const { error: updateError } = await supabase.from('actions').update({ status: action.status }).eq('id', action.id)
+      const { error: updateError } = await supabase.from('actions').update(updateData).eq('id', action.id)
 
       if (updateError) throw updateError
 
-      // Update child actions status if parent is completed
-      if (action.status) {
+      // Update child actions completed status if parent is completed
+      if (action.completed) {
         const collectChildIds = (parentId) => {
           const children = getSubActions(parentId)
           let ids = []
           for (const child of children) {
-            if (!child.status) ids.push(child.id)
+            if (!child.completed) ids.push(child.id)
             ids = ids.concat(collectChildIds(child.id))
           }
           return ids
@@ -212,14 +236,17 @@
         if (childIds.length > 0) {
           const { error: childUpdateError } = await supabase
             .from('actions')
-            .update({ status: true })
+            .update({ completed: true, completed_at: now })
             .in('id', childIds)
 
           if (childUpdateError) throw childUpdateError
 
           const idSet = new Set(childIds)
       actions.value.forEach((actionItem) => {
-        if (idSet.has(actionItem.id)) actionItem.status = true
+        if (idSet.has(actionItem.id)) {
+          actionItem.completed = true
+          actionItem.completed_at = now
+        }
       })
         }
       }
@@ -232,8 +259,8 @@
     } catch (exception) {
       error.value = exception.message
       // Exception thrown while updating action status
-      // Revert status on error
-      action.status = originalStatus
+      // Revert completed status on error
+      action.completed = originalCompleted
       optimisticUpdates.value.delete(action.id)
     }
   }
@@ -282,10 +309,10 @@
 
       const idsToDelete = collectIds(actionId)
 
-      // Soft delete: update deleted_at instead of actual deletion
+      // Soft delete: update archived instead of actual deletion
       const { error: deleteError } = await supabase
         .from('actions')
-        .update({ deleted_at: new Date().toISOString() })
+        .update({ archived: true })
         .in('id', idsToDelete)
 
       if (deleteError) throw deleteError
@@ -346,7 +373,7 @@
 
   // Utility functions
   const getActionClasses = (action) => ({
-    'text-decoration-line-through text-muted': action.status,
+    'text-decoration-line-through text-muted': action.completed,
     'opacity-75': optimisticUpdates.value.has(action.id),
   })
 

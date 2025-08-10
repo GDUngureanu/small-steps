@@ -5,7 +5,7 @@ A Vue 3 single-page application that serves as a personal passion project focuse
 ## Features
 
 - Interactive checklists and suggestions for various life areas
-- Multiple sections: Home, Ikigai, Ippo, Literature (Books, Poems), Entertainment (Anime, Movies), Nutrition, Adventure, Habits, Experiments, and Random
+- Multiple sections: Home, Ikigai, Ippo, Literature (Books, Poems), Entertainment (Anime, Movies), Nutrition, Adventure, Habbit, Experiments, and Random
 - Password-protected sections for personal content
 - Responsive design using Bootstrap 5.3+
 - Client-side routing with Vue Router

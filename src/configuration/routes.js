@@ -30,9 +30,9 @@ const Ingredients = () => import('@/pages/nutrition/ingredients/Ingredients.vue'
 const Adventure = () => import('@/pages/adventure/Adventure.vue')
 const Destinations = () => import('@/pages/adventure/destinations/Destinations.vue')
 
-// Habits Components
-const Habits = () => import('@/pages/practice/Practice.vue')
-const Routines = () => import('@/pages/practice/routines/Routines.vue')
+// Habit Components
+const Habit = () => import('@/pages/habit/Habit.vue')
+const Routines = () => import('@/pages/habit/routines/Routines.vue')
 // Not Found
 const NotFound = () => import('@/pages/NotFound.vue')
 
@@ -52,7 +52,7 @@ export default [
   { path: '/nutrition/ingredients', component: Ingredients, meta: { label: 'Ingredients', group: 'nutrition', requiresAuth: false } },
   { path: '/adventure', component: Adventure, meta: { label: 'Overview', group: 'adventure', requiresAuth: false } },
   { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
-  { path: '/habits', component: Habits, meta: { label: 'Overview', group: 'habits', requiresAuth: true } },
-  { path: '/habits/routines', component: Routines, meta: { label: 'Routines', group: 'habits', requiresAuth: true } },
+  { path: '/habit', component: Habit, meta: { label: 'Overview', group: 'habit', requiresAuth: true } },
+  { path: '/habit/routines', component: Routines, meta: { label: 'Routines', group: 'habit', requiresAuth: true } },
   { path: '/:pathMatch(.*)*', component: NotFound },
 ]

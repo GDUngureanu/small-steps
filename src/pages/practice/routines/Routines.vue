@@ -447,65 +447,42 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 <template>
   <!-- Add New Habit Section -->
   <ArticleTemplate title="Add New Habit" meta="Create custom habits for your routine">
-    <!-- Add Habit Form -->
-    <div class="border rounded p-3 bg-light">
-      <!-- Success Message -->
-      <div v-if="formSuccess" class="alert alert-success d-flex align-items-center" role="alert">
-        <i class="bi bi-check-circle me-2"></i>
-        Habit created successfully!
-      </div>
-
-      <!-- Error Message -->
-      <div v-if="formError" class="alert alert-danger d-flex align-items-center" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ formError }}
-      </div>
-
-      <form @submit.prevent="addNewHabit" class="row g-3">
-        <!-- Habit Name -->
-        <div class="col-md-6">
-          <label for="habit-name" class="form-label fw-medium">Habit Name <span class="text-danger">*</span></label>
-          <input id="habit-name" v-model="newHabitForm.name" type="text" class="form-control" placeholder="e.g., Morning Exercise" maxlength="100" required :disabled="formLoading">
-        </div>
-
-        <!-- Scope Selection -->
-        <div class="col-md-3">
-          <label for="habit-scope" class="form-label fw-medium">Frequency</label>
-          <select id="habit-scope" v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
-            <option value="day">Daily</option>
-            <option value="week">Weekly</option>
-            <option value="month">Monthly</option>
-            <option value="year">Yearly</option>
-          </select>
-        </div>
-
-        <!-- Category -->
-        <div class="col-md-3">
-          <label for="habit-category" class="form-label fw-medium">Category <span class="text-danger">*</span></label>
-          <div class="d-flex gap-2">
-            <input id="habit-category" v-model="newHabitForm.category" type="text" class="form-control" placeholder="e.g., Health" maxlength="50" list="category-suggestions"
-              required :disabled="formLoading">
-            <datalist id="category-suggestions">
-              <option v-for="category in allCategories" :key="category" :value="category"></option>
-            </datalist>
-          </div>
-        </div>
-
-        <!-- Form Actions -->
-        <div class="col-12 d-flex gap-2 justify-content-end">
-          <button type="button" @click="resetForm" class="btn btn-outline-secondary btn-sm" :disabled="formLoading">
-            <i class="bi bi-arrow-clockwise me-1"></i>
-            Reset
-          </button>
-          <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1"
-            :disabled="formLoading || !newHabitForm.name.trim() || !newHabitForm.category.trim()">
-            <div v-if="formLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
-            <i v-else class="bi bi-plus-lg"></i>
-            {{ formLoading ? 'Creating...' : 'Create Habit' }}
-          </button>
-        </div>
-      </form>
+    <!-- Success/Error Messages -->
+    <div v-if="formSuccess" class="alert alert-success mb-3" role="alert">
+      Habit created successfully!
     </div>
+    <div v-if="formError" class="alert alert-danger mb-3" role="alert">
+      {{ formError }}
+    </div>
+
+    <!-- Minimalist Form -->
+    <form @submit.prevent="addNewHabit" class="d-flex gap-2 align-items-end">
+      <div class="flex-grow-1">
+        <input v-model="newHabitForm.name" type="text" class="form-control" 
+               placeholder="Habit name" maxlength="100" required :disabled="formLoading">
+      </div>
+      <div>
+        <select v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
+          <option value="day">Daily</option>
+          <option value="week">Weekly</option>
+          <option value="month">Monthly</option>
+          <option value="year">Yearly</option>
+        </select>
+      </div>
+      <div>
+        <input v-model="newHabitForm.category" type="text" class="form-control" 
+               placeholder="Category" maxlength="50" list="category-suggestions"
+               required :disabled="formLoading">
+        <datalist id="category-suggestions">
+          <option v-for="category in allCategories" :key="category" :value="category"></option>
+        </datalist>
+      </div>
+      <button type="submit" class="btn btn-primary"
+              :disabled="formLoading || !newHabitForm.name.trim() || !newHabitForm.category.trim()">
+        <div v-if="formLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        <i v-else class="bi bi-plus-lg"></i>
+      </button>
+    </form>
   </ArticleTemplate>
 
   <!-- Existing Habits Sections -->

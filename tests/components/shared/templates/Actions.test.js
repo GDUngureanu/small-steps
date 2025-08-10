@@ -27,6 +27,7 @@ beforeEach(() => {
   }
   fromMock.mockReset()
 })
+
 test('fetches actions and caches them', async () => {
   const listId = 'list1'
   let resolveFetch
@@ -37,8 +38,10 @@ test('fetches actions and caches them', async () => {
   fromMock.mockImplementationOnce(() => ({
     select: vi.fn(() => ({
       eq: vi.fn(() => ({
-        is: vi.fn(() => ({
-          order: vi.fn(() => fetchPromise),
+        eq: vi.fn(() => ({
+          or: vi.fn(() => ({
+            order: vi.fn(() => fetchPromise),
+          })),
         })),
       })),
     })),
@@ -53,7 +56,7 @@ test('fetches actions and caches them', async () => {
     description: 'Test',
     list_id: listId,
     parent_id: null,
-    status: false,
+    completed: false,
     created_at: '2024-01-01',
     priority: 'LOW',
   }
@@ -73,8 +76,10 @@ test('handles fetch error state', async () => {
   fromMock.mockImplementationOnce(() => ({
     select: vi.fn(() => ({
       eq: vi.fn(() => ({
-        is: vi.fn(() => ({
-          order: vi.fn().mockResolvedValue({ data: null, error: { message: 'fail' } }),
+        eq: vi.fn(() => ({
+          or: vi.fn(() => ({
+            order: vi.fn().mockResolvedValue({ data: null, error: { message: 'fail' } }),
+          })),
         })),
       })),
     })),
@@ -95,7 +100,7 @@ test('creates new action and resets state', async () => {
     description: 'created',
     list_id: listId,
     parent_id: null,
-    status: false,
+    completed: false,
     created_at: '2024-01-02',
     priority: 'LOW',
   }
@@ -104,8 +109,10 @@ test('creates new action and resets state', async () => {
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [], error: null }),
+            })),
           })),
         })),
       })),
@@ -133,7 +140,7 @@ test('creates new action and resets state', async () => {
 
 test('uses cached actions without fetching', async () => {
   const listId = 'list1'
-  const cached = [{ id: 1, description: 'Cached', list_id: listId, parent_id: null, status: false, created_at: '2024-01-03', priority: 'LOW' }]
+  const cached = [{ id: 1, description: 'Cached', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-03', priority: 'LOW' }]
   sessionStorage.setItem(`actions_${listId}`, JSON.stringify({ data: cached, timestamp: Date.now() }))
 
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
@@ -145,9 +152,9 @@ test('uses cached actions without fetching', async () => {
 
 test('marks action complete updates all descendants in one request and local state', async () => {
   const listId = 'list1'
-  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
-  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
-  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, status: false, created_at: '2024-01-03', priority: 'LOW' }
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, completed: false, created_at: '2024-01-02', priority: 'LOW' }
+  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, completed: false, created_at: '2024-01-03', priority: 'LOW' }
 
   const childUpdateSpy = vi.fn().mockResolvedValue({ data: null, error: null })
 
@@ -155,8 +162,10 @@ test('marks action complete updates all descendants in one request and local sta
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+            })),
           })),
         })),
       })),
@@ -175,15 +184,14 @@ test('marks action complete updates all descendants in one request and local sta
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
   await flushPromises()
 
-  parent.status = true
   await wrapper.vm.updateActionStatus(parent)
   await flushPromises()
 
   expect(childUpdateSpy).toHaveBeenCalledTimes(1)
   expect(childUpdateSpy).toHaveBeenCalledWith('id', [2, 3])
-  expect(wrapper.vm.actions.map((a) => a.status)).toEqual([true, true, true])
+  expect(wrapper.vm.actions.map((a) => a.completed)).toEqual([true, true, true])
   const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
-  expect(cache.data.map((a) => a.status)).toEqual([true, true, true])
+  expect(cache.data.map((a) => a.completed)).toEqual([true, true, true])
   expect(fromMock).toHaveBeenCalledTimes(3)
 })
 
@@ -194,7 +202,7 @@ test('unmarking a parent does not change descendant statuses', async () => {
     description: 'parent',
     list_id: listId,
     parent_id: null,
-    status: true,
+    completed: true,
     created_at: '2024-01-01',
     priority: 'LOW',
   }
@@ -203,7 +211,7 @@ test('unmarking a parent does not change descendant statuses', async () => {
     description: 'child',
     list_id: listId,
     parent_id: 1,
-    status: true,
+    completed: true,
     created_at: '2024-01-02',
     priority: 'LOW',
   }
@@ -212,7 +220,7 @@ test('unmarking a parent does not change descendant statuses', async () => {
     description: 'grand',
     list_id: listId,
     parent_id: 2,
-    status: true,
+    completed: true,
     created_at: '2024-01-03',
     priority: 'LOW',
   }
@@ -225,8 +233,10 @@ test('unmarking a parent does not change descendant statuses', async () => {
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild], error: null }),
+            })),
           })),
         })),
       })),
@@ -238,7 +248,6 @@ test('unmarking a parent does not change descendant statuses', async () => {
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
   await flushPromises()
 
-  parent.status = false
   await wrapper.vm.updateActionStatus(parent)
   await flushPromises()
 
@@ -248,30 +257,32 @@ test('unmarking a parent does not change descendant statuses', async () => {
   const parentAction = wrapper.vm.actions.find((a) => a.id === 1)
   const childAction = wrapper.vm.actions.find((a) => a.id === 2)
   const grandchildAction = wrapper.vm.actions.find((a) => a.id === 3)
-  expect(parentAction.status).toBe(false)
-  expect(childAction.status).toBe(true)
-  expect(grandchildAction.status).toBe(true)
+  expect(parentAction.completed).toBe(false)
+  expect(childAction.completed).toBe(true)
+  expect(grandchildAction.completed).toBe(true)
 
   const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
   const cacheParent = cache.data.find((a) => a.id === 1)
   const cacheChild = cache.data.find((a) => a.id === 2)
   const cacheGrandchild = cache.data.find((a) => a.id === 3)
-  expect(cacheParent.status).toBe(false)
-  expect(cacheChild.status).toBe(true)
-  expect(cacheGrandchild.status).toBe(true)
+  expect(cacheParent.completed).toBe(false)
+  expect(cacheChild.completed).toBe(true)
+  expect(cacheGrandchild.completed).toBe(true)
 })
 
 test('handles status update failure and reverts local state', async () => {
   const listId = 'list1'
-  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
-  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, completed: false, created_at: '2024-01-02', priority: 'LOW' }
 
   fromMock
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+            })),
           })),
         })),
       })),
@@ -285,23 +296,22 @@ test('handles status update failure and reverts local state', async () => {
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
   await flushPromises()
 
-  parent.status = true
   await wrapper.vm.updateActionStatus(parent)
   await flushPromises()
 
-  expect(wrapper.vm.actions.map((a) => a.status)).toEqual([true, false])
+  expect(wrapper.vm.actions.map((a) => a.completed)).toEqual([false, false])
   expect(wrapper.vm.error).toBe('fail')
   const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
-  expect(cache.data.map((a) => a.status)).toEqual([false, false])
+  expect(cache.data.map((a) => a.completed)).toEqual([false, false])
   expect(fromMock).toHaveBeenCalledTimes(2)
 })
 
 test('soft deletes action and descendants in one request updating local state and cache', async () => {
   const listId = 'list1'
-  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
-  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
-  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, status: false, created_at: '2024-01-03', priority: 'LOW' }
-  const other = { id: 4, description: 'other', list_id: listId, parent_id: null, status: false, created_at: '2024-01-04', priority: 'LOW' }
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, completed: false, created_at: '2024-01-02', priority: 'LOW' }
+  const grandchild = { id: 3, description: 'grand', list_id: listId, parent_id: 2, completed: false, created_at: '2024-01-03', priority: 'LOW' }
+  const other = { id: 4, description: 'other', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-04', priority: 'LOW' }
 
   const deleteSpy = vi.fn().mockResolvedValue({ data: null, error: null })
 
@@ -309,8 +319,10 @@ test('soft deletes action and descendants in one request updating local state an
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild, other], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [parent, child, grandchild, other], error: null }),
+            })),
           })),
         })),
       })),
@@ -324,7 +336,7 @@ test('soft deletes action and descendants in one request updating local state an
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
   await flushPromises()
 
-  await wrapper.vm.deleteAction(parent.id)
+  await wrapper.vm.deleteAction(1)
   await flushPromises()
 
   expect(deleteSpy).toHaveBeenCalledTimes(1)
@@ -337,15 +349,17 @@ test('soft deletes action and descendants in one request updating local state an
 
 test('handles delete failure and preserves state', async () => {
   const listId = 'list1'
-  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, status: false, created_at: '2024-01-01', priority: 'LOW' }
-  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, status: false, created_at: '2024-01-02', priority: 'LOW' }
+  const parent = { id: 1, description: 'parent', list_id: listId, parent_id: null, completed: false, created_at: '2024-01-01', priority: 'LOW' }
+  const child = { id: 2, description: 'child', list_id: listId, parent_id: 1, completed: false, created_at: '2024-01-02', priority: 'LOW' }
 
   fromMock
     .mockImplementationOnce(() => ({
       select: vi.fn(() => ({
         eq: vi.fn(() => ({
-          is: vi.fn(() => ({
-            order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+          eq: vi.fn(() => ({
+            or: vi.fn(() => ({
+              order: vi.fn().mockResolvedValue({ data: [parent, child], error: null }),
+            })),
           })),
         })),
       })),
@@ -359,7 +373,7 @@ test('handles delete failure and preserves state', async () => {
   const wrapper = mount(ActionsTemplate, { props: { listId }, global: { stubs } })
   await flushPromises()
 
-  await wrapper.vm.deleteAction(parent.id)
+  await wrapper.vm.deleteAction(1)
   await flushPromises()
 
   expect(wrapper.vm.actions).toEqual([parent, child])
@@ -367,5 +381,5 @@ test('handles delete failure and preserves state', async () => {
   const cache = JSON.parse(sessionStorage.getItem(`actions_${listId}`))
   expect(cache.data).toEqual([parent, child])
   expect(fromMock).toHaveBeenCalledTimes(2)
+  expect(wrapper.vm.loading).toBe(false)
 })
-

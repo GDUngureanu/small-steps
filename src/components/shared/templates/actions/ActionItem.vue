@@ -1,7 +1,7 @@
 <script setup>
   import { PRIORITY_LEVELS, getPriorityClass, getPriorityText, formatDate } from './utils.js'
 
-  defineProps({
+  const props = defineProps({
     action: { type: Object, required: true },
     editingActionId: { type: [String, Number, null], required: true },
     editingActionText: { type: String, required: true },
@@ -22,13 +22,18 @@
 
   const emit = defineEmits(['update:editingActionText', 'update:newSubActionText', 'setRef'])
 
+  const handleStatusToggle = () => {
+    // Pass the action ID to let parent handle the toggle
+    props.updateActionStatus(props.action.id)
+  }
+
   defineOptions({ name: 'ActionItem' })
 </script>
 
 <template>
   <div class="form-check hover-group mt-2">
     <div class="d-flex align-items-start">
-      <input type="checkbox" class="form-check-input actions-checkbox" :id="`action-${action.id}`" :checked="action.status" @change="updateActionStatus(action)" />
+      <input type="checkbox" class="form-check-input actions-checkbox" :id="`action-${action.id}`" :checked="action.completed" @change="handleStatusToggle" />
 
       <div class="flex-grow-1">
         <div v-if="editingActionId === action.id">

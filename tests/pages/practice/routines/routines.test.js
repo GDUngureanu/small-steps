@@ -20,10 +20,10 @@ test('Add new habit form is always visible', async () => {
   
   // Form should be visible without any toggle action
   expect(wrapper.html()).toContain('Add New Habit')
-  expect(wrapper.html()).toContain('habit-name')
-  expect(wrapper.html()).toContain('habit-scope') 
-  expect(wrapper.html()).toContain('habit-category')
-  expect(wrapper.html()).toContain('Create Habit')
+  expect(wrapper.html()).toContain('placeholder="Habit name"')
+  expect(wrapper.html()).toContain('form-select') 
+  expect(wrapper.html()).toContain('placeholder="Category"')
+  expect(wrapper.html()).toContain('bi-plus-lg')
   
   // Should not contain toggle button elements
   expect(wrapper.html()).not.toContain('bi-plus-circle')
