@@ -18,7 +18,7 @@
     <h4>Available Habit Modules:</h4>
     <ul>
       <li>
-        <router-link to="/habits/routines"><strong>Routine Tracking</strong></router-link> - Track daily, weekly, monthly, and yearly habits with streak analytics
+        <router-link to="/habits/tracker"><strong>Habit Tracking</strong></router-link> - Track daily, weekly, monthly, and yearly habits with streak analytics
       </li>
     </ul>
 

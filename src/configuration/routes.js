@@ -32,9 +32,7 @@ const Destinations = () => import('@/pages/adventure/destinations/Destinations.v
 
 // Habit Components
 const Habit = () => import('@/pages/habit/Habit.vue')
-const Routines = () => import('@/pages/habit/routines/Routines.vue')
-// Not Found
-const NotFound = () => import('@/pages/NotFound.vue')
+const Tracker = () => import('@/pages/habit/tracker/Tracker.vue')
 
 export default [
   { path: '/', component: Home, meta: { label: 'Home', group: null, requiresAuth: false } },
@@ -53,6 +51,5 @@ export default [
   { path: '/adventure', component: Adventure, meta: { label: 'Overview', group: 'adventure', requiresAuth: false } },
   { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
   { path: '/habit', component: Habit, meta: { label: 'Overview', group: 'habit', requiresAuth: true } },
-  { path: '/habit/routines', component: Routines, meta: { label: 'Routines', group: 'habit', requiresAuth: true } },
-  { path: '/:pathMatch(.*)*', component: NotFound },
+  { path: '/habit/tracker', component: Tracker, meta: { label: 'Tracker', group: 'habit', requiresAuth: true } },
 ]

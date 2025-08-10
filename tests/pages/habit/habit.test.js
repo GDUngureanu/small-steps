@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../pageTestUtils.js'
 
-const file = 'src/pages/practice/Habit.vue'
+const file = 'src/pages/habit/Habit.vue'
 const path = '/habits'
 
 test('Habits page renders without errors', async () => {

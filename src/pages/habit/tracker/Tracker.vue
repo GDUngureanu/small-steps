@@ -6,7 +6,7 @@ import { useActivities } from '@/composables/useActivities.js'
 
 
 defineOptions({
-  name: 'RoutinesTemplate',
+  name: 'HabitTrackerTemplate',
 })
 
 // Initialize composables
@@ -446,7 +446,7 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
 
 <template>
   <!-- Add New Habit Section -->
-  <ArticleTemplate title="Add New Habit" meta="Create custom habits for your routine">
+  <ArticleTemplate title="Add Habit Tracker" meta="Aug 6, 2025 by G. D. Ungureanu">
     <!-- Success/Error Messages -->
     <div v-if="formSuccess" class="alert alert-success mb-3" role="alert">
       Habit created successfully!

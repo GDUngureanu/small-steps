@@ -82,7 +82,7 @@ This builds the project and deploys it to the `gh-pages` branch.
 Some sections require password authentication:
 
 - `/experiments` - Personal experiments and projects
-- `/habits` - Personal routines and habits tracking
+- `/habit` - Personal habit tracking
 
 Authentication is handled via Supabase integration.
 

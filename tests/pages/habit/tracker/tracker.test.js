@@ -1,25 +1,25 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
-const file = 'src/pages/practice/routines/Routines.vue'
-const path = '/habits/routines'
+const file = 'src/pages/habit/tracker/Tracker.vue'
+const path = '/habits/tracker'
 
-test('Routines page renders without errors', async () => {
+test('Tracker page renders without errors', async () => {
   const wrapper = await renderComponent(file)
   expect(wrapper.exists()).toBe(true)
   expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Routines route resolves correctly with authentication', async () => {
+test('Tracker route resolves correctly with authentication', async () => {
   const resolved = await resolveRoute(path, true)
   expect(resolved).toBe(path)
 })
 
-test('Add new habit form is always visible', async () => {
+test('Add Habit Tracker Form is always visible', async () => {
   const wrapper = await renderComponent(file)
   
   // Form should be visible without any toggle action
-  expect(wrapper.html()).toContain('Add New Habit')
+  expect(wrapper.html()).toContain('Add Habit Tracker')
   expect(wrapper.html()).toContain('placeholder="Habit name"')
   expect(wrapper.html()).toContain('form-select') 
   expect(wrapper.html()).toContain('placeholder="Category"')
