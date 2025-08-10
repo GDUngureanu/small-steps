@@ -541,7 +541,7 @@ onUnmounted(() => { if (timerId) clearInterval(timerId) })
               <i class="bi bi-fire" :class="getFireColor(scopeData[scope].streaks[habit.id])"></i>
               <span class="text-secondary fw-medium small">{{ scopeData[scope].streaks[habit.id] }}</span>
             </div>
-            <div class="text-truncate fw-medium text-dark-emphasis small flex-grow-1">{{ habit.name }}</div>
+            <div class="fw-medium text-dark-emphasis small flex-grow-1" style="word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">{{ habit.name }}</div>
             <button @click="deleteHabit(habit.id)" class="btn btn-sm p-1 ms-2 text-danger opacity-75 hover-opacity-100" :aria-label="`Delete habit: ${habit.name}`"
               title="Delete habit" style="border: none; background: none; font-size: 0.75rem; line-height: 1;">
               <i class="bi bi-x-lg"></i>
