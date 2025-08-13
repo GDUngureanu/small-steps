@@ -3,6 +3,7 @@
   import ArticleTemplate from '@/components/shared/templates/Article.vue'
   import { useHabits } from '@/composables/useHabits.js'
   import { useActivities } from '@/composables/useActivities.js'
+  import { computeWindows, parsePeriodKey } from '@/utils/dateIntervals.js'
 
   defineOptions({
     name: 'HabitTrackerTemplate',
@@ -31,7 +32,6 @@
   const formError = ref(null)
   const formSuccess = ref(false)
   const allScopes = ['day', 'week', 'month', 'year']
-  const TIMEZONE = 'Europe/Bucharest'
 
   // Category filter state (independent per scope)
   const categoryFilters = reactive({
@@ -47,186 +47,6 @@
     week: { title: 'Weekly Habits', plural: 'weekly' },
     month: { title: 'Monthly Habits', plural: 'monthly' },
     year: { title: 'Yearly Habits', plural: 'yearly' },
-  }
-  const LOCALE = 'en-US'
-
-  // Temporal window functions
-  function floorToInterval(scope, nowTZ) {
-    const now = new Date(nowTZ.toLocaleString(LOCALE, { timeZone: TIMEZONE }))
-
-    switch (scope) {
-      case 'day':
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-      case 'week': {
-        // Monday (ISO) of the current week in Europe/Bucharest
-        const monday = new Date(now) // copy
-        monday.setHours(0, 0, 0, 0) // local midnight
-        const isoDow = monday.getDay() || 7 // Sun=0 -> 7
-        monday.setDate(monday.getDate() - (isoDow - 1))
-        return monday // <-- return a Date, not a string
-      }
-
-      case 'month':
-        return new Date(now.getFullYear(), now.getMonth(), 1)
-
-      case 'year':
-        return new Date(now.getFullYear(), 0, 1)
-
-      default:
-        throw new Error(`Unknown scope: ${scope}`)
-    }
-  }
-
-  function shiftInterval(intervalStart, scope, delta) {
-    const result = new Date(intervalStart)
-
-    switch (scope) {
-      case 'day':
-        result.setDate(result.getDate() + delta)
-        break
-
-      case 'week':
-        result.setDate(result.getDate() + delta * 7)
-        break
-
-      case 'month':
-        result.setMonth(result.getMonth() + delta)
-        break
-
-      case 'year':
-        result.setFullYear(result.getFullYear() + delta)
-        break
-    }
-
-    return result
-  }
-
-  // setActivityStatus is provided by useActivities composable
-  // One function for all period keys
-  function formatPeriodKey(scope, inputDate = new Date()) {
-    switch (scope) {
-      case 'day': {
-        const y = inputDate.getFullYear()
-        const m = String(inputDate.getMonth() + 1).padStart(2, '0')
-        const d = String(inputDate.getDate()).padStart(2, '0')
-        return `${y}-${m}-${d}` // YYYY-MM-DD in local time
-      }
-
-      case 'week':
-        return isoWeekId(inputDate) // <-- use the helper below
-
-      case 'month': {
-        const y = inputDate.getFullYear()
-        const m = String(inputDate.getMonth() + 1).padStart(2, '0')
-        return `${y}-${m}`
-      }
-
-      case 'year':
-        return String(inputDate.getFullYear())
-
-      default:
-        throw new Error(`Unknown scope: ${scope}`)
-    }
-  }
-
-  // ISO week id in UTC: "YYYY-Www"
-  function isoWeekId(inputDate) {
-    // normalize to UTC midnight for stability
-    const d = new Date(Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate()))
-
-    // ISO: week starts Monday. Convert Sunday(0) to 7.
-    const day = d.getUTCDay() || 7
-
-    // Move to Thursday of this week (ISO anchor)
-    d.setUTCDate(d.getUTCDate() + 4 - day)
-
-    const weekYear = d.getUTCFullYear()
-
-    // Week 1 is the week with Jan 4 in it (equivalently, the first Thursday)
-    const yearStart = new Date(Date.UTC(weekYear, 0, 1))
-    const weekNum = Math.ceil(((d - yearStart) / MS_DAY + 1) / 7)
-
-    return `${weekYear}-W${String(weekNum).padStart(2, '0')}`
-  }
-
-  function humanLabel(scope, start) {
-    const startDate = new Date(start)
-
-    switch (scope) {
-      case 'day':
-        return new Intl.DateTimeFormat(LOCALE, {
-          timeZone: TIMEZONE,
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        }).format(startDate)
-
-      case 'week': {
-        const weekId = formatPeriodKey('week', startDate)
-        const m = weekId.match(/(\d{4})-W(\d{2})/)
-        const num = m ? m[2] : '00'
-        const endOfWeek = new Date(startDate)
-        endOfWeek.setDate(endOfWeek.getDate() + 6)
-        const fmt = new Intl.DateTimeFormat(LOCALE, { timeZone: TIMEZONE, month: 'short', day: 'numeric' })
-        return `W${num} (${fmt.format(startDate)}–${fmt.format(endOfWeek)})`
-      }
-      case 'month':
-        return new Intl.DateTimeFormat(LOCALE, { timeZone: TIMEZONE, year: 'numeric', month: 'long' }).format(startDate)
-
-      case 'year':
-        return startDate.getFullYear().toString()
-    }
-  }
-
-  function computeWindows(scope, nowTZ) {
-    const currentInterval = floorToInterval(scope, nowTZ)
-    const windows = []
-
-    // Generate I-10 to I-1
-    for (let offset = 10; offset >= 1; offset--) {
-      const intervalStart = shiftInterval(currentInterval, scope, -offset)
-      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
-      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
-
-      windows.push({
-        intervalId: formatPeriodKey(scope, intervalStart),
-        label: humanLabel(scope, intervalStart),
-        start: intervalStart,
-        end: intervalEnd,
-      })
-    }
-
-    // Add current interval I0
-    const currentEnd = new Date(shiftInterval(currentInterval, scope, 1))
-    currentEnd.setMilliseconds(currentEnd.getMilliseconds() - 1)
-    windows.push({
-      intervalId: formatPeriodKey(scope, currentInterval),
-      label: humanLabel(scope, currentInterval),
-      start: currentInterval,
-      end: currentEnd,
-    })
-
-    // Generate I+1 to I+2
-    for (let offset = 1; offset <= 2; offset++) {
-      const intervalStart = shiftInterval(currentInterval, scope, offset)
-      const intervalEnd = new Date(shiftInterval(intervalStart, scope, 1))
-      intervalEnd.setMilliseconds(intervalEnd.getMilliseconds() - 1)
-
-      windows.push({
-        intervalId: formatPeriodKey(scope, intervalStart),
-        label: humanLabel(scope, intervalStart),
-        start: intervalStart,
-        end: intervalEnd,
-      })
-    }
-
-    return {
-      scope,
-      currentIndex: 10,
-      windows,
-    }
   }
 
   // State management functions (now using composables)
@@ -373,31 +193,6 @@
     return scopeDetails
   })
 
-  const MS_DAY = 86_400_000
-
-  function isoWeekStartUTC(year, week) {
-    // ISO week 1 is the week with Jan 4. Find its Monday (UTC) and offset by (week-1)*7 days.
-    const jan4 = Date.UTC(year, 0, 4)
-    const jan4DowMon0 = (new Date(jan4).getUTCDay() + 6) % 7 // Mon=0..Sun=6
-    const week1Mon = jan4 - jan4DowMon0 * MS_DAY
-    return week1Mon + (week - 1) * 7 * MS_DAY
-  }
-
-  function parsePeriodKey(scope, key) {
-    if (scope === 'day') {
-      const [y, m, d] = key.split('-').map(Number)
-      return Date.UTC(y, m - 1, d) / MS_DAY // day ordinal
-    }
-    if (scope === 'week') {
-      const [y, wRaw] = key.split('-W').map(Number)
-      return isoWeekStartUTC(y, wRaw) / MS_DAY / 7 // week ordinal
-    }
-    if (scope === 'month') {
-      const [y, m] = key.split('-').map(Number)
-      return y * 12 + (m - 1) // month ordinal
-    }
-    return Number(key) // year ordinal
-  }
 
   function streakStats(scope, periodKeys, gap = 3) {
     if (!periodKeys || periodKeys.length === 0) return 0
