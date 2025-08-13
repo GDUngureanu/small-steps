@@ -1,5 +1,7 @@
 # Code Map
 
+[\u2190 Back to main README](../README.md)
+
 ```mermaid
 graph TD;
   main[main.js] --> router[router.js];
