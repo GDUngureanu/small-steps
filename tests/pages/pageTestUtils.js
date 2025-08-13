@@ -112,8 +112,9 @@ export async function resolveRoute(pathName, authenticated = false) {
   const { createAppRouter } = await import('../../src/configuration/router.js')
   const router = createAppRouter(createMemoryHistory(), routes)
 
+  const { useAuthentication, resetAuth } = await import('../../src/configuration/authentication/useAuthentication.js')
+  resetAuth()
   if (authenticated) {
-    const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
     const auth = useAuthentication()
     auth.authenticate('secret')
   }

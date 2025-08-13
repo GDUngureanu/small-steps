@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { test, expect, vi } from 'vitest'
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, readonly } from 'vue'
 import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
 
 // Mock router to observe prefetch calls
@@ -23,7 +23,7 @@ const isAuthenticated = ref(false)
 const logoutMock = vi.fn()
 vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
   useAuthentication: () => ({
-    isAuthenticated: computed(() => isAuthenticated.value),
+    isAuthenticated: readonly(isAuthenticated),
     logout: logoutMock,
   }),
 }))
