@@ -1,7 +1,9 @@
 <script setup>
-  import ArticleTemplate from '@/components/shared/templates/Articles.vue'
+  import MDArticleTemplate from '@/components/shared/templates/MDArticle.vue'
 
-  const markdownUrl = new URL('../../../content/sample.md', import.meta.url).href
+  const markdownResearchUrl1 = new URL('./Research1.md', import.meta.url).href
+  const markdownResearchUrl2 = new URL('./Research2.md', import.meta.url).href
+
 
   defineOptions({
     name: 'LaptopsTemplate',
@@ -9,10 +11,18 @@
 </script>
 
 <template>
-  <ArticleTemplate
-    :src="markdownUrl"
-    title="Laptops List"
-    meta="August 13, 2025 by G. D. Ungureanu"
+  <MDArticleTemplate
+    :src="markdownResearchUrl2"
+    title="Laptops List Research 2"
+    meta="August 12, 2025 by G. D. Ungureanu"
+    :expanded="false"
+  />
+
+  <MDArticleTemplate
+    :src="markdownResearchUrl1"
+    title="Laptops List Research 1"
+    meta="August 11, 2025 by G. D. Ungureanu"
+    :expanded="false"
   />
 </template>
 

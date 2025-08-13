@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, watchEffect } from 'vue'
   import { marked } from 'marked'
 
   /**
@@ -22,6 +22,11 @@
 
   const isExpanded = ref(props.expanded)
   const content = ref('')
+
+  // Keep isExpanded in sync with prop changes
+  watchEffect(() => {
+    isExpanded.value = props.expanded
+  })
 
   async function loadMarkdown() {
     try {

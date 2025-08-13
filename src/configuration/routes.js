@@ -56,6 +56,6 @@ export default [
   { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
   { path: '/habit', component: Habit, meta: { label: 'Overview', group: 'habit', requiresAuth: true } },
   { path: '/habit/tracker', component: Tracker, meta: { label: 'Tracker', group: 'habit', requiresAuth: true } },
-  { path: '/pisicuta', component: Pisicuta, meta: { label: 'Overview', group: 'pisicuta', requiresAuth: false } },
-  { path: '/pisicuta/laptops', component: Laptops, meta: { label: 'Laptops', group: 'pisicuta', requiresAuth: false } },
+  { path: '/pisicuta', component: Pisicuta, meta: { label: 'Overview', group: 'pisicuta', requiresAuth: true } },
+  { path: '/pisicuta/laptops', component: Laptops, meta: { label: 'Laptops', group: 'pisicuta', requiresAuth: true } },
 ]
