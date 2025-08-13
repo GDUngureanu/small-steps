@@ -81,12 +81,12 @@ export default [
     meta: { navLabel: 'Overview', navGroup: 'literature', requiresAuth: false, icon: 'bi-journal' },
   },
   {
-    path: '/books',
+    path: '/literature/books',
     component: Books,
     meta: { navLabel: 'Books', navGroup: 'literature', requiresAuth: false, icon: 'bi-book', badge: '4' },
   },
   {
-    path: '/poems',
+    path: '/literature/poems',
     component: Poems,
     meta: { navLabel: 'Poems', navGroup: 'literature', requiresAuth: false, icon: 'bi-pencil' },
   },
@@ -96,12 +96,12 @@ export default [
     meta: { navLabel: 'Overview', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-controller' },
   },
   {
-    path: '/anime',
+    path: '/entertainment/anime',
     component: Anime,
     meta: { navLabel: 'Anime', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-emoji-smile' },
   },
   {
-    path: '/movies',
+    path: '/entertainment/movies',
     component: Movies,
     meta: { navLabel: 'Movies', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-film' },
   },
@@ -138,17 +138,17 @@ export default [
   {
     path: '/fitness',
     component: Fitness,
-    meta: { navLabel: 'Fitness', navGroup: null, requiresAuth: false, icon: 'bi-heart-pulse' },
+    meta: { navLabel: 'Overview', navGroup: 'fitness', requiresAuth: false, icon: 'bi-heart-pulse' },
   },
   {
     path: '/fitness/workouts/strength',
     component: StrengthWorkout,
-    meta: { requiresAuth: false },
+    meta: { navLabel: 'Strength', navGroup: 'fitness', requiresAuth: false, icon: 'bi-lightning' },
   },
   {
     path: '/fitness/workouts/cardio',
     component: CardioWorkout,
-    meta: { requiresAuth: false },
+    meta: { navLabel: 'Cardio', navGroup: 'fitness', requiresAuth: false, icon: 'bi-activity' },
   },
   {
     path: '/adventure',
@@ -161,14 +161,14 @@ export default [
     meta: { navLabel: 'Destinations', navGroup: 'adventure', requiresAuth: false, icon: 'bi-geo-alt' },
   },
   {
-    path: '/habit',
+    path: '/habits',
     component: Habit,
-    meta: { navLabel: 'Overview', navGroup: 'habit', requiresAuth: true, icon: 'bi-calendar-check' },
+    meta: { navLabel: 'Overview', navGroup: 'habits', requiresAuth: true, icon: 'bi-calendar-check' },
   },
   {
-    path: '/habit/tracker',
+    path: '/habits/routines',
     component: Tracker,
-    meta: { navLabel: 'Tracker', navGroup: 'habit', requiresAuth: true, icon: 'bi-graph-up' },
+    meta: { navLabel: 'Routines', navGroup: 'habits', requiresAuth: true, icon: 'bi-graph-up' },
   },
   {
     path: '/pisicuta',

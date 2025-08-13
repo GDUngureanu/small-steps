@@ -2,7 +2,7 @@ import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
 const file = 'src/pages/literature/books/Books.vue'
-const path = '/books'
+const path = '/literature/books'
 
 test('Books page renders without errors', async () => {
   const wrapper = await renderComponent(file)

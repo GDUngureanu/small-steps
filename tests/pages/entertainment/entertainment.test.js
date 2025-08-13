@@ -4,8 +4,8 @@ import path from 'node:path'
 
 const pages = [
   { file: 'src/pages/entertainment/Entertainment.vue', route: '/entertainment' },
-  { file: 'src/pages/entertainment/Anime.vue', route: '/anime' },
-  { file: 'src/pages/entertainment/Movies.vue', route: '/movies' },
+  { file: 'src/pages/entertainment/Anime.vue', route: '/entertainment/anime' },
+  { file: 'src/pages/entertainment/Movies.vue', route: '/entertainment/movies' },
 ]
 
 for (const { file, route } of pages) {
