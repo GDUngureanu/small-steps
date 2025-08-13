@@ -27,6 +27,16 @@ const Nutrition = () => import('@/pages/nutrition/Nutrition.vue')
 const Ingredients = () => import('@/pages/nutrition/ingredients/Ingredients.vue')
 const MealPrep = () => import('@/pages/nutrition/MealPrep.vue')
 
+// Finance Components
+const Finance = () => import('@/pages/finance/Finance.vue')
+const Budget = () => import('@/pages/finance/Budget.vue')
+const Investments = () => import('@/pages/finance/Investments.vue')
+
+// Fitness Components
+const Fitness = () => import('@/pages/fitness/Fitness.vue')
+const StrengthWorkout = () => import('@/pages/fitness/workouts/Strength.vue')
+const CardioWorkout = () => import('@/pages/fitness/workouts/Cardio.vue')
+
 // Adventure Components
 const Adventure = () => import('@/pages/adventure/Adventure.vue')
 const Destinations = () => import('@/pages/adventure/destinations/Destinations.vue')
@@ -108,7 +118,37 @@ export default [
   {
     path: '/nutrition/meal-prep',
     component: MealPrep,
-    meta: { navLabel: 'Meal Prep', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-basket' },
+    meta: { navLabel: 'Meal Prep', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-basket' }, 
+  },
+  {
+    path: '/finance',
+    component: Finance,
+    meta: { navLabel: 'Overview', navGroup: 'finance', requiresAuth: false, icon: 'bi-cash-coin' },
+  },
+  {
+    path: '/finance/budget',
+    component: Budget,
+    meta: { navLabel: 'Budget', navGroup: 'finance', requiresAuth: false, icon: 'bi-wallet2' },
+  },
+  {
+    path: '/finance/investments',
+    component: Investments,
+    meta: { navLabel: 'Investments', navGroup: 'finance', requiresAuth: false, icon: 'bi-graph-up' },
+  },
+  {
+    path: '/fitness',
+    component: Fitness,
+    meta: { navLabel: 'Fitness', navGroup: null, requiresAuth: false, icon: 'bi-heart-pulse' },
+  },
+  {
+    path: '/fitness/workouts/strength',
+    component: StrengthWorkout,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: '/fitness/workouts/cardio',
+    component: CardioWorkout,
+    meta: { requiresAuth: false },
   },
   {
     path: '/adventure',

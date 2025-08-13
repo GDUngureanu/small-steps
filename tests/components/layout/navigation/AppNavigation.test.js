@@ -1,31 +1,66 @@
-import { test, expect, vi } from 'vitest'
+import { test, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { usePrefetch } from '@/composables/usePrefetch.js'
+import { computed } from 'vue'
+import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
 
-test('navbar collapse hides on small screens after link click', () => {
-  const originalWindow = global.window
-  global.window = { innerWidth: 500 }
+let offcanvasInstance
+const showSpy = vi.fn()
+const hideSpy = vi.fn()
 
-  let hideFunctionCalled = false
-  const bootstrapCollapse = {
-    hide: () => {
-      hideFunctionCalled = true
-    },
-  }
-
-  const closeMenu = () => {
-    if (window.innerWidth < 992 && bootstrapCollapse) {
-      bootstrapCollapse.hide()
+vi.mock('bootstrap', () => ({
+  Offcanvas: class {
+    constructor() {
+      offcanvasInstance = this
     }
-  }
 
-  const navigationLinkElement = new EventTarget()
-  navigationLinkElement.addEventListener('click', closeMenu)
-  navigationLinkElement.dispatchEvent(new Event('click'))
+    show = showSpy
+    hide = hideSpy
+  },
+}))
 
-  expect(hideFunctionCalled).toBe(true)
-  global.window = originalWindow
+vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
+  useAuthentication: () => ({
+    isAuthenticated: computed(() => false),
+    logout: vi.fn(),
+  }),
+}))
+
+vi.mock('@/composables/useNavigation.js', () => ({
+  useNavigation: () => ({
+    navigationItems: computed(() => [{ path: '/test', label: 'Test', requiresAuth: false }]),
+    dropdownSections: computed(() => ({})),
+  }),
+}))
+
+beforeEach(() => {
+  showSpy.mockClear()
+  hideSpy.mockClear()
+})
+
+test('offcanvas opens and hides on small screens and ignores large screens', async () => {
+  const originalWidth = global.window.innerWidth
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 500 })
+
+  const wrapper = mount(AppNavigation, {
+    global: {
+      stubs: { RouterLink: { template: '<a><slot /></a>' } },
+    },
+  })
+
+  offcanvasInstance.show()
+  expect(showSpy).toHaveBeenCalled()
+
+  await wrapper.find('a').trigger('click')
+  expect(hideSpy).toHaveBeenCalled()
+
+  hideSpy.mockClear()
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 1200 })
+  await wrapper.find('a').trigger('click')
+  expect(hideSpy).not.toHaveBeenCalled()
+
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: originalWidth })
 })
 
 test('prefetch only triggers after delay and cancels on quick leave', async () => {

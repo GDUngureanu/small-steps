@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted, computed } from 'vue'
-  import { Collapse } from 'bootstrap'
+  import { Offcanvas } from 'bootstrap'
   import { useAuthentication } from '@/configuration/authentication/useAuthentication.js'
   import { useNavigation } from '@/composables/useNavigation.js'
   import { usePrefetch } from '@/composables/usePrefetch.js'
@@ -36,18 +36,18 @@
     emit('showAuthentication')
   }
 
-  const navbarCollapse = ref(null)
-  let bootstrapCollapse
+  const offcanvas = ref(null)
+  let bootstrapOffcanvas
 
   onMounted(() => {
-    if (navbarCollapse.value) {
-      bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
+    if (offcanvas.value) {
+      bootstrapOffcanvas = new Offcanvas(offcanvas.value, { backdrop: true })
     }
   })
 
   const closeMenu = () => {
-    if (window.innerWidth < 992 && bootstrapCollapse) {
-      bootstrapCollapse.hide()
+    if (window.innerWidth < 992 && bootstrapOffcanvas) {
+      bootstrapOffcanvas.hide()
     }
   }
 
@@ -57,12 +57,20 @@
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg fixed-top d-block" data-navbar-on-scroll="data-navbar-on-scroll">
+  <nav class="navbar fixed-top d-block" data-navbar-on-scroll="data-navbar-on-scroll">
     <div class="container">
-      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler d-lg-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#navOffcanvas"
+        aria-controls="navOffcanvas"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
+
+      <div class="d-none d-lg-flex w-100 border-top" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
             <RouterLink
@@ -84,7 +92,14 @@
 
           <!-- Dynamic dropdown sections -->
           <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
-            <a class="nav-link dropdown-toggle fw-medium" href="#" :id="`${key}Dropdown`" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle fw-medium"
+              href="#"
+              :id="`${key}Dropdown`"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               {{ section.label }}
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
@@ -126,4 +141,91 @@
       </div>
     </div>
   </nav>
+
+  <div
+    class="offcanvas offcanvas-start d-lg-none"
+    tabindex="-1"
+    id="navOffcanvas"
+    aria-labelledby="navOffcanvasLabel"
+    ref="offcanvas"
+  >
+    <div class="offcanvas-body">
+      <div class="d-flex justify-content-between mb-3">
+        <h5 class="offcanvas-title" id="navOffcanvasLabel">Navigation</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <ul class="navbar-nav me-auto">
+        <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
+          <RouterLink
+            :to="item.path"
+            class="nav-link fw-medium"
+            active-class="active"
+            @click="closeMenu"
+            @mouseover="prefetch(item.path)"
+            @mouseleave="cancelPrefetch"
+          >
+            <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
+            {{ item.label }}
+            <span
+              v-if="item.badge"
+              class="badge rounded-pill bg-secondary ms-1"
+            >{{ item.badge }}</span>
+          </RouterLink>
+        </li>
+
+        <!-- Dynamic dropdown sections -->
+        <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
+          <a
+            class="nav-link dropdown-toggle fw-medium"
+            href="#"
+            :id="`${key}DropdownOffcanvas`"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{ section.label }}
+          </a>
+          <ul class="dropdown-menu" :aria-labelledby="`${key}DropdownOffcanvas`">
+            <li v-for="item in section.items" :key="item.path">
+              <RouterLink
+                :to="item.path"
+                class="dropdown-item"
+                @click="closeMenu"
+                @mouseover="prefetch(item.path)"
+                @mouseleave="cancelPrefetch"
+              >
+                <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
+                {{ item.label }}
+                <span
+                  v-if="item.badge"
+                  class="badge rounded-pill bg-secondary ms-1"
+                >{{ item.badge }}</span>
+              </RouterLink>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Auth controls -->
+      <ul class="navbar-nav mt-3">
+        <li v-if="!isAuthenticated" class="nav-item px-2">
+          <button @click="showAuthenticationModal" class="btn btn-outline-primary btn-sm w-100">
+            <i class="bi bi-unlock"></i>
+            Login
+          </button>
+        </li>
+        <li v-if="isAuthenticated" class="nav-item px-2">
+          <button @click="logout" class="btn btn-outline-secondary btn-sm w-100">
+            <i class="bi bi-lock"></i>
+            Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
