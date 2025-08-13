@@ -26,6 +26,11 @@ const Movies = () => import('@/pages/entertainment/Movies.vue')
 const Nutrition = () => import('@/pages/nutrition/Nutrition.vue')
 const Ingredients = () => import('@/pages/nutrition/ingredients/Ingredients.vue')
 
+// Finance Components
+const Finance = () => import('@/pages/finance/Finance.vue')
+const Budget = () => import('@/pages/finance/Budget.vue')
+const Investments = () => import('@/pages/finance/Investments.vue')
+
 // Adventure Components
 const Adventure = () => import('@/pages/adventure/Adventure.vue')
 const Destinations = () => import('@/pages/adventure/destinations/Destinations.vue')
@@ -103,6 +108,21 @@ export default [
     path: '/nutrition/ingredients',
     component: Ingredients,
     meta: { navLabel: 'Ingredients', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-list-ul' },
+  },
+  {
+    path: '/finance',
+    component: Finance,
+    meta: { navLabel: 'Overview', navGroup: 'finance', requiresAuth: false, icon: 'bi-cash-coin' },
+  },
+  {
+    path: '/finance/budget',
+    component: Budget,
+    meta: { navLabel: 'Budget', navGroup: 'finance', requiresAuth: false, icon: 'bi-wallet2' },
+  },
+  {
+    path: '/finance/investments',
+    component: Investments,
+    meta: { navLabel: 'Investments', navGroup: 'finance', requiresAuth: false, icon: 'bi-graph-up' },
   },
   {
     path: '/adventure',
