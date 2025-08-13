@@ -1,11 +1,15 @@
 # Components
 
-Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) exposes a PascalCase component file (e.g. `Ikigai.vue`) that is registered with Vue Router.
+[\u2190 Back to main README](../../README.md)
+
+Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`)
+exposes a PascalCase component file (e.g. `Ikigai.vue`) that is registered with
+Vue Router.
 
 ### Key directories
 
-- `auth/` – access modal for gated routes.
-- `navigation/`, `header/`, `footer/` – layout chrome shared across pages.
+- `auth/` \u2013 access modal for gated routes.
+- `navigation/`, `header/`, `footer/` \u2013 layout chrome shared across pages.
 - Feature pages such as `adventure/`, `entertainment/`, `literature/`, `nutrition/`, `habit/`, `ikigai/`, `ippo/`, `random/` and `home/` each provide a router-mounted component file and optional JSON data files.
 
 ## Dependencies
@@ -15,7 +19,7 @@ Feature-oriented Vue components. Each subdirectory (e.g. `ikigai`, `nutrition`) 
 
 ## Local Development
 
-Components are compiled and hot‑reloaded via Vite. Run the application from the repository root:
+Components are compiled and hot\u2011reloaded via Vite. Run the application from the repository root:
 
 ```sh
 npm start

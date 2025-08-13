@@ -1,13 +1,15 @@
 # Configuration
 
-Centralised configuration and third‑party clients.
+[\u2190 Back to main README](../README.md)
+
+Centralised configuration and third\u2011party clients.
 
 ## Supabase
 
 `supabase.js` initialises the Supabase client using environment variables:
 
-- `VITE_SUPABASE_URL` – project URL
-- `VITE_SUPABASE_ANON_KEY` – public anon key
+- `VITE_SUPABASE_URL` \u2013 project URL
+- `VITE_SUPABASE_ANON_KEY` \u2013 public anon key
 
 The exported `supabase` instance is used by composables for authentication and data management.
 

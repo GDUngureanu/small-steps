@@ -1,5 +1,7 @@
 # SCSS
 
+[\u2190 Back to main README](../README.md)
+
 Custom Bootstrap variables and utility classes. Overrides live in
 `_variables.scss`; additional helpers can be added under this directory and
 imported from `main.scss`.
