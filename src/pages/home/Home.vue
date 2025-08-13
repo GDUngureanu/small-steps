@@ -22,18 +22,22 @@
     <h4>Prioritize With Intention</h4>
     <ul>
       <li>Career / Work</li>
-      <li>Self</li>
-      <ul>
-        <li>Physical Health</li>
-        <li>Mental & Emotional Health</li>
-        <li>Personal Growth / Creativity</li>
-      </ul>
-      <li>Relationships</li>
-      <ul>
-        <li>Intimate Relationship</li>
-        <li>Family</li>
-        <li>Friends</li>
-      </ul>
+      <li>
+        Self
+        <ul>
+          <li>Physical Health</li>
+          <li>Mental & Emotional Health</li>
+          <li>Personal Growth / Creativity</li>
+        </ul>
+      </li>
+      <li>
+        Relationships
+        <ul>
+          <li>Intimate Relationship</li>
+          <li>Family</li>
+          <li>Friends</li>
+        </ul>
+      </li>
     </ul>
 
     <h4>The 1-3-5 Rule</h4>
