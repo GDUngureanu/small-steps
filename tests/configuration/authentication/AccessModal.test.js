@@ -70,9 +70,7 @@ describe('AccessModal', () => {
 
   it('AccessModal emits hide when Escape key is pressed', async () => {
     const wrapper = mountModal()
-
-    window.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape' }))
-    await nextTick()
+    await wrapper.find('.modal').trigger('keyup', { key: 'Escape' })
 
     expect(wrapper.emitted('hide')).toHaveLength(1)
     wrapper.unmount()
@@ -88,28 +86,12 @@ describe('AccessModal', () => {
     wrapper.unmount()
   })
 
-  it('does not emit hide when Escape originates from an input', async () => {
+  it('AccessModal emits hide when Escape originates from an input', async () => {
     const wrapper = mountModal()
     const input = wrapper.find('#authPassword')
-    input.element.focus()
-    input.element.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape', bubbles: true }))
-    await nextTick()
+    await input.trigger('keyup', { key: 'Escape' })
 
-    expect(wrapper.emitted('hide')).toBeFalsy()
+    expect(wrapper.emitted('hide')).toHaveLength(1)
     wrapper.unmount()
-  })
-
-  it('only the topmost modal emits hide on Escape', async () => {
-    const first = mountModal()
-    const second = mountModal()
-
-    window.dispatchEvent(new KeyboardEvent('keyup', { key: 'Escape' }))
-    await nextTick()
-
-    expect(first.emitted('hide')).toBeFalsy()
-    expect(second.emitted('hide')).toHaveLength(1)
-
-    first.unmount()
-    second.unmount()
   })
 })

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, nextTick, watch, computed, onMounted, onBeforeUnmount } from 'vue'
+  import { ref, nextTick, watch, computed } from 'vue'
   import { useAuthentication } from '../useAuthentication.js'
 
   /**
@@ -26,7 +26,6 @@
   const error = ref('')
   const isSubmitting = ref(false)
   const passwordInput = ref(null)
-  const modalRef = ref(null)
 
   // Computed property for form validation
   const isValidPassword = computed(() => password.value.trim().length > 0)
@@ -79,34 +78,13 @@
     emit('hide')
   }
 
-  const handleEscape = (event) => {
-    if (event.key !== 'Escape' || !props.show) return
-
-    const tag = event.target?.closest('input,textarea,select')?.tagName
-    if (tag) return
-
-    const modals = Array.from(document.querySelectorAll('.modal.show'))
-    const topModal = modals[modals.length - 1]
-    if (modalRef.value === topModal) {
-      handleCancel()
-    }
-  }
-
-  onMounted(() => {
-    window.addEventListener('keyup', handleEscape)
-  })
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('keyup', handleEscape)
-  })
-
   defineOptions({
     name: 'AccessModal',
   })
 </script>
 
 <template>
-  <div ref="modalRef" class="modal fade" :class="{ show: show }" :style="{ display: show ? 'block' : 'none' }" tabindex="-1" @click.self="handleCancel">
+  <div class="modal fade" :class="{ show: show }" :style="{ display: show ? 'block' : 'none' }" tabindex="-1" @click.self="handleCancel" @keyup.esc="handleCancel">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
