@@ -6,9 +6,9 @@ import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t) {
   setupTestEnvironment(t)
-  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
+  const { useAuthentication, resetAuth } = await import('../../src/configuration/authentication/useAuthentication.js')
+  resetAuth()
   const auth = useAuthentication()
-  auth.logout()
   return auth
 }
 
