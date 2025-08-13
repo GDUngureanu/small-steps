@@ -5,18 +5,21 @@ import vm from 'node:vm'
 
 async function loadSupabaseModule({ url, key }) {
   const code = await readFile(new URL('../../src/configuration/supabase.js', import.meta.url), 'utf8')
-  const transformed = code.replace("import { createClient } from '@supabase/supabase-js'\n", '').replace("import { env } from './env.js'\n", '').replace('export const supabase', 'const supabase')
+  const transformed = code
+    .replace("import { createClient } from '@supabase/supabase-js'\n", '')
+    .replace("import { VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } from './env.js'\n", '')
+    .replace('export const supabase', 'const supabase')
   const calls = []
   const createClientMock = (...args) => {
     calls.push(args)
     return {}
   }
-  const envMock = {
-    getViteSupabaseUrl: () => url,
-    getViteSupabaseAnonKey: () => key,
-  }
   try {
-    vm.runInNewContext(transformed, { createClient: createClientMock, env: envMock })
+    vm.runInNewContext(transformed, {
+      createClient: createClientMock,
+      VITE_SUPABASE_URL: url,
+      VITE_SUPABASE_ANON_KEY: key,
+    })
     return { calls }
   } catch (err) {
     err.calls = calls

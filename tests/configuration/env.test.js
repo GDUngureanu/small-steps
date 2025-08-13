@@ -23,19 +23,19 @@ test('reads variables from import.meta.env', { concurrency: false }, async () =>
     VITE_SUPABASE_URL: 'url',
     VITE_SUPABASE_ANON_KEY: 'anon',
   }
-  const { getViteAppPassword, getViteSupabaseUrl, getViteSupabaseAnonKey } = await loadEnvModule(importEnv, {})
+  const { VITE_APP_PASSWORD, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } = await loadEnvModule(importEnv, {})
 
-  assert.equal(getViteAppPassword(), 'password')
-  assert.equal(getViteSupabaseUrl(), 'url')
-  assert.equal(getViteSupabaseAnonKey(), 'anon')
+  assert.equal(VITE_APP_PASSWORD, 'password')
+  assert.equal(VITE_SUPABASE_URL, 'url')
+  assert.equal(VITE_SUPABASE_ANON_KEY, 'anon')
 
   delete importEnv.VITE_APP_PASSWORD
   delete importEnv.VITE_SUPABASE_URL
   delete importEnv.VITE_SUPABASE_ANON_KEY
 
-  assert.equal(getViteAppPassword(), undefined)
-  assert.equal(getViteSupabaseUrl(), undefined)
-  assert.equal(getViteSupabaseAnonKey(), undefined)
+  assert.equal(VITE_APP_PASSWORD, 'password')
+  assert.equal(VITE_SUPABASE_URL, 'url')
+  assert.equal(VITE_SUPABASE_ANON_KEY, 'anon')
 })
 
 test('falls back to process.env when import.meta.env missing', { concurrency: false }, async () => {
@@ -44,17 +44,24 @@ test('falls back to process.env when import.meta.env missing', { concurrency: fa
     VITE_SUPABASE_URL: 'supabase',
     VITE_SUPABASE_ANON_KEY: 'key',
   }
-  const { getViteAppPassword, getViteSupabaseUrl, getViteSupabaseAnonKey } = await loadEnvModule({}, processEnv)
+  const { VITE_APP_PASSWORD, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } = await loadEnvModule({}, processEnv)
 
-  assert.equal(getViteAppPassword(), 'pass')
-  assert.equal(getViteSupabaseUrl(), 'supabase')
-  assert.equal(getViteSupabaseAnonKey(), 'key')
+  assert.equal(VITE_APP_PASSWORD, 'pass')
+  assert.equal(VITE_SUPABASE_URL, 'supabase')
+  assert.equal(VITE_SUPABASE_ANON_KEY, 'key')
 
   delete processEnv.VITE_APP_PASSWORD
   delete processEnv.VITE_SUPABASE_URL
   delete processEnv.VITE_SUPABASE_ANON_KEY
 
-  assert.equal(getViteAppPassword(), undefined)
-  assert.equal(getViteSupabaseUrl(), undefined)
-  assert.equal(getViteSupabaseAnonKey(), undefined)
+  assert.equal(VITE_APP_PASSWORD, 'pass')
+  assert.equal(VITE_SUPABASE_URL, 'supabase')
+  assert.equal(VITE_SUPABASE_ANON_KEY, 'key')
+})
+
+test('env object is frozen', { concurrency: false }, async () => {
+  const { env } = await loadEnvModule({ VITE_APP_PASSWORD: 'password' }, {})
+  assert.throws(() => {
+    env.VITE_APP_PASSWORD = 'hack'
+  })
 })

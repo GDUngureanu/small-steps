@@ -5,14 +5,14 @@ import { vi } from 'vitest'
 import { h } from 'vue'
 
 vi.mock('../../src/configuration/env.js', () => ({
-  env: {
-    getViteAppPassword: () => 'secret',
-    getViteSupabaseUrl: () => 'https://example.supabase.co',
-    getViteSupabaseAnonKey: () => 'anon',
-  },
-  getViteAppPassword: () => 'secret',
-  getViteSupabaseUrl: () => 'https://example.supabase.co',
-  getViteSupabaseAnonKey: () => 'anon',
+  env: Object.freeze({
+    VITE_APP_PASSWORD: 'secret',
+    VITE_SUPABASE_URL: 'https://example.supabase.co',
+    VITE_SUPABASE_ANON_KEY: 'anon',
+  }),
+  VITE_APP_PASSWORD: 'secret',
+  VITE_SUPABASE_URL: 'https://example.supabase.co',
+  VITE_SUPABASE_ANON_KEY: 'anon',
 }))
 
 /**

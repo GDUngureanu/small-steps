@@ -1,5 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import routes from '../../src/configuration/routes.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
@@ -48,15 +49,19 @@ test('route access control', { concurrency: false }, async (t) => {
   assert.equal(auth.canAccessRoute(restrictedPath), true)
 })
 
-test('warns when password variable is absent', { concurrency: false }, async (t) => {
-  setupTestEnvironment(t, { password: null })
+test('warns when password variable is absent', { concurrency: false }, () => {
+  const env = { ...process.env }
+  delete env.VITE_APP_PASSWORD
+  const { stderr, status } = spawnSync(
+    process.execPath,
+    [
+      '--input-type=module',
+      '-e',
+      "const { useAuthentication } = await import('./src/configuration/authentication/useAuthentication.js'); const auth = useAuthentication(); auth.authenticate('anything');",
+    ],
+    { cwd: new URL('../..', import.meta.url).pathname, env, encoding: 'utf8' }
+  )
 
-  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js?no-password')
-  const auth = useAuthentication()
-
-  const warnMock = t.mock.method(console, 'warn')
-
-  assert.equal(auth.authenticate('anything'), false)
-  assert.equal(warnMock.mock.callCount(), 1)
-  assert.match(warnMock.mock.calls[0].arguments[0], /VITE_APP_PASSWORD/)
+  assert.equal(status, 0)
+  assert.match(stderr, /VITE_APP_PASSWORD/)
 })
