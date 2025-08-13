@@ -64,36 +64,44 @@
       <li>
         <strong><a href="https://jamesclear.com/habit-triggers" class="text-decoration-none">Cue</a></strong
         >: The cue is the trigger that initiates the habit.
+        <ul>
+          <li><strong>Phone buzzes</strong>.</li>
+          <li><strong>Answering emails</strong>.</li>
+          <li><strong>Waking up</strong>.</li>
+        </ul>
       </li>
-      <ul>
-        <li><strong>Phone buzzes</strong>.</li>
-        <li><strong>Answering emails</strong>.</li>
-        <li><strong>Waking up</strong>.</li>
-      </ul>
-      <li><strong>Craving</strong>: The craving is the desire or motivation that drives the habit.</li>
-      <ul>
-        <li>You <u>want to learn the context of the notification</u>.</li>
-        <li>You begin to feel stressed and overwhelmed by work, you <u>want to feel in control</u>.</li>
-        <li>You <u>want to feel alert</u>.</li>
-      </ul>
-      <li><strong>Response</strong>: The response is the actual action or behavior that fulfills the craving.</li>
-      <ul>
-        <li>You <strong>grab the phone</strong> and check the notification.</li>
-        <li>You <strong>bite your nails</strong>.</li>
-        <li>You <strong>drink a cup of coffee</strong>.</li>
-      </ul>
-      <li><strong>Reward</strong>: The reward is the positive outcome that reinforces the habit.</li>
-      <ul>
-        <li>Satisfy the craving <u>to check the notification</u>.</li>
-        <li>Satisfy the craving <u>to reduce stress</u>.</li>
-        <li>Satisfy the craving <u>to feel alert</u>.</li>
-      </ul>
-      <li><strong>Outcome</strong>:</li>
-      <ul>
-        <li><strong>Grabbing the phone</strong> becomes associated with <strong>your phone buzzing</strong>.</li>
-        <li><strong>Biting your nails</strong> becomes associated with <strong>reading your emails</strong>.</li>
-        <li><strong>Drinking coffee</strong> becomes associated with <strong>waking up</strong>.</li>
-      </ul>
+      <li>
+        <strong>Craving</strong>: The craving is the desire or motivation that drives the habit.
+        <ul>
+          <li>You <u>want to learn the context of the notification</u>.</li>
+          <li>You begin to feel stressed and overwhelmed by work, you <u>want to feel in control</u>.</li>
+          <li>You <u>want to feel alert</u>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Response</strong>: The response is the actual action or behavior that fulfills the craving.
+        <ul>
+          <li>You <strong>grab the phone</strong> and check the notification.</li>
+          <li>You <strong>bite your nails</strong>.</li>
+          <li>You <strong>drink a cup of coffee</strong>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Reward</strong>: The reward is the positive outcome that reinforces the habit.
+        <ul>
+          <li>Satisfy the craving <u>to check the notification</u>.</li>
+          <li>Satisfy the craving <u>to reduce stress</u>.</li>
+          <li>Satisfy the craving <u>to feel alert</u>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Outcome</strong>:
+        <ul>
+          <li><strong>Grabbing the phone</strong> becomes associated with <strong>your phone buzzing</strong>.</li>
+          <li><strong>Biting your nails</strong> becomes associated with <strong>reading your emails</strong>.</li>
+          <li><strong>Drinking coffee</strong> becomes associated with <strong>waking up</strong>.</li>
+        </ul>
+      </li>
     </ul>
 
     <h5>The 4 Laws of Behavior (Good Habit):</h5>
