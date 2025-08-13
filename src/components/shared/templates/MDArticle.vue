@@ -2,6 +2,15 @@
   import { ref, onMounted, watchEffect } from 'vue'
   import { marked } from 'marked'
 
+  try {
+    const renderer = new marked.Renderer()
+    renderer.table = (header, body) =>
+      `<div class="table-scroll"><table>\n<thead>${header}</thead>\n<tbody>${body}</tbody>\n</table></div>`
+    marked.setOptions({ renderer })
+  } catch {
+    /* istanbul ignore next */
+  }
+
   /**
    * Article template that loads Markdown content.
    *
@@ -86,6 +95,10 @@
       max-height 0.3s ease,
       opacity 0.3s ease;
     opacity: 1;
+  }
+
+  .article-content .table-scroll {
+    overflow-x: auto;
   }
 
   .article-content.collapsed {
