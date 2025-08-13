@@ -4,6 +4,16 @@
   defineOptions({
     name: 'RandomTemplate',
   })
+
+  const morningRoutine = [
+    'Start your day with a refreshing workout.',
+    'Consider having a healthy breakfast.',
+    'Consider using the pomodoro technique for heavy tasks.',
+  ]
+
+  const afternoonRoutine = ['TBD.']
+
+  const eveningRoutine = ['TBD.']
 </script>
 
 <template>
@@ -23,23 +33,39 @@
 
     <h5>Morning Routine</h5>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">Start your day with a refreshing workout.</li>
-      <li class="list-group-item">Consider having a healthy breakfast.</li>
-      <li class="list-group-item">Consider using the pomodoro technique for heavy tasks.</li>
+      <li
+        v-for="(item, index) in morningRoutine"
+        :key="`morning-${index}`"
+        class="list-group-item"
+      >
+        {{ item }}
+      </li>
     </ul>
 
     <br />
 
     <h5>Afternoon Routine</h5>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">TBD.</li>
+      <li
+        v-for="(item, index) in afternoonRoutine"
+        :key="`afternoon-${index}`"
+        class="list-group-item"
+      >
+        {{ item }}
+      </li>
     </ul>
 
     <br />
 
     <h5>Evening Routine</h5>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">TBD.</li>
+      <li
+        v-for="(item, index) in eveningRoutine"
+        :key="`evening-${index}`"
+        class="list-group-item"
+      >
+        {{ item }}
+      </li>
     </ul>
   </ArticleTemplate>
 
