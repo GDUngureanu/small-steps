@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, watch, computed, nextTick } from 'vue'
+  import { ref, watch, computed, nextTick, reactive } from 'vue'
   import { supabase } from '@/configuration/supabase.js'
   import ActionItem from './ActionItem.vue'
   import ActionDeleteModal from './ActionDeleteModal.vue'
@@ -53,7 +53,7 @@
   const showDeleteModal = ref(false)
 
   // Optimistic updates state
-  const optimisticUpdates = ref(new Map())
+  const optimisticUpdates = reactive(new Map())
 
   // Vue refs for DOM elements
   const createActionInput = ref(null)
@@ -198,7 +198,7 @@
     action.completed = newCompleted
 
     // Track optimistic update
-    optimisticUpdates.value.set(action.id, {
+    optimisticUpdates.set(action.id, {
       type: 'completed',
       originalValue: originalCompleted,
     })
@@ -244,7 +244,7 @@
       }
 
       // Clear optimistic update on success
-      optimisticUpdates.value.delete(action.id)
+      optimisticUpdates.delete(action.id)
 
       // Update cache after successful API call
       setCachedActions(props.listId, actions.value)
@@ -253,7 +253,7 @@
       // Exception thrown while updating action status
       // Revert completed status on error
       action.completed = originalCompleted
-      optimisticUpdates.value.delete(action.id)
+      optimisticUpdates.delete(action.id)
     }
   }
 
@@ -336,7 +336,7 @@
     action.priority = newPriority
 
     // Track optimistic update
-    optimisticUpdates.value.set(action.id, {
+    optimisticUpdates.set(action.id, {
       type: 'priority',
       originalValue: originalPriority,
     })
@@ -347,7 +347,7 @@
       if (updateError) throw updateError
 
       // Clear optimistic update on success
-      optimisticUpdates.value.delete(action.id)
+      optimisticUpdates.delete(action.id)
 
       // Update cache after successful API call
       setCachedActions(props.listId, actions.value)
@@ -356,14 +356,14 @@
       // Exception thrown while updating priority
       // Revert priority on error
       action.priority = originalPriority
-      optimisticUpdates.value.delete(action.id)
+      optimisticUpdates.delete(action.id)
     }
   }
 
   // Utility functions
   const getActionClasses = (action) => ({
     'text-decoration-line-through text-muted': action.completed,
-    'opacity-75': optimisticUpdates.value.has(action.id),
+    'opacity-75': optimisticUpdates.has(action.id),
   })
 
   const startEditing = async (action) => {
