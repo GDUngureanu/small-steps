@@ -5,7 +5,7 @@
   try {
     const renderer = new marked.Renderer()
     renderer.table = (header, body) =>
-      `<div class="table-scroll"><table>\n<thead>${header}</thead>\n<tbody>${body}</tbody>\n</table></div>`
+      `<div class="table-responsive"><table class="table table-striped table-hover">\n<thead class="table-dark">${header}</thead>\n<tbody>${body}</tbody>\n</table></div>`
     marked.setOptions({ renderer })
   } catch {
     /* istanbul ignore next */
@@ -97,8 +97,9 @@
     opacity: 1;
   }
 
-  .article-content .table-scroll {
-    overflow-x: auto;
+  /* Bootstrap handles table responsiveness, but we can add some custom styling if needed */
+  .article-content .table-responsive {
+    margin: 1rem 0;
   }
 
   .article-content.collapsed {
