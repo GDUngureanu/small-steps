@@ -1,22 +1,18 @@
 import { test, expect, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import { defineComponent } from 'vue'
 import Articles from '@/components/shared/templates/Articles.vue'
 
-vi.mock(
-  '@/content/sample.md',
-  () => ({
-    __esModule: true,
-    default: defineComponent({ template: '<div>Sample Markdown</div>' }),
-  }),
-  { virtual: true }
-)
-
 test('renders markdown content inside article container', async () => {
+  global.fetch = vi.fn(() =>
+    Promise.resolve({ text: () => Promise.resolve('# Sample Markdown') })
+  )
+
   const wrapper = mount(Articles, {
-    props: { title: 'MD', meta: 'meta', src: '@/content/sample.md' },
+    props: { title: 'MD', meta: 'meta', src: '/sample.md' },
   })
+
   await flushPromises()
-  await flushPromises()
+
+  expect(global.fetch).toHaveBeenCalledWith('/sample.md')
   expect(wrapper.html()).toContain('Sample Markdown')
 })
