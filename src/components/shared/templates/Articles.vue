@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, defineAsyncComponent } from 'vue'
+  import { ref, onMounted } from 'vue'
+  import { marked } from 'marked'
 
   /**
    * Article template that loads Markdown content.
@@ -20,12 +21,23 @@
   })
 
   const isExpanded = ref(props.expanded)
+  const content = ref('')
+
+  async function loadMarkdown() {
+    try {
+      const response = await fetch(props.src)
+      const text = await response.text()
+      content.value = marked.parse(text)
+    } catch {
+      content.value = '<p>Failed to load content.</p>'
+    }
+  }
 
   function toggleExpanded() {
     isExpanded.value = !isExpanded.value
   }
 
-  const MarkdownComponent = defineAsyncComponent(() => import(props.src))
+  onMounted(loadMarkdown)
 </script>
 
 <template>
@@ -43,9 +55,7 @@
         </button>
       </div>
 
-      <div class="article-content" :class="{ collapsed: !isExpanded }">
-        <component :is="MarkdownComponent" />
-      </div>
+      <div class="article-content" :class="{ collapsed: !isExpanded }" v-html="content" />
     </article>
   </div>
 </template>
@@ -78,3 +88,4 @@
     opacity: 0;
   }
 </style>
+
