@@ -236,13 +236,21 @@ export function useActivities() {
     handleActivitiesChange
   )
 
+  async function initialize() {
+    const result = await resourceInitialize()
+    if (result.error) {
+      error.value = result.error.message || result.error
+    }
+    return result
+  }
+
   function cleanup() {
     resourceCleanup()
     sessionOverrides.clear()
   }
 
   // Auto-initialize when composable is used
-  resourceInitialize()
+  initialize()
 
   return {
     // Data
@@ -258,7 +266,7 @@ export function useActivities() {
     setActivityStatus,
     isActivityDone,
     getKeysForHabit,
-    initialize: resourceInitialize,
+    initialize,
     cleanup,
   }
 }
