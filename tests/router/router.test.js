@@ -11,10 +11,9 @@ import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 async function setup(t, authenticated = false) {
   setupTestEnvironment(t)
 
-  const { useAuthentication } = await import(
+  const { useAuthentication, resetAuth } = await import(
     '../../src/configuration/authentication/useAuthentication.js'
   )
-  const { useAuthentication, resetAuth } = await import('../../src/configuration/authentication/useAuthentication.js')
   const { createAppRouter } = await import('../../src/configuration/router.js')
 
   // Stub components to avoid loading .vue files
