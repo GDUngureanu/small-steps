@@ -11,6 +11,7 @@ Centralized documentation for the Small Steps project.
 - [Code Map](codemap.md)
 - [Configuration](configuration.md)
 - [SCSS](scss.md)
+- [Testing](testing.md)
 - [Components](components/README.md)
   - Layout
     - [Navigation](components/layout/navigation.md)

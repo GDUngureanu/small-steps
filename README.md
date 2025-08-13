@@ -23,13 +23,34 @@ A Vue 3 single-page application that serves as a personal passion project focuse
 
 ## Quick Start
 
-```sh
-# Install dependencies
-npm install
+1. **Install Node.js** – this project is tested with Node 20+. Earlier versions
+   may not support the tooling used here.
+2. **Install dependencies**:
 
-# Start development server (port 8080)
-npm start
-```
+   ```sh
+   npm install
+   ```
+3. **Add environment variables** – create a `.env` file in the project root
+   with your Supabase credentials:
+
+   ```
+   VITE_SUPABASE_URL=<your-project-url>
+   VITE_SUPABASE_ANON_KEY=<your-public-anon-key>
+   ```
+
+   A sample file is not provided and the process for obtaining these values is
+   currently undocumented. Ask a maintainer for the correct values or use your
+   own Supabase project.
+4. **Start the development server** (port 8080):
+
+   ```sh
+   npm start
+   ```
+5. **Run the tests** to confirm your setup:
+
+   ```sh
+   npm test
+   ```
 
 ## Available Scripts
 
@@ -83,6 +104,7 @@ Complete project documentation is organized in the [`docs/`](docs/README.md) dir
 - [Code Map](docs/codemap.md)
 - [Configuration](docs/configuration.md)
 - [SCSS](docs/scss.md)
+- [Testing](docs/testing.md)
 - Components
   - [Overview](docs/components/README.md)
   - [Navigation](docs/components/layout/navigation.md)
@@ -97,15 +119,28 @@ Some sections require password authentication:
 - `/experiments` - Personal experiments and projects
 - `/habit` - Personal habit tracking
 
-Authentication is handled via Supabase integration.
+Authentication is handled via Supabase integration. The setup process for the
+required Supabase tables and initial passwords is not currently documented, so
+new contributors should check with a maintainer for the correct configuration.
 
 ## Testing
 
-The project uses a mix of Vitest and Node's built-in test runner:
+The project mixes two testing tools:
 
-- Unit tests: Located in `/tests` directory
-- Coverage reporting: Enabled via `--experimental-test-coverage`
-- Test files: Follow `.test.js` and `.spec.js` naming conventions
+- **Vitest** drives component and page tests in a simulated browser
+  environment.
+- **Node's built-in test runner** handles composables and router logic, with
+  coverage enabled via `--experimental-test-coverage`.
+
+Run all tests and linting with:
+
+```sh
+npm test
+```
+
+See [docs/testing.md](docs/testing.md) for a breakdown of the test folders and
+commands. The reason for using two different runners is not documented; ask a
+maintainer if you are unsure about the current strategy.
 
 ## License
 
