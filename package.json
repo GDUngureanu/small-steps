@@ -48,6 +48,7 @@
     "sass-loader": "^16.0.5",
     "vite": "^6.3.5",
     "vitest": "^3.2.4",
-    "vue-loader": "^17.4.2"
+    "vue-loader": "^17.4.2",
+    "vite-plugin-markdown": "^2.1.0"
   }
 }

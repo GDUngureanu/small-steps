@@ -1,10 +1,14 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Markdown from 'vite-plugin-markdown'
 import path from 'node:path'
 
 export default defineConfig({
   base: '/small-steps/',
-  plugins: [vue()],
+  plugins: [
+    vue({ include: [/\.vue$/, /\.md$/] }),
+    Markdown({ mode: ['vue'] })
+  ],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') }
   },
