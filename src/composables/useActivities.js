@@ -44,7 +44,6 @@ export function useActivities() {
 
       return true
     } catch (err) {
-      // console.error('Error loading activities:', err)
       error.value = err.message
       return false
     } finally {
