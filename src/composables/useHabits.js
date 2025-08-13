@@ -4,15 +4,12 @@
 
 import { ref, computed } from 'vue'
 import { supabase } from '@/configuration/supabase.js'
+import { useSupabaseResource } from './useSupabaseResource.js'
 
 // Global state for habits
 const habits = ref([])
 const loading = ref(false)
 const error = ref(null)
-
-// Cache management
-let habitsSubscription = null
-let isInitialized = false
 
 /**
  * Composable for managing habits data with Supabase
@@ -156,85 +153,47 @@ export function useHabits() {
     habits: habits.value,
   }))
 
-  /**
-   * Initialize habits data and real-time subscription
-   */
-  async function initialize() {
-    if (isInitialized) return
-
-    // Load initial data
-    await loadHabits()
-
-    // Set up real-time subscription
-    habitsSubscription = supabase
-      .channel('habits_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'habits',
-        },
-        (payload) => {
-          // console.log('Habits change:', payload)
-
-          switch (payload.eventType) {
-            case 'INSERT': {
-              // Add new habit to local state
-              const newHabit = {
-                id: payload.new.id,
-                name: payload.new.name,
-                scope: payload.new.scope,
-                category: payload.new.category,
-                archived: payload.new.archived,
-                sort: 0,
-              }
-              if (!habits.value.find((h) => h.id === newHabit.id)) {
-                habits.value.push(newHabit)
-              }
-              break
-            }
-
-            case 'UPDATE': {
-              // Update existing habit in local state
-              const habitIndex = habits.value.findIndex((h) => h.id === payload.new.id)
-              if (habitIndex >= 0) {
-                Object.assign(habits.value[habitIndex], {
-                  name: payload.new.name,
-                  scope: payload.new.scope,
-                  category: payload.new.category,
-                  archived: payload.new.archived,
-                })
-              }
-              break
-            }
-
-            case 'DELETE': {
-              // Remove habit from local state
-              const deleteIndex = habits.value.findIndex((h) => h.id === payload.old.id)
-              if (deleteIndex >= 0) {
-                habits.value.splice(deleteIndex, 1)
-              }
-              break
-            }
-          }
+  function handleHabitsChange(payload) {
+    switch (payload.eventType) {
+      case 'INSERT': {
+        const newHabit = {
+          id: payload.new.id,
+          name: payload.new.name,
+          scope: payload.new.scope,
+          category: payload.new.category,
+          archived: payload.new.archived,
+          sort: 0,
         }
-      )
-      .subscribe()
+        if (!habits.value.find((h) => h.id === newHabit.id)) {
+          habits.value.push(newHabit)
+        }
+        break
+      }
 
-    isInitialized = true
-  }
+      case 'UPDATE': {
+        const habitIndex = habits.value.findIndex((h) => h.id === payload.new.id)
+        if (habitIndex >= 0) {
+          Object.assign(habits.value[habitIndex], {
+            name: payload.new.name,
+            scope: payload.new.scope,
+            category: payload.new.category,
+            archived: payload.new.archived,
+          })
+        }
+        break
+      }
 
-  /**
-   * Clean up subscription
-   */
-  function cleanup() {
-    if (habitsSubscription) {
-      supabase.removeChannel(habitsSubscription)
-      habitsSubscription = null
+      case 'DELETE': {
+        const deleteIndex = habits.value.findIndex((h) => h.id === payload.old.id)
+        if (deleteIndex >= 0) {
+          habits.value.splice(deleteIndex, 1)
+        }
+        break
+      }
     }
-    isInitialized = false
   }
+
+  const { initialize, cleanup } = useSupabaseResource('habits', loadHabits, handleHabitsChange)
 
   // Auto-initialize when composable is used
   initialize()

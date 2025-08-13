@@ -4,6 +4,7 @@
 
 import { ref, computed, reactive } from 'vue'
 import { supabase } from '@/configuration/supabase.js'
+import { useSupabaseResource } from './useSupabaseResource.js'
 
 // Global state for activities
 const activities = ref([])
@@ -12,10 +13,6 @@ const error = ref(null)
 
 // Session overrides for optimistic updates
 const sessionOverrides = reactive(new Map())
-
-// Cache management
-let activitiesSubscription = null
-let isInitialized = false
 
 /**
  * Composable for managing habit activities with Supabase
@@ -220,71 +217,44 @@ export function useActivities() {
     return map
   })
 
-  /**
-   * Initialize activities data and real-time subscription
-   */
-  async function initialize() {
-    if (isInitialized) return
-
-    // Load initial data
-    await loadActivities()
-
-    // Set up real-time subscription
-    activitiesSubscription = supabase
-      .channel('activities_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'habit_activities',
-        },
-        (payload) => {
-          // console.log('Activities change:', payload)
-
-          switch (payload.eventType) {
-            case 'INSERT': {
-              // Add new activity to local state
-              const newActivity = {
-                habitId: payload.new.habit_id,
-                periodKey: payload.new.period_key,
-              }
-              if (!activities.value.find((a) => a.habitId === newActivity.habitId && a.periodKey === newActivity.periodKey)) {
-                activities.value.push(newActivity)
-              }
-              break
-            }
-
-            case 'DELETE': {
-              // Remove activity from local state
-              const deleteIndex = activities.value.findIndex((a) => a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key)
-              if (deleteIndex >= 0) {
-                activities.value.splice(deleteIndex, 1)
-              }
-              break
-            }
-          }
+  function handleActivitiesChange(payload) {
+    switch (payload.eventType) {
+      case 'INSERT': {
+        const newActivity = {
+          habitId: payload.new.habit_id,
+          periodKey: payload.new.period_key,
         }
-      )
-      .subscribe()
+        if (!activities.value.find((a) => a.habitId === newActivity.habitId && a.periodKey === newActivity.periodKey)) {
+          activities.value.push(newActivity)
+        }
+        break
+      }
 
-    isInitialized = true
+      case 'DELETE': {
+        const deleteIndex = activities.value.findIndex(
+          (a) => a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key
+        )
+        if (deleteIndex >= 0) {
+          activities.value.splice(deleteIndex, 1)
+        }
+        break
+      }
+    }
   }
 
-  /**
-   * Clean up subscription and session overrides
-   */
+  const { initialize: resourceInitialize, cleanup: resourceCleanup } = useSupabaseResource(
+    'habit_activities',
+    loadActivities,
+    handleActivitiesChange
+  )
+
   function cleanup() {
-    if (activitiesSubscription) {
-      supabase.removeChannel(activitiesSubscription)
-      activitiesSubscription = null
-    }
+    resourceCleanup()
     sessionOverrides.clear()
-    isInitialized = false
   }
 
   // Auto-initialize when composable is used
-  initialize()
+  resourceInitialize()
 
   return {
     // Data
@@ -301,7 +271,7 @@ export function useActivities() {
     upsertActivity,
     isActivityDone,
     getKeysForHabit,
-    initialize,
+    initialize: resourceInitialize,
     cleanup,
   }
 }
