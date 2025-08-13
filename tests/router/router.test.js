@@ -14,14 +14,15 @@ async function setup(t, authenticated = false) {
   const { useAuthentication } = await import(
     '../../src/configuration/authentication/useAuthentication.js'
   )
+  const { useAuthentication, resetAuth } = await import('../../src/configuration/authentication/useAuthentication.js')
   const { createAppRouter } = await import('../../src/configuration/router.js')
 
   // Stub components to avoid loading .vue files
   const routes = rawRoutes.map((route) => ({ ...route, component: {} }))
 
   const router = createAppRouter(createMemoryHistory(), routes)
+  resetAuth()
   const auth = useAuthentication()
-  auth.logout()
   if (authenticated) auth.authenticate(PASSWORD)
   await router.push('/')
   return router
