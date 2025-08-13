@@ -1,18 +1,35 @@
 export const PASSWORD = 'secret'
 
 export function setupTestEnvironment(t, { password = PASSWORD } = {}) {
-  const originalSessionStorage = global.sessionStorage
-  const store = {}
+  function overrideSessionStorage(currentTest) {
+    const originalSessionStorage = global.sessionStorage
+    originalSessionStorage?.clear?.()
 
-  global.sessionStorage = {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => {
-      store[key] = value
-    },
-    removeItem: (key) => {
-      delete store[key]
-    },
+    const store = {}
+    const mockedSessionStorage = {
+      getItem: (key) => store[key] || null,
+      setItem: (key, value) => {
+        store[key] = value
+      },
+      removeItem: (key) => {
+        delete store[key]
+      },
+      clear: () => {
+        Object.keys(store).forEach((key) => delete store[key])
+      },
+    }
+
+    global.sessionStorage = mockedSessionStorage
+
+    currentTest.after(() => {
+      mockedSessionStorage.clear()
+      global.sessionStorage = originalSessionStorage
+    })
   }
+
+  // Apply once for the current test and again for any subtests
+  overrideSessionStorage(t)
+  t.beforeEach(overrideSessionStorage)
 
   const originalPassword = process.env.VITE_APP_PASSWORD
   if (password === null || password === undefined) {
@@ -22,7 +39,6 @@ export function setupTestEnvironment(t, { password = PASSWORD } = {}) {
   }
 
   t.after(() => {
-    global.sessionStorage = originalSessionStorage
     if (originalPassword === undefined) {
       delete process.env.VITE_APP_PASSWORD
     } else {
