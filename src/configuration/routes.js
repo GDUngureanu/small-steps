@@ -39,23 +39,99 @@ const Pisicuta = () => import('@/pages/pisicuta/Pisicuta.vue')
 const Laptops = () => import('@/pages/pisicuta/laptops/Laptops.vue')
 
 export default [
-  { path: '/', component: Home, meta: { label: 'Home', group: null, requiresAuth: false } },
-  { path: '/ikigai', component: Ikigai, meta: { label: 'Ikigai', group: null, requiresAuth: true } },
-  { path: '/ippo', component: Ippo, meta: { label: 'Ippo', group: null, requiresAuth: true } },
-  { path: '/experiments', component: Experiments, meta: { label: 'Experiments', group: null, requiresAuth: true } },
-  { path: '/random', component: Random, meta: { label: 'Random', group: null, requiresAuth: true } },
-  { path: '/literature', component: Literature, meta: { label: 'Overview', group: 'literature', requiresAuth: false } },
-  { path: '/books', component: Books, meta: { label: 'Books', group: 'literature', requiresAuth: false } },
-  { path: '/poems', component: Poems, meta: { label: 'Poems', group: 'literature', requiresAuth: false } },
-  { path: '/entertainment', component: Entertainment, meta: { label: 'Overview', group: 'entertainment', requiresAuth: false } },
-  { path: '/anime', component: Anime, meta: { label: 'Anime', group: 'entertainment', requiresAuth: false } },
-  { path: '/movies', component: Movies, meta: { label: 'Movies', group: 'entertainment', requiresAuth: false } },
-  { path: '/nutrition', component: Nutrition, meta: { label: 'Overview', group: 'nutrition', requiresAuth: false } },
-  { path: '/nutrition/ingredients', component: Ingredients, meta: { label: 'Ingredients', group: 'nutrition', requiresAuth: false } },
-  { path: '/adventure', component: Adventure, meta: { label: 'Overview', group: 'adventure', requiresAuth: false } },
-  { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
-  { path: '/habit', component: Habit, meta: { label: 'Overview', group: 'habit', requiresAuth: true } },
-  { path: '/habit/tracker', component: Tracker, meta: { label: 'Tracker', group: 'habit', requiresAuth: true } },
-  { path: '/pisicuta', component: Pisicuta, meta: { label: 'Overview', group: 'pisicuta', requiresAuth: true } },
-  { path: '/pisicuta/laptops', component: Laptops, meta: { label: 'Laptops', group: 'pisicuta', requiresAuth: true } },
+  {
+    path: '/',
+    component: Home,
+    meta: { navLabel: 'Home', navGroup: null, requiresAuth: false, icon: 'bi-house' },
+  },
+  {
+    path: '/ikigai',
+    component: Ikigai,
+    meta: { navLabel: 'Ikigai', navGroup: null, requiresAuth: true, icon: 'bi-lightbulb' },
+  },
+  {
+    path: '/ippo',
+    component: Ippo,
+    meta: { navLabel: 'Ippo', navGroup: null, requiresAuth: true, icon: 'bi-flag' },
+  },
+  {
+    path: '/experiments',
+    component: Experiments,
+    meta: { navLabel: 'Experiments', navGroup: null, requiresAuth: true, icon: 'bi-gear' },
+  },
+  {
+    path: '/random',
+    component: Random,
+    meta: { navLabel: 'Random', navGroup: null, requiresAuth: true, icon: 'bi-shuffle' },
+  },
+  {
+    path: '/literature',
+    component: Literature,
+    meta: { navLabel: 'Overview', navGroup: 'literature', requiresAuth: false, icon: 'bi-journal' },
+  },
+  {
+    path: '/books',
+    component: Books,
+    meta: { navLabel: 'Books', navGroup: 'literature', requiresAuth: false, icon: 'bi-book', badge: '4' },
+  },
+  {
+    path: '/poems',
+    component: Poems,
+    meta: { navLabel: 'Poems', navGroup: 'literature', requiresAuth: false, icon: 'bi-pencil' },
+  },
+  {
+    path: '/entertainment',
+    component: Entertainment,
+    meta: { navLabel: 'Overview', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-controller' },
+  },
+  {
+    path: '/anime',
+    component: Anime,
+    meta: { navLabel: 'Anime', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-emoji-smile' },
+  },
+  {
+    path: '/movies',
+    component: Movies,
+    meta: { navLabel: 'Movies', navGroup: 'entertainment', requiresAuth: false, icon: 'bi-film' },
+  },
+  {
+    path: '/nutrition',
+    component: Nutrition,
+    meta: { navLabel: 'Overview', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-egg' },
+  },
+  {
+    path: '/nutrition/ingredients',
+    component: Ingredients,
+    meta: { navLabel: 'Ingredients', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-list-ul' },
+  },
+  {
+    path: '/adventure',
+    component: Adventure,
+    meta: { navLabel: 'Overview', navGroup: 'adventure', requiresAuth: false, icon: 'bi-map' },
+  },
+  {
+    path: '/adventure/destinations',
+    component: Destinations,
+    meta: { navLabel: 'Destinations', navGroup: 'adventure', requiresAuth: false, icon: 'bi-geo-alt' },
+  },
+  {
+    path: '/habit',
+    component: Habit,
+    meta: { navLabel: 'Overview', navGroup: 'habit', requiresAuth: true, icon: 'bi-calendar-check' },
+  },
+  {
+    path: '/habit/tracker',
+    component: Tracker,
+    meta: { navLabel: 'Tracker', navGroup: 'habit', requiresAuth: true, icon: 'bi-graph-up' },
+  },
+  {
+    path: '/pisicuta',
+    component: Pisicuta,
+    meta: { navLabel: 'Overview', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-laptop' },
+  },
+  {
+    path: '/pisicuta/laptops',
+    component: Laptops,
+    meta: { navLabel: 'Laptops', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-laptop' },
+  },
 ]

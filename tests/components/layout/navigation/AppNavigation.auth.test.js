@@ -20,21 +20,23 @@ vi.mock('vue-router', () => ({
 
 // Mock authentication composable with reactive auth state
 const isAuthenticated = ref(false)
-const navigationItems = computed(() =>
-  isAuthenticated.value
-    ? [
-        { path: '/public', label: 'Public' },
-        { path: '/private', label: 'Private' },
-      ]
-    : [{ path: '/public', label: 'Public' }]
-)
 const logoutMock = vi.fn()
 vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
   useAuthentication: () => ({
     isAuthenticated: computed(() => isAuthenticated.value),
+    logout: logoutMock,
+  }),
+}))
+
+// Mock navigation composable to supply structural data
+const navigationItems = computed(() => [
+  { path: '/public', label: 'Public', requiresAuth: false },
+  { path: '/private', label: 'Private', requiresAuth: true },
+])
+vi.mock('@/composables/useNavigation.js', () => ({
+  useNavigation: () => ({
     navigationItems,
     dropdownSections: computed(() => ({})),
-    logout: logoutMock,
   }),
 }))
 
