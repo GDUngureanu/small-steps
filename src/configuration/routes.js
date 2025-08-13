@@ -34,6 +34,10 @@ const Destinations = () => import('@/pages/adventure/destinations/Destinations.v
 const Habit = () => import('@/pages/habit/Habit.vue')
 const Tracker = () => import('@/pages/habit/tracker/Tracker.vue')
 
+// Pisicuta Components
+const Pisicuta = () => import('@/pages/pisicuta/Pisicuta.vue')
+const Laptops = () => import('@/pages/pisicuta/laptops/Laptops.vue')
+
 export default [
   { path: '/', component: Home, meta: { label: 'Home', group: null, requiresAuth: false } },
   { path: '/ikigai', component: Ikigai, meta: { label: 'Ikigai', group: null, requiresAuth: true } },
@@ -52,4 +56,6 @@ export default [
   { path: '/adventure/destinations', component: Destinations, meta: { label: 'Destinations', group: 'adventure', requiresAuth: false } },
   { path: '/habit', component: Habit, meta: { label: 'Overview', group: 'habit', requiresAuth: true } },
   { path: '/habit/tracker', component: Tracker, meta: { label: 'Tracker', group: 'habit', requiresAuth: true } },
+  { path: '/pisicuta', component: Pisicuta, meta: { label: 'Overview', group: 'pisicuta', requiresAuth: false } },
+  { path: '/pisicuta/laptops', component: Laptops, meta: { label: 'Laptops', group: 'pisicuta', requiresAuth: false } },
 ]
