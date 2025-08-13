@@ -45,7 +45,6 @@ export function useHabits() {
 
       return true
     } catch (err) {
-      // console.error('Error loading habits:', err)
       error.value = err.message
       return false
     } finally {
@@ -94,7 +93,6 @@ export function useHabits() {
 
       return newHabit
     } catch (err) {
-      // console.error('Error creating habit:', err)
       error.value = err.message
       return null
     } finally {
@@ -127,7 +125,6 @@ export function useHabits() {
 
       return true
     } catch (err) {
-      // console.error('Error updating habit:', err)
       error.value = err.message
       return false
     } finally {

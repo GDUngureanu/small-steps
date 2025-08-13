@@ -44,7 +44,6 @@ export function useActivities() {
 
       return true
     } catch (err) {
-      // console.error('Error loading activities:', err)
       error.value = err.message
       return false
     } finally {
@@ -106,7 +105,6 @@ export function useActivities() {
       sessionOverrides.delete(key)
       return true
     } catch (err) {
-      // console.error('Error toggling activity:', err)
       error.value = err.message
 
       // Revert optimistic update
