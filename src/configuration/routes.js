@@ -25,6 +25,7 @@ const Movies = () => import('@/pages/entertainment/Movies.vue')
 // Nutrition Components
 const Nutrition = () => import('@/pages/nutrition/Nutrition.vue')
 const Ingredients = () => import('@/pages/nutrition/ingredients/Ingredients.vue')
+const MealPrep = () => import('@/pages/nutrition/MealPrep.vue')
 
 // Finance Components
 const Finance = () => import('@/pages/finance/Finance.vue')
@@ -113,6 +114,11 @@ export default [
     path: '/nutrition/ingredients',
     component: Ingredients,
     meta: { navLabel: 'Ingredients', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-list-ul' },
+  },
+  {
+    path: '/nutrition/meal-prep',
+    component: MealPrep,
+    meta: { navLabel: 'Meal Prep', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-basket' }, 
   },
   {
     path: '/finance',
