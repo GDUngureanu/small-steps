@@ -19,39 +19,33 @@ let isInitialized = false
  * @returns {Object} Habits data and methods
  */
 export function useHabits() {
-  
   /**
    * Load habits from Supabase
    * @returns {Promise<boolean>} Success status
    */
   async function loadHabits() {
     if (loading.value) return false
-    
+
     try {
       loading.value = true
       error.value = null
-      
-      const { data, error: supabaseError } = await supabase
-        .from('habits')
-        .select('*')
-        .order('scope')
-        .order('category')
-        .order('name')
-      
+
+      const { data, error: supabaseError } = await supabase.from('habits').select('*').order('scope').order('category').order('name')
+
       if (supabaseError) {
         throw supabaseError
       }
-      
+
       // Transform to match existing JSON structure
-      habits.value = data.map(habit => ({
+      habits.value = data.map((habit) => ({
         id: habit.id,
         name: habit.name,
         scope: habit.scope,
         category: habit.category,
         archived: habit.archived,
-        sort: 0 // Not in DB, but needed for compatibility
+        sort: 0, // Not in DB, but needed for compatibility
       }))
-      
+
       return true
     } catch (err) {
       // console.error('Error loading habits:', err)
@@ -71,22 +65,24 @@ export function useHabits() {
     try {
       loading.value = true
       error.value = null
-      
+
       const { data, error: supabaseError } = await supabase
         .from('habits')
-        .insert([{
-          name: habitData.name,
-          scope: habitData.scope,
-          category: habitData.category,
-          archived: habitData.archived || false
-        }])
+        .insert([
+          {
+            name: habitData.name,
+            scope: habitData.scope,
+            category: habitData.category,
+            archived: habitData.archived || false,
+          },
+        ])
         .select()
         .single()
-      
+
       if (supabaseError) {
         throw supabaseError
       }
-      
+
       // Add to local state immediately (optimistic update)
       const newHabit = {
         id: data.id,
@@ -94,11 +90,11 @@ export function useHabits() {
         scope: data.scope,
         category: data.category,
         archived: data.archived,
-        sort: 0
+        sort: 0,
       }
-      
+
       habits.value.push(newHabit)
-      
+
       return newHabit
     } catch (err) {
       // console.error('Error creating habit:', err)
@@ -119,22 +115,19 @@ export function useHabits() {
     try {
       loading.value = true
       error.value = null
-      
-      const { error: supabaseError } = await supabase
-        .from('habits')
-        .update(updates)
-        .eq('id', habitId)
-      
+
+      const { error: supabaseError } = await supabase.from('habits').update(updates).eq('id', habitId)
+
       if (supabaseError) {
         throw supabaseError
       }
-      
+
       // Update local state immediately (optimistic update)
-      const habitIndex = habits.value.findIndex(h => h.id === habitId)
+      const habitIndex = habits.value.findIndex((h) => h.id === habitId)
       if (habitIndex >= 0) {
         Object.assign(habits.value[habitIndex], updates)
       }
-      
+
       return true
     } catch (err) {
       // console.error('Error updating habit:', err)
@@ -160,7 +153,7 @@ export function useHabits() {
    */
   const habitsData = computed(() => ({
     version: '1.0',
-    habits: habits.value
+    habits: habits.value,
   }))
 
   /**
@@ -168,10 +161,10 @@ export function useHabits() {
    */
   async function initialize() {
     if (isInitialized) return
-    
+
     // Load initial data
     await loadHabits()
-    
+
     // Set up real-time subscription
     habitsSubscription = supabase
       .channel('habits_changes')
@@ -180,11 +173,11 @@ export function useHabits() {
         {
           event: '*',
           schema: 'public',
-          table: 'habits'
+          table: 'habits',
         },
         (payload) => {
           // console.log('Habits change:', payload)
-          
+
           switch (payload.eventType) {
             case 'INSERT': {
               // Add new habit to local state
@@ -194,31 +187,31 @@ export function useHabits() {
                 scope: payload.new.scope,
                 category: payload.new.category,
                 archived: payload.new.archived,
-                sort: 0
+                sort: 0,
               }
-              if (!habits.value.find(h => h.id === newHabit.id)) {
+              if (!habits.value.find((h) => h.id === newHabit.id)) {
                 habits.value.push(newHabit)
               }
               break
             }
-              
+
             case 'UPDATE': {
               // Update existing habit in local state
-              const habitIndex = habits.value.findIndex(h => h.id === payload.new.id)
+              const habitIndex = habits.value.findIndex((h) => h.id === payload.new.id)
               if (habitIndex >= 0) {
                 Object.assign(habits.value[habitIndex], {
                   name: payload.new.name,
                   scope: payload.new.scope,
                   category: payload.new.category,
-                  archived: payload.new.archived
+                  archived: payload.new.archived,
                 })
               }
               break
             }
-              
+
             case 'DELETE': {
               // Remove habit from local state
-              const deleteIndex = habits.value.findIndex(h => h.id === payload.old.id)
+              const deleteIndex = habits.value.findIndex((h) => h.id === payload.old.id)
               if (deleteIndex >= 0) {
                 habits.value.splice(deleteIndex, 1)
               }
@@ -228,7 +221,7 @@ export function useHabits() {
         }
       )
       .subscribe()
-    
+
     isInitialized = true
   }
 
@@ -252,13 +245,13 @@ export function useHabits() {
     habitsData,
     loading,
     error,
-    
+
     // Methods
     loadHabits,
     createHabit,
     updateHabit,
     deleteHabit,
     initialize,
-    cleanup
+    cleanup,
   }
 }

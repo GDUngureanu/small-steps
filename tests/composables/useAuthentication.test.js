@@ -14,9 +14,7 @@ async function setup(t) {
 test('initializes from existing session token and clears on logout', { concurrency: false }, async (t) => {
   setupTestEnvironment(t)
   sessionStorage.setItem('memento-mori-authentication', 'true')
-  const { useAuthentication } = await import(
-    '../../src/configuration/authentication/useAuthentication.js?from-session'
-  )
+  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js?from-session')
   const auth = useAuthentication()
   assert.equal(auth.isAuthenticated.value, true)
   auth.logout()
@@ -53,9 +51,7 @@ test('route access control', { concurrency: false }, async (t) => {
 test('warns when password variable is absent', { concurrency: false }, async (t) => {
   setupTestEnvironment(t, { password: null })
 
-  const { useAuthentication } = await import(
-    '../../src/configuration/authentication/useAuthentication.js?no-password'
-  )
+  const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js?no-password')
   const auth = useAuthentication()
 
   const warnMock = t.mock.method(console, 'warn')

@@ -28,4 +28,3 @@ test('clicking Delete Action emits confirm and respects loading state', async ()
   await deleteBtn.trigger('click')
   expect(wrapper.emitted('confirm')).toHaveLength(1)
 })
-

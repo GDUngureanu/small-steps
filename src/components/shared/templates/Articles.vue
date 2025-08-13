@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineAsyncComponent } from 'vue'
+  import { ref, defineAsyncComponent } from 'vue'
 
   /**
    * Article template that loads Markdown content.
@@ -15,8 +15,8 @@ import { ref, defineAsyncComponent } from 'vue'
     meta: String,
     expanded: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   })
 
   const isExpanded = ref(props.expanded)
@@ -38,15 +38,12 @@ import { ref, defineAsyncComponent } from 'vue'
             <em>{{ meta }}</em>
           </p>
         </div>
-        <button
-          class="btn btn-sm p-1 text-muted article-toggle"
-          :aria-label="isExpanded ? 'Collapse section' : 'Expand section'"
-        >
+        <button class="btn btn-sm p-1 text-muted article-toggle" :aria-label="isExpanded ? 'Collapse section' : 'Expand section'">
           <i class="bi" :class="isExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
         </button>
       </div>
 
-      <div class="article-content" :class="{ 'collapsed': !isExpanded }">
+      <div class="article-content" :class="{ collapsed: !isExpanded }">
         <component :is="MarkdownComponent" />
       </div>
     </article>
@@ -54,28 +51,30 @@ import { ref, defineAsyncComponent } from 'vue'
 </template>
 
 <style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
+  .cursor-pointer {
+    cursor: pointer;
+  }
 
-.article-toggle {
-  border: none !important;
-  background: none !important;
-  transition: transform 0.2s ease;
-}
+  .article-toggle {
+    border: none !important;
+    background: none !important;
+    transition: transform 0.2s ease;
+  }
 
-.article-toggle:hover {
-  transform: scale(1.1);
-}
+  .article-toggle:hover {
+    transform: scale(1.1);
+  }
 
-.article-content {
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
-  opacity: 1;
-}
+  .article-content {
+    overflow: hidden;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 1;
+  }
 
-.article-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-}
+  .article-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+  }
 </style>

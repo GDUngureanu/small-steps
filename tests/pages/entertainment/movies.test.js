@@ -15,4 +15,3 @@ test('ActionsTemplate is present', async () => {
   const wrapper = await renderComponent(file)
   expect(wrapper.find('actions-template-stub').exists()).toBe(true)
 })
-

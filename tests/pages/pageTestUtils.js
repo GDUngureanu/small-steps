@@ -26,20 +26,24 @@ export async function renderComponent(file, options = {}) {
   Object.defineProperty(global, 'sessionStorage', {
     value: {
       getItem: (key) => mockStorage[key] || null,
-      setItem: (key, value) => { mockStorage[key] = value },
-      removeItem: (key) => { delete mockStorage[key] },
+      setItem: (key, value) => {
+        mockStorage[key] = value
+      },
+      removeItem: (key) => {
+        delete mockStorage[key]
+      },
     },
-    configurable: true
+    configurable: true,
   })
 
   const component = (await import(`../../${file}`)).default
-  
+
   // Create a router with stubbed components for testing
-  const routes = rawRoutes.map((route) => ({ 
-    ...route, 
-    component: { template: '<div>Stubbed Component</div>' }
+  const routes = rawRoutes.map((route) => ({
+    ...route,
+    component: { template: '<div>Stubbed Component</div>' },
   }))
-  
+
   const router = createRouter({
     history: createMemoryHistory(),
     routes,
@@ -53,19 +57,19 @@ export async function renderComponent(file, options = {}) {
         RouterLink: true,
         RouterView: true,
         // Stub shared templates to avoid deep dependencies
-        'ArticleTemplate': {
+        ArticleTemplate: {
           render() {
             return h('article-template-stub', this.$slots.default ? this.$slots.default() : [])
-          }
+          },
         },
-        'ActionsTemplate': true,
-        'SuggestionsTemplate': true,
+        ActionsTemplate: true,
+        SuggestionsTemplate: true,
         ...((options.global && options.global.stubs) || {}),
       },
       mocks: {
         // Mock any global properties if needed
         ...((options.global && options.global.mocks) || {}),
-      }
+      },
     },
   })
 
@@ -85,26 +89,30 @@ export async function resolveRoute(pathName, authenticated = false) {
   Object.defineProperty(global, 'sessionStorage', {
     value: {
       getItem: (key) => mockStorage[key] || null,
-      setItem: (key, value) => { mockStorage[key] = value },
-      removeItem: (key) => { delete mockStorage[key] },
+      setItem: (key, value) => {
+        mockStorage[key] = value
+      },
+      removeItem: (key) => {
+        delete mockStorage[key]
+      },
     },
-    configurable: true
+    configurable: true,
   })
-  
+
   const routes = rawRoutes.map((r) => ({
-    ...r, 
-    component: { template: '<div>Test Route</div>' }
+    ...r,
+    component: { template: '<div>Test Route</div>' },
   }))
-  
+
   const { createAppRouter } = await import('../../src/configuration/router.js')
   const router = createAppRouter(createMemoryHistory(), routes)
-  
+
   if (authenticated) {
     const { useAuthentication } = await import('../../src/configuration/authentication/useAuthentication.js')
     const auth = useAuthentication()
     auth.authenticate('secret')
   }
-  
+
   await router.push(pathName)
   await router.isReady()
   return router.currentRoute.value.fullPath

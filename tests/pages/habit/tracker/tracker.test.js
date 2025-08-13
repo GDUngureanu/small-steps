@@ -17,14 +17,14 @@ test('Tracker route resolves correctly with authentication', async () => {
 
 test('Add Habit Tracker Form is always visible', async () => {
   const wrapper = await renderComponent(file)
-  
+
   // Form should be visible without any toggle action
   expect(wrapper.html()).toContain('Add Habit Tracker')
   expect(wrapper.html()).toContain('placeholder="Habit name"')
-  expect(wrapper.html()).toContain('form-select') 
+  expect(wrapper.html()).toContain('form-select')
   expect(wrapper.html()).toContain('placeholder="Category"')
   expect(wrapper.html()).toContain('bi-plus-lg')
-  
+
   // Should not contain toggle button elements
   expect(wrapper.html()).not.toContain('bi-plus-circle')
   expect(wrapper.html()).not.toContain('bi-dash-circle')
@@ -32,7 +32,7 @@ test('Add Habit Tracker Form is always visible', async () => {
 
 test('Category autocomplete datalist is present', async () => {
   const wrapper = await renderComponent(file)
-  
+
   // Should contain datalist for category autocomplete
   expect(wrapper.html()).toContain('category-suggestions')
   expect(wrapper.html()).toContain('datalist')

@@ -22,4 +22,3 @@ test('renders table rows from data.json', async () => {
   const rows = wrapper.findAll('tbody tr')
   expect(rows.length).toBe(animeList.length)
 })
-

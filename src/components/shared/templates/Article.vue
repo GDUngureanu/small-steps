@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+  import { ref } from 'vue'
 
   /**
    * Basic article layout with a header and body slot.
@@ -13,8 +13,8 @@ import { ref } from 'vue'
     meta: String,
     expanded: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   })
 
   const isExpanded = ref(props.expanded)
@@ -39,7 +39,7 @@ import { ref } from 'vue'
         </button>
       </div>
 
-      <div class="article-content" :class="{ 'collapsed': !isExpanded }">
+      <div class="article-content" :class="{ collapsed: !isExpanded }">
         <slot />
       </div>
     </article>
@@ -47,28 +47,30 @@ import { ref } from 'vue'
 </template>
 
 <style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
+  .cursor-pointer {
+    cursor: pointer;
+  }
 
-.article-toggle {
-  border: none !important;
-  background: none !important;
-  transition: transform 0.2s ease;
-}
+  .article-toggle {
+    border: none !important;
+    background: none !important;
+    transition: transform 0.2s ease;
+  }
 
-.article-toggle:hover {
-  transform: scale(1.1);
-}
+  .article-toggle:hover {
+    transform: scale(1.1);
+  }
 
-.article-content {
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
-  opacity: 1;
-}
+  .article-content {
+    overflow: hidden;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 1;
+  }
 
-.article-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-}
+  .article-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+  }
 </style>

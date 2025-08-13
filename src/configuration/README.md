@@ -16,7 +16,7 @@ The exported `supabase` instance is used by composables for authentication and d
 The `authentication/` directory contains the complete authentication system:
 
 - `useAuthentication.js` - Core authentication logic and password validation
-- `authenticationEvents.js` - Event system for authentication state management  
+- `authenticationEvents.js` - Event system for authentication state management
 - `components/AccessModal.vue` - Password input modal component
 
 ## Router and Routes

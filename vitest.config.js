@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Markdown from 'vite-plugin-markdown'
 import path from 'node:path'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    Markdown({ mode: ['html', 'vue'] })
+  ],
   test: {
     environment: 'jsdom',
     globals: true,
@@ -12,7 +16,6 @@ export default defineConfig({
     alias: { '@': path.resolve(__dirname, 'src') }
   },
   define: {
-    // Ensure environment variables are available
     'process.env': process.env
   }
 })

@@ -5,10 +5,7 @@ import vm from 'node:vm'
 
 async function loadSupabaseModule({ url, key }) {
   const code = await readFile(new URL('../../src/configuration/supabase.js', import.meta.url), 'utf8')
-  const transformed = code
-    .replace("import { createClient } from '@supabase/supabase-js'\n", '')
-    .replace("import { env } from './env.js'\n", '')
-    .replace('export const supabase', 'const supabase')
+  const transformed = code.replace("import { createClient } from '@supabase/supabase-js'\n", '').replace("import { env } from './env.js'\n", '').replace('export const supabase', 'const supabase')
   const calls = []
   const createClientMock = (...args) => {
     calls.push(args)
@@ -28,24 +25,15 @@ async function loadSupabaseModule({ url, key }) {
 }
 
 test('missing URL and key prioritizes missing URL error', async () => {
-  await assert.rejects(
-    loadSupabaseModule({ url: undefined, key: undefined }),
-    /Missing VITE_SUPABASE_URL/,
-  )
+  await assert.rejects(loadSupabaseModule({ url: undefined, key: undefined }), /Missing VITE_SUPABASE_URL/)
 })
 
 test('missing URL throws an error', async () => {
-  await assert.rejects(
-    loadSupabaseModule({ url: undefined, key: 'anon' }),
-    /Missing VITE_SUPABASE_URL/
-  )
+  await assert.rejects(loadSupabaseModule({ url: undefined, key: 'anon' }), /Missing VITE_SUPABASE_URL/)
 })
 
 test('missing anon key throws an error', async () => {
-  await assert.rejects(
-    loadSupabaseModule({ url: 'https://example.supabase.co', key: undefined }),
-    /Missing VITE_SUPABASE_ANON_KEY/
-  )
+  await assert.rejects(loadSupabaseModule({ url: 'https://example.supabase.co', key: undefined }), /Missing VITE_SUPABASE_ANON_KEY/)
 })
 
 test('createClient is called with expected options when credentials provided', async () => {

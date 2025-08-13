@@ -10,13 +10,7 @@
 
   const normalizeRomanianText = (text) => {
     if (!text) return ''
-    return String(text)
-      .toLowerCase()
-      .replace(/ă/g, 'a')
-      .replace(/â/g, 'a')
-      .replace(/î/g, 'i')
-      .replace(/ș/g, 's')
-      .replace(/ț/g, 't')
+    return String(text).toLowerCase().replace(/ă/g, 'a').replace(/â/g, 'a').replace(/î/g, 'i').replace(/ș/g, 's').replace(/ț/g, 't')
   }
 
   const searchIndex = ingredients.map((ingredient) => ({
@@ -268,10 +262,7 @@
           </tr>
         </thead>
         <tbody class="table-group-divider">
-          <tr
-            v-for="(ingredient, index) in paginatedIngredients"
-            :key="`${sortColumn}-${sortDirection}-${index}-${ingredient.ingredient}`"
-          >
+          <tr v-for="(ingredient, index) in paginatedIngredients" :key="`${sortColumn}-${sortDirection}-${index}-${ingredient.ingredient}`">
             <td class="text-center">
               <i v-if="ingredient.preferred" class="bi bi-star-fill text-warning" title="Preferat"></i>
               <i v-else class="bi bi-star text-muted" title="Nu este preferat"></i>
@@ -280,18 +271,10 @@
             <td class="d-none d-sm-table-cell">{{ ingredient.portion }}g</td>
             <td class="d-none d-md-table-cell">{{ ingredient.form }}</td>
             <td class="d-none d-sm-table-cell">{{ ingredient.type }}</td>
-            <td :class="getNutritionalValueClass(calculateProteinScore(ingredient.protein))">
-              {{ calculateProteinScore(ingredient.protein) }} ({{ ingredient.protein }}g)
-            </td>
-            <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(ingredient.unsaturated_fats))">
-              {{ calculateUnsaturatedFatsScore(ingredient.unsaturated_fats) }} ({{ ingredient.unsaturated_fats }}g)
-            </td>
-            <td :class="getNutritionalValueClass(calculateSolubleFiberScore(ingredient.soluble_fiber))">
-              {{ calculateSolubleFiberScore(ingredient.soluble_fiber) }} ({{ ingredient.soluble_fiber }}g)
-            </td>
-            <td :class="getNutritionalValueClass(calculateInsolubleFiberScore(ingredient.insoluble_fiber))">
-              {{ calculateInsolubleFiberScore(ingredient.insoluble_fiber) }} ({{ ingredient.insoluble_fiber }}g)
-            </td>
+            <td :class="getNutritionalValueClass(calculateProteinScore(ingredient.protein))">{{ calculateProteinScore(ingredient.protein) }} ({{ ingredient.protein }}g)</td>
+            <td :class="getNutritionalValueClass(calculateUnsaturatedFatsScore(ingredient.unsaturated_fats))">{{ calculateUnsaturatedFatsScore(ingredient.unsaturated_fats) }} ({{ ingredient.unsaturated_fats }}g)</td>
+            <td :class="getNutritionalValueClass(calculateSolubleFiberScore(ingredient.soluble_fiber))">{{ calculateSolubleFiberScore(ingredient.soluble_fiber) }} ({{ ingredient.soluble_fiber }}g)</td>
+            <td :class="getNutritionalValueClass(calculateInsolubleFiberScore(ingredient.insoluble_fiber))">{{ calculateInsolubleFiberScore(ingredient.insoluble_fiber) }} ({{ ingredient.insoluble_fiber }}g)</td>
             <td :class="getNutritionalValueClass(ingredient.vitamins_minerals)">
               {{ ingredient.vitamins_minerals }}
             </td>

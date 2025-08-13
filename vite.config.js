@@ -6,8 +6,8 @@ import path from 'node:path'
 export default defineConfig({
   base: '/small-steps/',
   plugins: [
-    vue({ include: [/\.vue$/, /\.md$/] }),
-    Markdown({ mode: ['vue'] })
+    vue(),
+    Markdown({ mode: ['html', 'vue'] })
   ],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') }
@@ -29,7 +29,6 @@ export default defineConfig({
     },
   },
   define: {
-    // Ensure environment variables are available
     'process.env': process.env
   },
   test: {

@@ -106,14 +106,7 @@
 </script>
 
 <template>
-  <div
-    ref="modalRef"
-    class="modal fade"
-    :class="{ show: show }"
-    :style="{ display: show ? 'block' : 'none' }"
-    tabindex="-1"
-    @click.self="handleCancel"
-  >
+  <div ref="modalRef" class="modal fade" :class="{ show: show }" :style="{ display: show ? 'block' : 'none' }" tabindex="-1" @click.self="handleCancel">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">

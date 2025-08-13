@@ -1,9 +1,5 @@
 import { test, expect } from 'vitest'
-import {
-  getPriorityText,
-  getPriorityClass,
-  PRIORITY_LEVELS,
-} from '../../../../../src/components/shared/templates/actions/utils.js'
+import { getPriorityText, getPriorityClass, PRIORITY_LEVELS } from '../../../../../src/components/shared/templates/actions/utils.js'
 
 test('getPriorityText returns correct labels', () => {
   expect(getPriorityText(PRIORITY_LEVELS.LOW)).toBe('Low')

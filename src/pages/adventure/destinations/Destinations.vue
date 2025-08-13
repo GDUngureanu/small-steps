@@ -111,9 +111,7 @@
 
   // Generate country colors from destinations data with computed status
   const countryColors = computed(() => {
-    return Object.fromEntries(
-      processedDestinations.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3'])
-    )
+    return Object.fromEntries(processedDestinations.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3']))
   })
 
   const getCountryColor = (countryId) => countryColors.value[countryId] || '#d3d3d3'
@@ -149,21 +147,11 @@
     }
 
     return {
-      completed: processedDestinations
-        .filter((destination) => destination.status === 'epic-adventure-done')
-        .sort(sortByPriorityThenAlpha),
-      inProgress: processedDestinations
-        .filter((destination) => destination.status === 'halfway-there')
-        .sort(sortByPriorityThenAlpha),
-      adventureAwaits: processedDestinations
-        .filter((destination) => destination.status === 'adventure-awaits')
-        .sort(sortByPriorityThenAlpha),
-      questForFun: processedDestinations
-        .filter((destination) => destination.status === 'quest-for-fun')
-        .sort(sortByPriorityThenAlpha),
-      postponed: processedDestinations
-        .filter((destination) => destination.status === 'journey-postponed')
-        .sort(sortByPriorityThenAlpha),
+      completed: processedDestinations.filter((destination) => destination.status === 'epic-adventure-done').sort(sortByPriorityThenAlpha),
+      inProgress: processedDestinations.filter((destination) => destination.status === 'halfway-there').sort(sortByPriorityThenAlpha),
+      adventureAwaits: processedDestinations.filter((destination) => destination.status === 'adventure-awaits').sort(sortByPriorityThenAlpha),
+      questForFun: processedDestinations.filter((destination) => destination.status === 'quest-for-fun').sort(sortByPriorityThenAlpha),
+      postponed: processedDestinations.filter((destination) => destination.status === 'journey-postponed').sort(sortByPriorityThenAlpha),
     }
   })
 

@@ -76,14 +76,7 @@
       <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
-            <RouterLink
-              :to="item.path"
-              class="nav-link fw-medium"
-              active-class="active"
-              @click="closeMenu"
-              @mouseover="prefetch(item.path)"
-              @mouseleave="cancelPrefetch"
-            >
+            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
               {{ item.label }}
             </RouterLink>
           </li>
@@ -95,13 +88,7 @@
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
               <li v-for="item in section.items" :key="item.path">
-                <RouterLink
-                  :to="item.path"
-                  class="dropdown-item"
-                  @click="closeMenu"
-                  @mouseover="prefetch(item.path)"
-                  @mouseleave="cancelPrefetch"
-                >
+                <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
                   {{ item.label }}
                 </RouterLink>
               </li>

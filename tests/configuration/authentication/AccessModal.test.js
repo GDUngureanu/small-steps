@@ -113,4 +113,3 @@ describe('AccessModal', () => {
     second.unmount()
   })
 })
-

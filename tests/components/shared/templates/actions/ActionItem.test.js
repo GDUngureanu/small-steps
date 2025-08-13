@@ -115,4 +115,3 @@ test('does not render sub-actions when getSubActions returns empty array', () =>
   expect(getSubActions).toHaveBeenCalledWith(baseAction.id)
   expect(wrapper.findAllComponents(ActionItem)).toHaveLength(0)
 })
-

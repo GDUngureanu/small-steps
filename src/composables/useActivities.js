@@ -22,33 +22,29 @@ let isInitialized = false
  * @returns {Object} Activities data and methods
  */
 export function useActivities() {
-  
   /**
    * Load activities from Supabase
    * @returns {Promise<boolean>} Success status
    */
   async function loadActivities() {
     if (loading.value) return false
-    
+
     try {
       loading.value = true
       error.value = null
-      
-      const { data, error: supabaseError } = await supabase
-        .from('habit_activities')
-        .select('*')
-        .order('period_key')
-      
+
+      const { data, error: supabaseError } = await supabase.from('habit_activities').select('*').order('period_key')
+
       if (supabaseError) {
         throw supabaseError
       }
-      
+
       // Transform to match existing JSON structure
-      activities.value = data.map(activity => ({
+      activities.value = data.map((activity) => ({
         habitId: activity.habit_id,
-        periodKey: activity.period_key
+        periodKey: activity.period_key,
       }))
-      
+
       return true
     } catch (err) {
       // console.error('Error loading activities:', err)
@@ -69,57 +65,53 @@ export function useActivities() {
     const key = `${habitId}|${periodKey}`
     const isDone = isActivityDone(habitId, periodKey)
     const shouldCreate = !isDone
-    
+
     try {
       // Optimistic update
       sessionOverrides.set(key, shouldCreate ? 'done' : 'undone')
-      
+
       if (shouldCreate) {
         // Create activity
-        const { error: supabaseError } = await supabase
-          .from('habit_activities')
-          .insert([{
+        const { error: supabaseError } = await supabase.from('habit_activities').insert([
+          {
             habit_id: habitId,
-            period_key: periodKey
-          }])
-        
+            period_key: periodKey,
+          },
+        ])
+
         if (supabaseError) {
           throw supabaseError
         }
-        
+
         // Add to local state
-        if (!activities.value.find(a => a.habitId === habitId && a.periodKey === periodKey)) {
+        if (!activities.value.find((a) => a.habitId === habitId && a.periodKey === periodKey)) {
           activities.value.push({
             habitId,
-            periodKey
+            periodKey,
           })
         }
       } else {
         // Delete activity
-        const { error: supabaseError } = await supabase
-          .from('habit_activities')
-          .delete()
-          .eq('habit_id', habitId)
-          .eq('period_key', periodKey)
-        
+        const { error: supabaseError } = await supabase.from('habit_activities').delete().eq('habit_id', habitId).eq('period_key', periodKey)
+
         if (supabaseError) {
           throw supabaseError
         }
-        
+
         // Remove from local state
-        const index = activities.value.findIndex(a => a.habitId === habitId && a.periodKey === periodKey)
+        const index = activities.value.findIndex((a) => a.habitId === habitId && a.periodKey === periodKey)
         if (index >= 0) {
           activities.value.splice(index, 1)
         }
       }
-      
+
       // Clear optimistic update
       sessionOverrides.delete(key)
       return true
     } catch (err) {
       // console.error('Error toggling activity:', err)
       error.value = err.message
-      
+
       // Revert optimistic update
       sessionOverrides.delete(key)
       return false
@@ -135,12 +127,12 @@ export function useActivities() {
    */
   async function upsertActivity(habitId, periodKey, done) {
     const currentStatus = isActivityDone(habitId, periodKey)
-    
+
     // Only toggle if status is different
     if (currentStatus !== done) {
       return await toggleActivity(habitId, periodKey)
     }
-    
+
     return true
   }
 
@@ -152,16 +144,14 @@ export function useActivities() {
    */
   function isActivityDone(habitId, periodKey) {
     const key = `${habitId}|${periodKey}`
-    
+
     // Check session overrides first
     if (sessionOverrides.has(key)) {
       return sessionOverrides.get(key) === 'done'
     }
-    
+
     // Check actual data
-    return activities.value.some(activity => 
-      activity.habitId === habitId && activity.periodKey === periodKey
-    )
+    return activities.value.some((activity) => activity.habitId === habitId && activity.periodKey === periodKey)
   }
 
   /**
@@ -171,14 +161,14 @@ export function useActivities() {
    */
   function getKeysForHabit(habitId) {
     const keys = []
-    
+
     // Get keys from actual data
-    activities.value.forEach(activity => {
+    activities.value.forEach((activity) => {
       if (activity.habitId === habitId) {
         keys.push(activity.periodKey)
       }
     })
-    
+
     // Apply session overrides
     sessionOverrides.forEach((value, key) => {
       const [overrideHabitId, periodKey] = key.split('|')
@@ -193,7 +183,7 @@ export function useActivities() {
         }
       }
     })
-    
+
     return keys
   }
 
@@ -203,7 +193,7 @@ export function useActivities() {
    */
   const activitiesData = computed(() => ({
     version: '1.0',
-    activities: activities.value
+    activities: activities.value,
   }))
 
   /**
@@ -212,12 +202,12 @@ export function useActivities() {
    */
   const activitiesMap = computed(() => {
     const map = new Map()
-    
-    activities.value.forEach(activity => {
+
+    activities.value.forEach((activity) => {
       const key = `${activity.habitId}|${activity.periodKey}`
       map.set(key, true)
     })
-    
+
     // Apply session overrides
     sessionOverrides.forEach((value, key) => {
       if (value === 'done') {
@@ -226,7 +216,7 @@ export function useActivities() {
         map.delete(key)
       }
     })
-    
+
     return map
   })
 
@@ -235,10 +225,10 @@ export function useActivities() {
    */
   async function initialize() {
     if (isInitialized) return
-    
+
     // Load initial data
     await loadActivities()
-    
+
     // Set up real-time subscription
     activitiesSubscription = supabase
       .channel('activities_changes')
@@ -247,29 +237,27 @@ export function useActivities() {
         {
           event: '*',
           schema: 'public',
-          table: 'habit_activities'
+          table: 'habit_activities',
         },
         (payload) => {
           // console.log('Activities change:', payload)
-          
+
           switch (payload.eventType) {
             case 'INSERT': {
               // Add new activity to local state
               const newActivity = {
                 habitId: payload.new.habit_id,
-                periodKey: payload.new.period_key
+                periodKey: payload.new.period_key,
               }
-              if (!activities.value.find(a => a.habitId === newActivity.habitId && a.periodKey === newActivity.periodKey)) {
+              if (!activities.value.find((a) => a.habitId === newActivity.habitId && a.periodKey === newActivity.periodKey)) {
                 activities.value.push(newActivity)
               }
               break
             }
-              
+
             case 'DELETE': {
               // Remove activity from local state
-              const deleteIndex = activities.value.findIndex(a => 
-                a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key
-              )
+              const deleteIndex = activities.value.findIndex((a) => a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key)
               if (deleteIndex >= 0) {
                 activities.value.splice(deleteIndex, 1)
               }
@@ -279,7 +267,7 @@ export function useActivities() {
         }
       )
       .subscribe()
-    
+
     isInitialized = true
   }
 
@@ -306,7 +294,7 @@ export function useActivities() {
     sessionOverrides,
     loading,
     error,
-    
+
     // Methods
     loadActivities,
     toggleActivity,
@@ -314,6 +302,6 @@ export function useActivities() {
     isActivityDone,
     getKeysForHabit,
     initialize,
-    cleanup
+    cleanup,
   }
 }

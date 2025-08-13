@@ -151,10 +151,7 @@
         priority: PRIORITY_LEVELS.LOW,
       }
 
-      const { data: insertedActions, error: insertError } = await supabase
-        .from('actions')
-        .insert([actionData])
-        .select('id, description, completed, priority, created_at, completed_at, parent_id')
+      const { data: insertedActions, error: insertError } = await supabase.from('actions').insert([actionData]).select('id, description, completed, priority, created_at, completed_at, parent_id')
 
       if (insertError) throw insertError
 
@@ -187,15 +184,13 @@
 
   const updateActionStatus = async (actionOrId) => {
     // Handle both action object and action ID
-    const action = typeof actionOrId === 'string' 
-      ? actions.value.find(a => a.id === actionOrId)
-      : actionOrId
+    const action = typeof actionOrId === 'string' ? actions.value.find((a) => a.id === actionOrId) : actionOrId
 
     if (!action) return
 
     // Toggle the completed status
     const newCompleted = !action.completed
-    
+
     // Store original completed status for rollback
     const originalCompleted = action.completed
 
@@ -211,7 +206,7 @@
     const now = new Date().toISOString()
     const updateData = {
       completed: newCompleted,
-      completed_at: newCompleted ? now : null
+      completed_at: newCompleted ? now : null,
     }
 
     try {
@@ -234,20 +229,17 @@
         const childIds = collectChildIds(action.id)
 
         if (childIds.length > 0) {
-          const { error: childUpdateError } = await supabase
-            .from('actions')
-            .update({ completed: true, completed_at: now })
-            .in('id', childIds)
+          const { error: childUpdateError } = await supabase.from('actions').update({ completed: true, completed_at: now }).in('id', childIds)
 
           if (childUpdateError) throw childUpdateError
 
           const idSet = new Set(childIds)
-      actions.value.forEach((actionItem) => {
-        if (idSet.has(actionItem.id)) {
-          actionItem.completed = true
-          actionItem.completed_at = now
-        }
-      })
+          actions.value.forEach((actionItem) => {
+            if (idSet.has(actionItem.id)) {
+              actionItem.completed = true
+              actionItem.completed_at = now
+            }
+          })
         }
       }
 
@@ -310,10 +302,7 @@
       const idsToDelete = collectIds(actionId)
 
       // Soft delete: update archived instead of actual deletion
-      const { error: deleteError } = await supabase
-        .from('actions')
-        .update({ archived: true })
-        .in('id', idsToDelete)
+      const { error: deleteError } = await supabase.from('actions').update({ archived: true }).in('id', idsToDelete)
 
       if (deleteError) throw deleteError
 
