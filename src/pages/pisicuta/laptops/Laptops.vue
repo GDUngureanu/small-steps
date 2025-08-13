@@ -13,14 +13,14 @@
 <template>
   <MDArticleTemplate
     :src="markdownResearchUrl2"
-    title="Laptops List Research 2"
+    title="Laptops Research 2021-2025"
     meta="August 12, 2025 by G. D. Ungureanu"
     :expanded="false"
   />
 
   <MDArticleTemplate
     :src="markdownResearchUrl1"
-    title="Laptops List Research 1"
+    title="Laptops Research 2022-2023"
     meta="August 11, 2025 by G. D. Ungureanu"
     :expanded="false"
   />

@@ -9,6 +9,6 @@
 
 <template>
   <ArticleTemplate title="Pisicuta Actions" meta="August 13, 2025 by G. D. Ungureanu">
-    <ActionsTemplate list-id="pisicuta-actions" />
+    <ActionsTemplate list-id="5c36ca7d-8260-4127-b028-1865c24e815b" />
   </ArticleTemplate>
 </template>
