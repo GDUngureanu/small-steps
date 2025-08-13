@@ -62,6 +62,11 @@ export async function renderComponent(file, options = {}) {
             return h('article-template-stub', this.$slots.default ? this.$slots.default() : [])
           },
         },
+        MDArticleTemplate: {
+          render() {
+            return h('md-article-template-stub', this.$slots.default ? this.$slots.default() : [])
+          },
+        },
         ActionsTemplate: true,
         SuggestionsTemplate: true,
         ...((options.global && options.global.stubs) || {}),
