@@ -94,8 +94,8 @@ test('clears prefetch timer and invokes cancelPrefetch on unmount', () => {
 
   wrapper.unmount()
 
-  // clearTimeout should run once directly and once via cancelPrefetch
-  expect(clearTimeoutSpy).toHaveBeenCalledTimes(2)
+  // clearTimeout should run once via cancelPrefetch
+  expect(clearTimeoutSpy).toHaveBeenCalledTimes(1)
 
   // ensure the scheduled prefetch never runs
   vi.runAllTimers()

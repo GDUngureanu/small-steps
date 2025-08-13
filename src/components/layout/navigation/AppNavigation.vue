@@ -52,7 +52,6 @@
   })
 
   onBeforeUnmount(() => {
-    clearTimeout(prefetchTimer)
     cancelPrefetch()
   })
 
