@@ -190,7 +190,19 @@ export function useHabits() {
     }
   }
 
-  const { initialize, cleanup } = useSupabaseResource('habits', loadHabits, handleHabitsChange)
+  const { initialize: resourceInitialize, cleanup } = useSupabaseResource(
+    'habits',
+    loadHabits,
+    handleHabitsChange
+  )
+
+  async function initialize() {
+    const result = await resourceInitialize()
+    if (result.error) {
+      error.value = result.error.message || result.error
+    }
+    return result
+  }
 
   // Auto-initialize when composable is used
   initialize()
