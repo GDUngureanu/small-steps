@@ -1,40 +1,34 @@
 <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { ref, onMounted, computed } from 'vue'
   import { Collapse } from 'bootstrap'
   import { useAuthentication } from '@/configuration/authentication/useAuthentication.js'
+  import { useNavigation } from '@/composables/useNavigation.js'
+  import { usePrefetch } from '@/composables/usePrefetch.js'
 
   /**
    * Top-level navigation bar showing public and restricted sections.
    *
-   * Uses `useAuthentication` to build the menu dynamically and emits a
-   * `showAuthentication` event when the user requests to log in.
+   * Structural data comes from `useNavigation` while authentication state is
+   * handled by `useAuthentication`.
    */
-  const { isAuthenticated, navigationItems, dropdownSections, logout } = useAuthentication()
-  const router = useRouter()
+  const { isAuthenticated, logout } = useAuthentication()
+  const { navigationItems: allNavigationItems, dropdownSections: allDropdownSections } = useNavigation()
+  const { prefetch, cancelPrefetch } = usePrefetch()
 
-  const prefetched = new Set()
-  let prefetchTimer
-  const prefetch = (path) => {
-    if (prefetched.has(path)) {
-      return
-    }
-    clearTimeout(prefetchTimer)
-    prefetchTimer = setTimeout(() => {
-      const route = router.resolve(path)
-      route.matched.forEach((record) => {
-        const component = record.components?.default
-        if (typeof component === 'function') {
-          component()
-        }
-      })
-      prefetched.add(path)
-    }, 150)
-  }
+  const navigationItems = computed(() =>
+    allNavigationItems.value.filter((item) => !item.requiresAuth || isAuthenticated.value)
+  )
 
-  const cancelPrefetch = () => {
-    clearTimeout(prefetchTimer)
-  }
+  const dropdownSections = computed(() => {
+    const sections = {}
+    Object.entries(allDropdownSections.value).forEach(([key, section]) => {
+      const items = section.items.filter((item) => !item.requiresAuth || isAuthenticated.value)
+      if (items.length) {
+        sections[key] = { ...section, items }
+      }
+    })
+    return sections
+  })
 
   const emit = defineEmits(['showAuthentication'])
 
@@ -49,10 +43,6 @@
     if (navbarCollapse.value) {
       bootstrapCollapse = new Collapse(navbarCollapse.value, { toggle: false })
     }
-  })
-
-  onBeforeUnmount(() => {
-    cancelPrefetch()
   })
 
   const closeMenu = () => {
@@ -75,8 +65,20 @@
       <div class="collapse navbar-collapse border-top" id="navbarSupportedContent" ref="navbarCollapse">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
-            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
+            <RouterLink
+              :to="item.path"
+              class="nav-link fw-medium"
+              active-class="active"
+              @click="closeMenu"
+              @mouseover="prefetch(item.path)"
+              @mouseleave="cancelPrefetch"
+            >
+              <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
               {{ item.label }}
+              <span
+                v-if="item.badge"
+                class="badge rounded-pill bg-secondary ms-1"
+              >{{ item.badge }}</span>
             </RouterLink>
           </li>
 
@@ -87,8 +89,19 @@
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
               <li v-for="item in section.items" :key="item.path">
-                <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
+                <RouterLink
+                  :to="item.path"
+                  class="dropdown-item"
+                  @click="closeMenu"
+                  @mouseover="prefetch(item.path)"
+                  @mouseleave="cancelPrefetch"
+                >
+                  <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
                   {{ item.label }}
+                  <span
+                    v-if="item.badge"
+                    class="badge rounded-pill bg-secondary ms-1"
+                  >{{ item.badge }}</span>
                 </RouterLink>
               </li>
             </ul>

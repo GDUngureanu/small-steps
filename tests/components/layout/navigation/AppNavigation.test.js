@@ -1,4 +1,7 @@
-import { test, expect } from 'vitest'
+import { test, expect, vi } from 'vitest'
+import { mount } from '@vue/test-utils'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import { usePrefetch } from '@/composables/usePrefetch.js'
 
 test('navbar collapse hides on small screens after link click', () => {
   const originalWindow = global.window
@@ -26,49 +29,30 @@ test('navbar collapse hides on small screens after link click', () => {
 })
 
 test('prefetch only triggers after delay and cancels on quick leave', async () => {
+  vi.useFakeTimers()
+
   let fetched = false
-  const mockRouter = {
-    resolve: () => ({
-      matched: [
-        {
-          components: {
-            default: () => {
-              fetched = true
-            },
-          },
-        },
-      ],
-    }),
-  }
+  const routes = [
+    { path: '/test', component: () => { fetched = true }, meta: { navLabel: 'Test' } },
+  ]
+  const router = createRouter({ history: createMemoryHistory(), routes })
 
-  let prefetchTimer
-  const prefetch = (path) => {
-    clearTimeout(prefetchTimer)
-    prefetchTimer = setTimeout(() => {
-      const route = mockRouter.resolve(path)
-      route.matched.forEach((record) => {
-        const component = record.components?.default
-        if (typeof component === 'function') {
-          component()
-        }
-      })
-    }, 150)
-  }
+  const wrapper = mount({
+    template: '<div></div>',
+    setup() {
+      return usePrefetch()
+    },
+  }, { global: { plugins: [router] } })
 
-  const cancelPrefetch = () => {
-    clearTimeout(prefetchTimer)
-  }
-
-  const navigationLinkElement = new EventTarget()
-  navigationLinkElement.addEventListener('mouseover', () => prefetch('/test'))
-  navigationLinkElement.addEventListener('mouseleave', cancelPrefetch)
-
-  navigationLinkElement.dispatchEvent(new Event('mouseover'))
-  setTimeout(() => navigationLinkElement.dispatchEvent(new Event('mouseleave')), 100)
-  await new Promise((r) => setTimeout(r, 200))
+  wrapper.vm.prefetch('/test')
+  vi.advanceTimersByTime(100)
+  wrapper.vm.cancelPrefetch()
+  vi.advanceTimersByTime(200)
   expect(fetched).toBe(false)
 
-  navigationLinkElement.dispatchEvent(new Event('mouseover'))
-  await new Promise((r) => setTimeout(r, 200))
+  wrapper.vm.prefetch('/test')
+  vi.advanceTimersByTime(200)
   expect(fetched).toBe(true)
+
+  vi.useRealTimers()
 })

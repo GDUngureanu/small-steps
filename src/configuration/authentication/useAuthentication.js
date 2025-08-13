@@ -30,7 +30,7 @@ watchEffect(() => {
 })
 
 /**
- * Manage client-side authentication state and navigation visibility.
+ * Manage client-side authentication state and basic route access checks.
  *
  * Returned helpers include:
  * - `isAuthenticated` reactive boolean flag
@@ -38,7 +38,6 @@ watchEffect(() => {
  *   matches the configured value
  * - `logout()` to clear the session
  * - route helpers: `isRouteRestricted`, `isRoutePublic`, `canAccessRoute`
- * - navigation builders: `navigationItems`, `dropdownSections`
  *
  * @returns {{
  *  isAuthenticated: import('vue').ComputedRef<boolean>,
@@ -47,8 +46,6 @@ watchEffect(() => {
  *  isRouteRestricted: (path: string) => boolean,
  *  isRoutePublic: (path: string) => boolean,
  *  canAccessRoute: (path: string) => boolean,
- *  navigationItems: import('vue').ComputedRef<Array>,
- *  dropdownSections: import('vue').ComputedRef<Record<string, any>>
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
@@ -85,47 +82,6 @@ export function useAuthentication() {
     return isRoutePublic(path) || isAuthenticated.value
   }
 
-  // Build primary navigation menu, hiding restricted routes for unauthenticated users
-  const navigationItems = computed(() => {
-    return routes
-      .filter((route) => !route.meta?.group)
-      .map((route) => ({
-        path: route.path,
-        label: route.meta?.label || route.path,
-        public: !route.meta?.requiresAuth,
-      }))
-      .filter((navigationItem) => navigationItem.public || isAuthenticated.value)
-  })
-
-  const dropdownSections = computed(() => {
-    const sectionsByGroup = {}
-    routes.forEach((route) => {
-      const meta = route.meta || {}
-      if (!meta.group) return
-
-      if (!sectionsByGroup[meta.group]) {
-        sectionsByGroup[meta.group] = {
-          label: meta.group.charAt(0).toUpperCase() + meta.group.slice(1),
-          public: !meta.requiresAuth,
-          items: [],
-        }
-      }
-
-      sectionsByGroup[meta.group].public = sectionsByGroup[meta.group].public && !meta.requiresAuth
-      sectionsByGroup[meta.group].items.push({ path: route.path, label: meta.label })
-    })
-
-    const visibleSections = {}
-    Object.keys(sectionsByGroup).forEach((sectionName) => {
-      const sectionDetails = sectionsByGroup[sectionName]
-      if (sectionDetails.public || isAuthenticated.value) {
-        visibleSections[sectionName] = sectionDetails
-      }
-    })
-
-    return visibleSections
-  })
-
   return {
     isAuthenticated: computed(() => isAuthenticated.value),
     authenticate,
@@ -133,7 +89,5 @@ export function useAuthentication() {
     isRouteRestricted,
     isRoutePublic,
     canAccessRoute,
-    navigationItems,
-    dropdownSections,
   }
 }
