@@ -1,12 +1,20 @@
-import { test, expect, vi } from 'vitest'
+import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import MarkdownArticle from '@/components/shared/templates/MarkdownArticle.vue'
 
-test('renders markdown content inside article container', async () => {
+const originalFetch = global.fetch
+
+beforeEach(() => {
   global.fetch = vi.fn(() =>
     Promise.resolve({ text: () => Promise.resolve('# Sample Markdown') })
   )
+})
 
+afterEach(() => {
+  global.fetch = originalFetch
+})
+
+test('renders markdown content inside article container', async () => {
   const wrapper = mount(MarkdownArticle, {
     props: { title: 'MD', meta: 'meta', src: '/sample.md' },
   })
