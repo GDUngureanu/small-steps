@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { test, expect, vi } from 'vitest'
+import { test, expect, vi, afterEach } from 'vitest'
 import { ref, computed, nextTick, readonly } from 'vue'
 import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
 
@@ -40,6 +40,11 @@ vi.mock('@/composables/useNavigation.js', () => ({
   }),
 }))
 
+afterEach(() => {
+  vi.useRealTimers()
+  vi.restoreAllMocks()
+})
+
 test('menu items react to authentication state and prefetch on hover', async () => {
   vi.useFakeTimers()
 
@@ -70,8 +75,6 @@ test('menu items react to authentication state and prefetch on hover', async () 
   expect(wrapper.text()).toContain('Private')
   expect(wrapper.text()).toContain('Logout')
   expect(wrapper.text()).not.toContain('Login')
-
-  vi.useRealTimers()
 })
 
 test('clears prefetch timer and invokes cancelPrefetch on unmount', () => {
@@ -102,6 +105,4 @@ test('clears prefetch timer and invokes cancelPrefetch on unmount', () => {
   // ensure the scheduled prefetch never runs
   vi.runAllTimers()
   expect(componentSpy).not.toHaveBeenCalled()
-
-  vi.useRealTimers()
 })
