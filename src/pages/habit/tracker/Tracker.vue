@@ -10,7 +10,13 @@
 
   // Initialize composables
   const { habitsData, loading: habitsLoading, error: habitsError, deleteHabit: archiveHabit, createHabit } = useHabits()
-  const { loading: activitiesLoading, error: activitiesError, isActivityDone: isDoneFromComposable, upsertActivity, getKeysForHabit } = useActivities()
+  const {
+    loading: activitiesLoading,
+    error: activitiesError,
+    isActivityDone: isDoneFromComposable,
+    setActivityStatus,
+    getKeysForHabit,
+  } = useActivities()
 
   // Reactive state
   const currentTime = ref(new Date())
@@ -96,7 +102,7 @@
     return result
   }
 
-  // upsertActivity is now provided by useActivities composable
+  // setActivityStatus is provided by useActivities composable
   // One function for all period keys
   function formatPeriodKey(scope, inputDate = new Date()) {
     switch (scope) {
@@ -230,7 +236,7 @@
 
   function toggleHabit(habitId, periodKey) {
     const next = !isDone(habitId, periodKey)
-    upsertActivity(habitId, periodKey, next)
+    setActivityStatus(habitId, periodKey, next)
   }
 
   // Delete habit function (now uses Supabase)

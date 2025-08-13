@@ -53,28 +53,35 @@ export function useActivities() {
   }
 
   /**
-   * Toggle activity status (create/delete)
+   * Set activity status (create/delete based on done flag)
    * @param {string} habitId - Habit ID
    * @param {string} periodKey - Period key (YYYY-MM-DD, YYYY-Www, etc.)
+   * @param {boolean} done - true to mark activity as done
    * @returns {Promise<boolean>} Success status
    */
-  async function toggleActivity(habitId, periodKey) {
+  async function setActivityStatus(habitId, periodKey, done) {
     const key = `${habitId}|${periodKey}`
-    const isDone = isActivityDone(habitId, periodKey)
-    const shouldCreate = !isDone
+    const currentStatus = isActivityDone(habitId, periodKey)
+
+    // Only proceed if status changes
+    if (currentStatus === done) {
+      return true
+    }
 
     try {
       // Optimistic update
-      sessionOverrides.set(key, shouldCreate ? 'done' : 'undone')
+      sessionOverrides.set(key, done ? 'done' : 'undone')
 
-      if (shouldCreate) {
-        // Create activity
-        const { error: supabaseError } = await supabase.from('habit_activities').insert([
-          {
-            habit_id: habitId,
-            period_key: periodKey,
-          },
-        ])
+      if (done) {
+        // Upsert activity
+        const { error: supabaseError } = await supabase
+          .from('habit_activities')
+          .upsert([
+            {
+              habit_id: habitId,
+              period_key: periodKey,
+            },
+          ])
 
         if (supabaseError) {
           throw supabaseError
@@ -82,14 +89,15 @@ export function useActivities() {
 
         // Add to local state
         if (!activities.value.find((a) => a.habitId === habitId && a.periodKey === periodKey)) {
-          activities.value.push({
-            habitId,
-            periodKey,
-          })
+          activities.value.push({ habitId, periodKey })
         }
       } else {
         // Delete activity
-        const { error: supabaseError } = await supabase.from('habit_activities').delete().eq('habit_id', habitId).eq('period_key', periodKey)
+        const { error: supabaseError } = await supabase
+          .from('habit_activities')
+          .delete()
+          .eq('habit_id', habitId)
+          .eq('period_key', periodKey)
 
         if (supabaseError) {
           throw supabaseError
@@ -106,31 +114,12 @@ export function useActivities() {
       sessionOverrides.delete(key)
       return true
     } catch (err) {
-      // console.error('Error toggling activity:', err)
       error.value = err.message
 
       // Revert optimistic update
       sessionOverrides.delete(key)
       return false
     }
-  }
-
-  /**
-   * Upsert activity (create if not exists, compatible with existing function)
-   * @param {string} habitId - Habit ID
-   * @param {string} periodKey - Period key
-   * @param {boolean} done - Whether activity is done
-   * @returns {Promise<boolean>} Success status
-   */
-  async function upsertActivity(habitId, periodKey, done) {
-    const currentStatus = isActivityDone(habitId, periodKey)
-
-    // Only toggle if status is different
-    if (currentStatus !== done) {
-      return await toggleActivity(habitId, periodKey)
-    }
-
-    return true
   }
 
   /**
@@ -267,8 +256,7 @@ export function useActivities() {
 
     // Methods
     loadActivities,
-    toggleActivity,
-    upsertActivity,
+    setActivityStatus,
     isActivityDone,
     getKeysForHabit,
     initialize: resourceInitialize,
