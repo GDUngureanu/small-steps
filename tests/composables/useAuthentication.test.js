@@ -1,8 +1,8 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { spawnSync } from 'node:child_process'
 import routes from '../../src/configuration/routes.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
+import { readFile, writeFile, unlink } from 'node:fs/promises'
 
 async function setup(t) {
   setupTestEnvironment(t)
@@ -49,19 +49,30 @@ test('route access control', { concurrency: false }, async (t) => {
   assert.equal(auth.canAccessRoute(restrictedPath), true)
 })
 
-test('warns when password variable is absent', { concurrency: false }, () => {
-  const env = { ...process.env }
-  delete env.VITE_APP_PASSWORD
-  const { stderr, status } = spawnSync(
-    process.execPath,
-    [
-      '--input-type=module',
-      '-e',
-      "const { useAuthentication } = await import('./src/configuration/authentication/useAuthentication.js'); const auth = useAuthentication(); auth.authenticate('anything');",
-    ],
-    { cwd: new URL('../..', import.meta.url).pathname, env, encoding: 'utf8' }
-  )
+test('warns when password variable is absent', { concurrency: false }, async (t) => {
+  const original = process.env.VITE_APP_PASSWORD
+  delete process.env.VITE_APP_PASSWORD
 
-  assert.equal(status, 0)
-  assert.match(stderr, /VITE_APP_PASSWORD/)
+  const warn = t.mock.method(console, 'warn')
+  const sourcePath = new URL('../../src/configuration/authentication/useAuthentication.js', import.meta.url)
+  const source = await readFile(sourcePath, 'utf8')
+  const tempPath = new URL(`../../src/configuration/authentication/useAuthentication.temp.js`, import.meta.url)
+  await writeFile(tempPath, source.replace('../env.js', '../env.js?noenv'))
+
+  try {
+    const { useAuthentication } = await import(`${tempPath.href}?${Date.now()}`)
+    const auth = useAuthentication()
+    auth.authenticate('anything')
+
+    assert.equal(warn.mock.callCount(), 1)
+    assert.match(warn.mock.calls[0].arguments[0], /VITE_APP_PASSWORD/)
+  } finally {
+    warn.mock.restore()
+    await unlink(tempPath)
+    if (original === undefined) {
+      delete process.env.VITE_APP_PASSWORD
+    } else {
+      process.env.VITE_APP_PASSWORD = original
+    }
+  }
 })
