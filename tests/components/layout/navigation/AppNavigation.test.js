@@ -1,4 +1,4 @@
-import { test, expect, vi, beforeEach } from 'vitest'
+import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { usePrefetch } from '@/composables/usePrefetch.js'
@@ -8,6 +8,8 @@ import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
 let offcanvasInstance
 const showSpy = vi.fn()
 const hideSpy = vi.fn()
+
+const originalWidth = global.window.innerWidth
 
 vi.mock('bootstrap', () => ({
   Offcanvas: class {
@@ -39,8 +41,12 @@ beforeEach(() => {
   hideSpy.mockClear()
 })
 
+afterEach(() => {
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: originalWidth })
+  vi.useRealTimers()
+})
+
 test('offcanvas opens and hides on small screens and ignores large screens', async () => {
-  const originalWidth = global.window.innerWidth
   Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 500 })
 
   const wrapper = mount(AppNavigation, {
@@ -59,8 +65,6 @@ test('offcanvas opens and hides on small screens and ignores large screens', asy
   Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 1200 })
   await wrapper.find('a').trigger('click')
   expect(hideSpy).not.toHaveBeenCalled()
-
-  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: originalWidth })
 })
 
 test('prefetch only triggers after delay and cancels on quick leave', async () => {
@@ -88,6 +92,4 @@ test('prefetch only triggers after delay and cancels on quick leave', async () =
   wrapper.vm.prefetch('/test')
   vi.advanceTimersByTime(200)
   expect(fetched).toBe(true)
-
-  vi.useRealTimers()
 })
