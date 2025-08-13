@@ -1,14 +1,17 @@
-import { ref, computed, watchEffect } from 'vue'
+import { ref, watchEffect, readonly } from 'vue'
 import routes from '../routes.js'
 import { VITE_APP_PASSWORD } from '../env.js'
+import {
+  buildRouteMetaMap,
+  isRouteRestricted as isRouteRestrictedUtil,
+  isRoutePublic as isRoutePublicUtil,
+  canAccessRoute as canAccessRouteUtil,
+} from './routeAccess.js'
 
 const isAuthenticated = ref(false)
 
 // Build a lookup of route metadata for quick access checks
-const routeMeta = routes.reduce((metaByPath, route) => {
-  metaByPath[route.path] = route.meta || {}
-  return metaByPath
-}, {})
+const routeMeta = buildRouteMetaMap(routes)
 
 // Check sessionStorage on initialization
 if (typeof sessionStorage !== 'undefined') {
@@ -40,7 +43,7 @@ watchEffect(() => {
  * - route helpers: `isRouteRestricted`, `isRoutePublic`, `canAccessRoute`
  *
  * @returns {{
- *  isAuthenticated: import('vue').ComputedRef<boolean>,
+ *  isAuthenticated: import('vue').Ref<boolean>,
  *  authenticate: (password: string) => boolean,
  *  logout: () => void,
  *  isRouteRestricted: (path: string) => boolean,
@@ -71,23 +74,30 @@ export function useAuthentication() {
   }
 
   const isRouteRestricted = (path) => {
-    return Boolean(routeMeta[path]?.requiresAuth)
+    return isRouteRestrictedUtil(routeMeta, path)
   }
 
   const isRoutePublic = (path) => {
-    return !isRouteRestricted(path)
+    return isRoutePublicUtil(routeMeta, path)
   }
 
   const canAccessRoute = (path) => {
-    return isRoutePublic(path) || isAuthenticated.value
+    return canAccessRouteUtil(routeMeta, path, isAuthenticated.value)
   }
 
   return {
-    isAuthenticated: computed(() => isAuthenticated.value),
+    isAuthenticated: readonly(isAuthenticated),
     authenticate,
     logout,
     isRouteRestricted,
     isRoutePublic,
     canAccessRoute,
+  }
+}
+
+export function resetAuth() {
+  isAuthenticated.value = false
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.removeItem('memento-mori-authentication')
   }
 }
