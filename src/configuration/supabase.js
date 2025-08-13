@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { env } from './env.js'
+import { VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY } from './env.js'
 
 /**
  * Initialise and export a configured Supabase client.
@@ -12,8 +12,8 @@ import { env } from './env.js'
  * @returns {import('@supabase/supabase-js').SupabaseClient} ready-to-use client
  */
 // Environment variables with fallbacks for development and testing
-const supabaseUrl = env.getViteSupabaseUrl()
-const supabaseKey = env.getViteSupabaseAnonKey()
+const supabaseUrl = VITE_SUPABASE_URL
+const supabaseKey = VITE_SUPABASE_ANON_KEY
 
 // Validate required environment variables
 if (!supabaseUrl) {

@@ -1,6 +1,6 @@
 import { ref, computed, watchEffect } from 'vue'
 import routes from '../routes.js'
-import { env } from '../env.js'
+import { VITE_APP_PASSWORD } from '../env.js'
 
 const isAuthenticated = ref(false)
 
@@ -53,7 +53,7 @@ watchEffect(() => {
  */
 export function useAuthentication() {
   // Password from environment variable via getter
-  const CORRECT_PASSWORD = env.getViteAppPassword()
+  const CORRECT_PASSWORD = VITE_APP_PASSWORD
 
   const authenticate = (password) => {
     if (!CORRECT_PASSWORD) {

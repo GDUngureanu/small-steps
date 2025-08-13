@@ -1,7 +1,16 @@
-export const env = {
-  getViteAppPassword: () => import.meta.env?.VITE_APP_PASSWORD ?? globalThis.process?.env?.VITE_APP_PASSWORD,
-  getViteSupabaseUrl: () => import.meta.env?.VITE_SUPABASE_URL ?? globalThis.process?.env?.VITE_SUPABASE_URL,
-  getViteSupabaseAnonKey: () => import.meta.env?.VITE_SUPABASE_ANON_KEY ?? globalThis.process?.env?.VITE_SUPABASE_ANON_KEY,
-}
+const importMetaEnv = import.meta?.env ?? {}
+const processEnv = globalThis.process?.env ?? {}
 
-export const { getViteAppPassword, getViteSupabaseUrl, getViteSupabaseAnonKey } = env
+const {
+  VITE_APP_PASSWORD,
+  VITE_SUPABASE_URL,
+  VITE_SUPABASE_ANON_KEY,
+} = { ...processEnv, ...importMetaEnv }
+
+export const env = Object.freeze({
+  VITE_APP_PASSWORD,
+  VITE_SUPABASE_URL,
+  VITE_SUPABASE_ANON_KEY,
+})
+
+export { VITE_APP_PASSWORD, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY }
