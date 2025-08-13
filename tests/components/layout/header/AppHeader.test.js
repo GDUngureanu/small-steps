@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import { test, expect, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import AppHeader from '@/components/layout/header/AppHeader.vue'
@@ -20,14 +20,22 @@ async function mountHeader(path) {
   })
 }
 
+let wrapper
+
+afterEach(() => {
+  if (wrapper) {
+    wrapper.unmount()
+  }
+})
+
 test('AppHeader renders on home route with expected text', async () => {
-  const wrapper = await mountHeader('/')
+  wrapper = await mountHeader('/')
   expect(wrapper.find('h1').text()).toBe('Memento Mori')
   expect(wrapper.text()).toContain('As a Man among Men')
 })
 
 test('AppHeader does not render on non-home routes', async () => {
-  const wrapper = await mountHeader('/about')
+  wrapper = await mountHeader('/about')
   expect(wrapper.find('h1').exists()).toBe(false)
   expect(wrapper.html()).toBe('<!--v-if-->')
 })
