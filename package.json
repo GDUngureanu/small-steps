@@ -21,6 +21,7 @@
     "test:pages": "vitest run --dir tests/domains",
     "test:unit": "npm run test:components",
     "test": "npm run test:unit && npm run test:pages && npm run lint",
+    "test:e2e": "playwright test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -35,6 +36,8 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.9.2",
+    "@playwright/test": "^1.49.0",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vue/test-utils": "^2.4.5",
     "eslint": "^9.27.0",
