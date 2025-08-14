@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { test, expect, vi, afterEach } from 'vitest'
-import { ref, computed, nextTick, readonly } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import AppNavigation from '@/core/layout/navigation/AppNavigation.vue'
 
 // Mock router to observe prefetch calls
@@ -23,7 +23,9 @@ const isAuthenticated = ref(false)
 const logoutMock = vi.fn()
 vi.mock('@/core/auth/useAuthentication.js', () => ({
   useAuthentication: () => ({
-    isAuthenticated: readonly(isAuthenticated),
+    get isAuthenticated() {
+      return isAuthenticated.value
+    },
     logout: logoutMock,
   }),
 }))
@@ -33,7 +35,7 @@ const navigationItems = computed(() => [
   { path: '/public', label: 'Public', requiresAuth: false },
   { path: '/private', label: 'Private', requiresAuth: true },
 ])
-vi.mock('@/composables/useNavigation.js', () => ({
+vi.mock('@/core/layout/navigation/useNavigation.js', () => ({
   useNavigation: () => ({
     navigationItems,
     dropdownSections: computed(() => ({})),

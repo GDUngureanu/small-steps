@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
+import { createPinia, setActivePinia } from 'pinia'
 import rawRoutes from '../../src/core/navigation/routes.js'
 import { h } from 'vue'
 
@@ -36,11 +37,12 @@ export async function renderComponent(file, options = {}) {
     history: createMemoryHistory(),
     routes,
   })
+  const pinia = createPinia()
 
   const wrapper = mount(component, {
     ...options,
     global: {
-      plugins: [router, ...((options.global && options.global.plugins) || [])],
+      plugins: [router, pinia, ...((options.global && options.global.plugins) || [])],
       stubs: {
         RouterLink: true,
         RouterView: true,
@@ -101,6 +103,7 @@ export async function resolveRoute(pathName, authenticated = false) {
   const router = createAppRouter(createMemoryHistory(), routes)
 
   const { useAuthentication, resetAuth } = await import('../../src/core/auth/useAuthentication.js')
+  setActivePinia(createPinia())
   resetAuth()
   if (authenticated) {
     const auth = useAuthentication()
