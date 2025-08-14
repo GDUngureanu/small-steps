@@ -99,16 +99,18 @@ export async function resolveRoute(pathName, authenticated = false) {
     component: { template: '<div>Test Route</div>' },
   }))
 
-  const { createAppRouter } = await import('../../src/core/navigation/router.js')
-  const router = createAppRouter(createMemoryHistory(), routes)
-
-  const { useAuthentication, resetAuth } = await import('../../src/core/auth/useAuthentication.js')
+  // Set up Pinia before creating the router
   setActivePinia(createPinia())
+  
+  const { useAuthentication, resetAuth } = await import('../../src/core/auth/useAuthentication.js')
   resetAuth()
   if (authenticated) {
     const auth = useAuthentication()
     auth.authenticate('secret')
   }
+
+  const { createAppRouter } = await import('../../src/core/navigation/router.js')
+  const router = createAppRouter(createMemoryHistory(), routes)
 
   await router.push(pathName)
   await router.isReady()
