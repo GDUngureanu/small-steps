@@ -46,7 +46,7 @@
   })
 
   const closeMenu = () => {
-    if (window.innerWidth < 992 && bootstrapOffcanvas) {
+    if (window.innerWidth < 768 && bootstrapOffcanvas) {
       bootstrapOffcanvas.hide()
     }
   }
@@ -60,7 +60,7 @@
   <nav class="navbar fixed-top d-block" data-navbar-on-scroll="data-navbar-on-scroll">
     <div class="container">
       <button
-        class="navbar-toggler d-lg-none"
+        class="navbar-toggler d-md-none"
         type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#navOffcanvas"
@@ -70,7 +70,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="d-none d-lg-flex w-100 border-top" id="navbarSupportedContent">
+      <div class="d-none d-md-flex w-100 border-top" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
             <RouterLink
@@ -143,7 +143,7 @@
   </nav>
 
   <div
-    class="offcanvas offcanvas-start d-lg-none"
+    class="offcanvas offcanvas-start d-md-none"
     tabindex="-1"
     id="navOffcanvas"
     aria-labelledby="navOffcanvasLabel"
