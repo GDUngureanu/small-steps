@@ -2,18 +2,13 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/configuration/routes.js'
-import {
-  authenticationEvents,
-  AUTH_REQUIRED_EVENT,
-} from '../../src/configuration/authentication/authenticationEvents.js'
+import { authenticationEvents, AUTH_REQUIRED_EVENT } from '../../src/configuration/authentication/authenticationEvents.js'
 import { setupTestEnvironment, PASSWORD } from '../testUtils.js'
 
 async function setup(t, authenticated = false) {
   setupTestEnvironment(t)
 
-  const { useAuthentication, resetAuth } = await import(
-    '../../src/configuration/authentication/useAuthentication.js'
-  )
+  const { useAuthentication, resetAuth } = await import('../../src/configuration/authentication/useAuthentication.js')
   const { createAppRouter } = await import('../../src/configuration/router.js')
 
   // Stub components to avoid loading .vue files
@@ -38,9 +33,7 @@ test('redirects unauthenticated users from protected route', async (t) => {
     eventDetail = e.detail
   }
   authenticationEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
-  t.after(() =>
-    authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler),
-  )
+  t.after(() => authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
 
   await router.push(protectedPath)
 
@@ -64,13 +57,10 @@ test('navigating to a public route does not emit authentication-required event',
     triggered = true
   }
   authenticationEvents.addEventListener(AUTH_REQUIRED_EVENT, handler, { once: true })
-  t.after(() =>
-    authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler),
-  )
+  t.after(() => authenticationEvents.removeEventListener(AUTH_REQUIRED_EVENT, handler))
 
   await router.push(publicPath)
 
   assert.equal(triggered, false)
   assert.equal(router.currentRoute.value.fullPath, publicPath)
 })
-

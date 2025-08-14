@@ -16,7 +16,7 @@
 
   <ArticleTemplate title="Finance" meta="July 31, 2025 by G. D. Ungureanu">
     <p>Manage your financial planning and investment tracking.</p>
-    
+
     <h3>Available Sections:</h3>
     <ul>
       <li>

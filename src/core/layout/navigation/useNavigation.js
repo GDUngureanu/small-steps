@@ -13,9 +13,7 @@ import { useRouter } from 'vue-router'
  */
 export function useNavigation() {
   const router = useRouter()
-  const routes = router
-    .getRoutes()
-    .filter((r) => r.meta && r.meta.navLabel)
+  const routes = router.getRoutes().filter((r) => r.meta && r.meta.navLabel)
 
   const navigationItems = computed(() =>
     routes

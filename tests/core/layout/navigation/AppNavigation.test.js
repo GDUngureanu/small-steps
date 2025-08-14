@@ -72,16 +72,25 @@ test('prefetch only triggers after delay and cancels on quick leave', async () =
 
   let fetched = false
   const routes = [
-    { path: '/test', component: () => { fetched = true }, meta: { navLabel: 'Test' } },
+    {
+      path: '/test',
+      component: () => {
+        fetched = true
+      },
+      meta: { navLabel: 'Test' },
+    },
   ]
   const router = createRouter({ history: createMemoryHistory(), routes })
 
-  const wrapper = mount({
-    template: '<div></div>',
-    setup() {
-      return usePrefetch()
+  const wrapper = mount(
+    {
+      template: '<div></div>',
+      setup() {
+        return usePrefetch()
+      },
     },
-  }, { global: { plugins: [router] } })
+    { global: { plugins: [router] } }
+  )
 
   wrapper.vm.prefetch('/test')
   vi.advanceTimersByTime(100)

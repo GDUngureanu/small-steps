@@ -21,10 +21,5 @@
 </script>
 
 <template>
-  <MarkdownArticleTemplate
-    v-for="item in articles"
-    v-bind="item"
-    :key="item.src"
-    :expanded="false"
-  />
+  <MarkdownArticleTemplate v-for="item in articles" v-bind="item" :key="item.src" :expanded="false" />
 </template>

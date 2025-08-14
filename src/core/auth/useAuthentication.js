@@ -1,12 +1,7 @@
 import { ref, watchEffect, readonly } from 'vue'
 import routes from '../navigation/routes.js'
 import env from '../config/env.js'
-import {
-  buildRouteMetaMap,
-  isRouteRestricted as isRouteRestrictedUtil,
-  isRoutePublic as isRoutePublicUtil,
-  canAccessRoute as canAccessRouteUtil,
-} from './routeAccess.js'
+import { buildRouteMetaMap, isRouteRestricted as isRouteRestrictedUtil, isRoutePublic as isRoutePublicUtil, canAccessRoute as canAccessRouteUtil } from './routeAccess.js'
 
 const isAuthenticated = ref(false)
 
@@ -52,7 +47,6 @@ watchEffect(() => {
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
-
   const authenticate = (password) => {
     if (password === env.VITE_APP_PASSWORD) {
       isAuthenticated.value = true

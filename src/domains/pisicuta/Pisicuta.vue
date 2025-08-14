@@ -14,7 +14,7 @@
 
   <ArticleTemplate title="Pisicuta" meta="August 13, 2025 by G. D. Ungureanu">
     <p>Dedicated content and research for Pisicuta's needs and interests.</p>
-    
+
     <h3>Available Sections:</h3>
     <ul>
       <li>

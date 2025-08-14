@@ -15,9 +15,7 @@
   const { navigationItems: allNavigationItems, dropdownSections: allDropdownSections } = useNavigation()
   const { prefetch, cancelPrefetch } = usePrefetch()
 
-  const navigationItems = computed(() =>
-    allNavigationItems.value.filter((item) => !item.requiresAuth || isAuthenticated.value)
-  )
+  const navigationItems = computed(() => allNavigationItems.value.filter((item) => !item.requiresAuth || isAuthenticated.value))
 
   const dropdownSections = computed(() => {
     const sections = {}
@@ -59,64 +57,31 @@
 <template>
   <nav class="navbar fixed-top d-block" data-navbar-on-scroll="data-navbar-on-scroll">
     <div class="container">
-      <button
-        class="navbar-toggler d-md-none"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#navOffcanvas"
-        aria-controls="navOffcanvas"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-controls="navOffcanvas" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="d-none d-md-flex w-100 border-top" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
           <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
-            <RouterLink
-              :to="item.path"
-              class="nav-link fw-medium"
-              active-class="active"
-              @click="closeMenu"
-              @mouseover="prefetch(item.path)"
-              @mouseleave="cancelPrefetch"
-            >
+            <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
               <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
               {{ item.label }}
-              <span
-                v-if="item.badge"
-                class="badge rounded-pill bg-secondary ms-1"
-              >{{ item.badge }}</span>
+              <span v-if="item.badge" class="badge rounded-pill bg-secondary ms-1">{{ item.badge }}</span>
             </RouterLink>
           </li>
 
           <!-- Dynamic dropdown sections -->
           <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
-            <a
-              class="nav-link dropdown-toggle fw-medium"
-              href="#"
-              :id="`${key}Dropdown`"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle fw-medium" href="#" :id="`${key}Dropdown`" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               {{ section.label }}
             </a>
             <ul class="dropdown-menu" :aria-labelledby="`${key}Dropdown`">
               <li v-for="item in section.items" :key="item.path">
-                <RouterLink
-                  :to="item.path"
-                  class="dropdown-item"
-                  @click="closeMenu"
-                  @mouseover="prefetch(item.path)"
-                  @mouseleave="cancelPrefetch"
-                >
+                <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
                   <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
                   {{ item.label }}
-                  <span
-                    v-if="item.badge"
-                    class="badge rounded-pill bg-secondary ms-1"
-                  >{{ item.badge }}</span>
+                  <span v-if="item.badge" class="badge rounded-pill bg-secondary ms-1">{{ item.badge }}</span>
                 </RouterLink>
               </li>
             </ul>
@@ -142,69 +107,32 @@
     </div>
   </nav>
 
-  <div
-    class="offcanvas offcanvas-start d-md-none"
-    tabindex="-1"
-    id="navOffcanvas"
-    aria-labelledby="navOffcanvasLabel"
-    ref="offcanvas"
-  >
+  <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="navOffcanvas" aria-labelledby="navOffcanvasLabel" ref="offcanvas">
     <div class="offcanvas-body">
       <div class="d-flex justify-content-between mb-3">
         <h5 class="offcanvas-title" id="navOffcanvasLabel">Navigation</h5>
-        <button
-          type="button"
-          class="btn-close text-reset"
-          data-bs-dismiss="offcanvas"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <ul class="navbar-nav me-auto">
         <li v-for="item in navigationItems" :key="item.path" class="nav-item px-2">
-          <RouterLink
-            :to="item.path"
-            class="nav-link fw-medium"
-            active-class="active"
-            @click="closeMenu"
-            @mouseover="prefetch(item.path)"
-            @mouseleave="cancelPrefetch"
-          >
+          <RouterLink :to="item.path" class="nav-link fw-medium" active-class="active" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
             <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
             {{ item.label }}
-            <span
-              v-if="item.badge"
-              class="badge rounded-pill bg-secondary ms-1"
-            >{{ item.badge }}</span>
+            <span v-if="item.badge" class="badge rounded-pill bg-secondary ms-1">{{ item.badge }}</span>
           </RouterLink>
         </li>
 
         <!-- Dynamic dropdown sections -->
         <li v-for="(section, key) in dropdownSections" :key="key" class="nav-item dropdown px-2">
-          <a
-            class="nav-link dropdown-toggle fw-medium"
-            href="#"
-            :id="`${key}DropdownOffcanvas`"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a class="nav-link dropdown-toggle fw-medium" href="#" :id="`${key}DropdownOffcanvas`" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ section.label }}
           </a>
           <ul class="dropdown-menu" :aria-labelledby="`${key}DropdownOffcanvas`">
             <li v-for="item in section.items" :key="item.path">
-              <RouterLink
-                :to="item.path"
-                class="dropdown-item"
-                @click="closeMenu"
-                @mouseover="prefetch(item.path)"
-                @mouseleave="cancelPrefetch"
-              >
+              <RouterLink :to="item.path" class="dropdown-item" @click="closeMenu" @mouseover="prefetch(item.path)" @mouseleave="cancelPrefetch">
                 <i v-if="item.icon" class="me-1 bi" :class="item.icon"></i>
                 {{ item.label }}
-                <span
-                  v-if="item.badge"
-                  class="badge rounded-pill bg-secondary ms-1"
-                >{{ item.badge }}</span>
+                <span v-if="item.badge" class="badge rounded-pill bg-secondary ms-1">{{ item.badge }}</span>
               </RouterLink>
             </li>
           </ul>

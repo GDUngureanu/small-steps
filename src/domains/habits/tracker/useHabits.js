@@ -190,11 +190,7 @@ export function useHabits() {
     }
   }
 
-  const { initialize: resourceInitialize, cleanup } = useSupabaseResource(
-    'habits',
-    loadHabits,
-    handleHabitsChange
-  )
+  const { initialize: resourceInitialize, cleanup } = useSupabaseResource('habits', loadHabits, handleHabitsChange)
 
   async function initialize() {
     const result = await resourceInitialize()

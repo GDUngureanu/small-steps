@@ -11,13 +11,7 @@
 
   // Initialize composables
   const { habitsData, loading: habitsLoading, error: habitsError, deleteHabit: archiveHabit, createHabit } = useHabits()
-  const {
-    loading: activitiesLoading,
-    error: activitiesError,
-    isActivityDone: isDoneFromComposable,
-    setActivityStatus,
-    getKeysForHabit,
-  } = useActivities()
+  const { loading: activitiesLoading, error: activitiesError, isActivityDone: isDoneFromComposable, setActivityStatus, getKeysForHabit } = useActivities()
 
   // Reactive state
   const currentTime = ref(new Date())
@@ -126,9 +120,7 @@
   // Computed properties for data processing
   const allCategories = computed(() => {
     const categories = new Set()
-    habitsData.value.habits
-      .filter((habit) => !habit.archived)
-      .forEach((habit) => categories.add(habit.category))
+    habitsData.value.habits.filter((habit) => !habit.archived).forEach((habit) => categories.add(habit.category))
     return ['All', ...Array.from(categories).sort()]
   })
 
@@ -143,9 +135,7 @@
 
   function getCategoriesForScope(scope) {
     const scopeCategories = new Set()
-    habitsData.value.habits
-      .filter((habit) => !habit.archived && habit.scope === scope)
-      .forEach((habit) => scopeCategories.add(habit.category))
+    habitsData.value.habits.filter((habit) => !habit.archived && habit.scope === scope).forEach((habit) => scopeCategories.add(habit.category))
     return ['All', ...Array.from(scopeCategories).sort()]
   }
 
@@ -194,9 +184,7 @@
 <template>
   <ArticleTemplate title="Habit Tracker" meta="Powerful habit tracking and analytics">
     <!-- Loading/Error States -->
-    <div v-if="habitsLoading || activitiesLoading" class="alert alert-info">
-      <i class="bi bi-hourglass-split"></i> Loading habits and activities...
-    </div>
+    <div v-if="habitsLoading || activitiesLoading" class="alert alert-info"><i class="bi bi-hourglass-split"></i> Loading habits and activities...</div>
 
     <div v-if="habitsError || activitiesError" class="alert alert-danger">
       <i class="bi bi-exclamation-triangle"></i>
@@ -207,24 +195,13 @@
     <div class="mb-4">
       <h4>Add Habit Tracker</h4>
 
-      <div v-if="formSuccess" class="alert alert-success">
-        <i class="bi bi-check-circle"></i> Habit tracker created successfully!
-      </div>
+      <div v-if="formSuccess" class="alert alert-success"><i class="bi bi-check-circle"></i> Habit tracker created successfully!</div>
 
-      <div v-if="formError" class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle"></i> {{ formError }}
-      </div>
+      <div v-if="formError" class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{ formError }}</div>
 
       <div class="row g-3">
         <div class="col-md-4">
-          <input
-            v-model="newHabitForm.name"
-            type="text"
-            class="form-control"
-            placeholder="Habit name"
-            :disabled="formLoading"
-            @keyup.enter="addNewHabit"
-          />
+          <input v-model="newHabitForm.name" type="text" class="form-control" placeholder="Habit name" :disabled="formLoading" @keyup.enter="addNewHabit" />
         </div>
         <div class="col-md-3">
           <select v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
@@ -235,15 +212,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <input
-            v-model="newHabitForm.category"
-            type="text"
-            class="form-control"
-            placeholder="Category"
-            list="category-suggestions"
-            :disabled="formLoading"
-            @keyup.enter="addNewHabit"
-          />
+          <input v-model="newHabitForm.category" type="text" class="form-control" placeholder="Category" list="category-suggestions" :disabled="formLoading" @keyup.enter="addNewHabit" />
           <datalist id="category-suggestions">
             <option v-for="category in allCategories.filter((c) => c !== 'All')" :key="category" :value="category">
               {{ category }}
@@ -302,15 +271,7 @@
               <td>
                 <!-- Progress Indicators -->
                 <div class="d-flex gap-1">
-                  <button
-                    v-for="window in computeWindows(scope, currentTime).windows"
-                    :key="window.intervalId"
-                    type="button"
-                    class="btn btn-sm"
-                    :class="isDone(habit.id, window.intervalId) ? 'btn-success' : 'btn-outline-secondary'"
-                    :title="window.label"
-                    @click="toggleHabit(habit.id, window.intervalId)"
-                  >
+                  <button v-for="window in computeWindows(scope, currentTime).windows" :key="window.intervalId" type="button" class="btn btn-sm" :class="isDone(habit.id, window.intervalId) ? 'btn-success' : 'btn-outline-secondary'" :title="window.label" @click="toggleHabit(habit.id, window.intervalId)">
                     <i class="bi" :class="isDone(habit.id, window.intervalId) ? 'bi-check' : 'bi-dash'"></i>
                   </button>
                 </div>
@@ -335,16 +296,16 @@
 </template>
 
 <style scoped>
-.habit-scope-section {
-  border-bottom: 1px solid #dee2e6;
-  padding-bottom: 2rem;
-}
+  .habit-scope-section {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 2rem;
+  }
 
-.habit-scope-section:last-child {
-  border-bottom: none;
-}
+  .habit-scope-section:last-child {
+    border-bottom: none;
+  }
 
-.btn-sm {
-  font-size: 0.75rem;
-}
+  .btn-sm {
+    font-size: 0.75rem;
+  }
 </style>

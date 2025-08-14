@@ -14,4 +14,3 @@ test('Budget route resolves', async () => {
   const resolved = await resolveRoute(path)
   expect(resolved).toBe(path)
 })
-

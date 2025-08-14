@@ -1,11 +1,5 @@
 import { test, expect } from 'vitest'
-import {
-  shiftInterval,
-  formatPeriodKey,
-  isoWeekId,
-  parsePeriodKey,
-  MS_DAY,
-} from '../../../src/shared/utils/dateIntervals.js'
+import { shiftInterval, formatPeriodKey, isoWeekId, parsePeriodKey, MS_DAY } from '../../../src/shared/utils/dateIntervals.js'
 
 test('shiftInterval moves over leap day correctly', () => {
   const start = new Date(Date.UTC(2020, 1, 28))

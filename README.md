@@ -30,6 +30,7 @@ A Vue 3 single-page application that serves as a personal passion project focuse
    ```sh
    npm install
    ```
+
 3. **Add environment variables** – create a `.env` file in the project root
    with your Supabase credentials:
 
@@ -41,11 +42,13 @@ A Vue 3 single-page application that serves as a personal passion project focuse
    A sample file is not provided and the process for obtaining these values is
    currently undocumented. Ask a maintainer for the correct values or use your
    own Supabase project.
+
 4. **Start the development server** (port 8080):
 
    ```sh
    npm start
    ```
+
 5. **Run the tests** to confirm your setup:
 
    ```sh
@@ -54,15 +57,15 @@ A Vue 3 single-page application that serves as a personal passion project focuse
 
 ## Available Scripts
 
-| Command           | Description                                   |
-| ----------------- | --------------------------------------------- |
-| `npm start`       | Start development server on port 8080         |
-| `npm run build`   | Build for production (outputs to `dist/`)     |
-| `npm run preview` | Preview production build on port 4173         |
-| `npm run lint`    | Run ESLint on .vue, .js files                 |
-| `npm run fix`     | Fix linting issues automatically              |
-| `npm run test`    | Run unit tests and linter                     |
-| `npm run deploy`  | Deploy to GitHub Pages                        |
+| Command           | Description                               |
+| ----------------- | ----------------------------------------- |
+| `npm start`       | Start development server on port 8080     |
+| `npm run build`   | Build for production (outputs to `dist/`) |
+| `npm run preview` | Preview production build on port 4173     |
+| `npm run lint`    | Run ESLint on .vue, .js files             |
+| `npm run fix`     | Fix linting issues automatically          |
+| `npm run test`    | Run unit tests and linter                 |
+| `npm run deploy`  | Deploy to GitHub Pages                    |
 
 ## Project Structure
 

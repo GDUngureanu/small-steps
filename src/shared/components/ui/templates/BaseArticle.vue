@@ -1,35 +1,35 @@
 <script setup>
-import { ref, watch } from 'vue'
+  import { ref, watch } from 'vue'
 
-/**
- * Provides shared article layout with header and toggle logic.
- *
- * @prop {string} title heading text displayed above the content
- * @prop {string} meta small subtitle or metadata string
- * @prop {boolean} expanded whether the article is open by default (default: true)
- */
-const props = defineProps({
-  title: String,
-  meta: String,
-  expanded: {
-    type: Boolean,
-    default: true,
-  },
-})
+  /**
+   * Provides shared article layout with header and toggle logic.
+   *
+   * @prop {string} title heading text displayed above the content
+   * @prop {string} meta small subtitle or metadata string
+   * @prop {boolean} expanded whether the article is open by default (default: true)
+   */
+  const props = defineProps({
+    title: String,
+    meta: String,
+    expanded: {
+      type: Boolean,
+      default: true,
+    },
+  })
 
-const isExpanded = ref(props.expanded)
+  const isExpanded = ref(props.expanded)
 
-// keep local state in sync with prop
-watch(
-  () => props.expanded,
-  value => {
-    isExpanded.value = value
+  // keep local state in sync with prop
+  watch(
+    () => props.expanded,
+    (value) => {
+      isExpanded.value = value
+    }
+  )
+
+  function toggleExpanded() {
+    isExpanded.value = !isExpanded.value
   }
-)
-
-function toggleExpanded() {
-  isExpanded.value = !isExpanded.value
-}
 </script>
 
 <template>
@@ -38,12 +38,11 @@ function toggleExpanded() {
       <div class="d-flex justify-content-between align-items-start cursor-pointer" @click="toggleExpanded">
         <div>
           <h3 class="display-6 link-body-emphasis mb-0">{{ title }}</h3>
-          <p class="blog-post-meta"><em>{{ meta }}</em></p>
+          <p class="blog-post-meta">
+            <em>{{ meta }}</em>
+          </p>
         </div>
-        <button
-          class="btn btn-sm p-1 text-muted article-toggle"
-          :aria-label="isExpanded ? 'Collapse section' : 'Expand section'"
-        >
+        <button class="btn btn-sm p-1 text-muted article-toggle" :aria-label="isExpanded ? 'Collapse section' : 'Expand section'">
           <i class="bi" :class="isExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
         </button>
       </div>
@@ -56,30 +55,30 @@ function toggleExpanded() {
 </template>
 
 <style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
+  .cursor-pointer {
+    cursor: pointer;
+  }
 
-.article-toggle {
-  border: none !important;
-  background: none !important;
-  transition: transform 0.2s ease;
-}
+  .article-toggle {
+    border: none !important;
+    background: none !important;
+    transition: transform 0.2s ease;
+  }
 
-.article-toggle:hover {
-  transform: scale(1.1);
-}
+  .article-toggle:hover {
+    transform: scale(1.1);
+  }
 
-.article-content {
-  overflow: hidden;
-  transition:
-    max-height 0.3s ease,
-    opacity 0.3s ease;
-  opacity: 1;
-}
+  .article-content {
+    overflow: hidden;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 1;
+  }
 
-.article-content.collapsed {
-  max-height: 0;
-  opacity: 0;
-}
+  .article-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+  }
 </style>

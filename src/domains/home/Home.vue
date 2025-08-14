@@ -9,7 +9,7 @@
 <template>
   <ArticleTemplate title="Welcome Home" meta="Your personal growth journey">
     <p>Welcome to your personal memento mori application - a space for growth, learning, and mindful living.</p>
-    
+
     <h4>Available Domains:</h4>
     <ul>
       <li><router-link to="/habits">Habits</router-link> - Track and build consistent habits</li>

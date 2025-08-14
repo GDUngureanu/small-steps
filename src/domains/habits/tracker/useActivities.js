@@ -73,14 +73,12 @@ export function useActivities() {
 
       if (done) {
         // Upsert activity
-        const { error: supabaseError } = await supabase
-          .from('habit_activities')
-          .upsert([
-            {
-              habit_id: habitId,
-              period_key: periodKey,
-            },
-          ])
+        const { error: supabaseError } = await supabase.from('habit_activities').upsert([
+          {
+            habit_id: habitId,
+            period_key: periodKey,
+          },
+        ])
 
         if (supabaseError) {
           throw supabaseError
@@ -92,11 +90,7 @@ export function useActivities() {
         }
       } else {
         // Delete activity
-        const { error: supabaseError } = await supabase
-          .from('habit_activities')
-          .delete()
-          .eq('habit_id', habitId)
-          .eq('period_key', periodKey)
+        const { error: supabaseError } = await supabase.from('habit_activities').delete().eq('habit_id', habitId).eq('period_key', periodKey)
 
         if (supabaseError) {
           throw supabaseError
@@ -219,9 +213,7 @@ export function useActivities() {
       }
 
       case 'DELETE': {
-        const deleteIndex = activities.value.findIndex(
-          (a) => a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key
-        )
+        const deleteIndex = activities.value.findIndex((a) => a.habitId === payload.old.habit_id && a.periodKey === payload.old.period_key)
         if (deleteIndex >= 0) {
           activities.value.splice(deleteIndex, 1)
         }
@@ -230,11 +222,7 @@ export function useActivities() {
     }
   }
 
-  const { initialize: resourceInitialize, cleanup: resourceCleanup } = useSupabaseResource(
-    'habit_activities',
-    loadActivities,
-    handleActivitiesChange
-  )
+  const { initialize: resourceInitialize, cleanup: resourceCleanup } = useSupabaseResource('habit_activities', loadActivities, handleActivitiesChange)
 
   async function initialize() {
     const result = await resourceInitialize()

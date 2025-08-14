@@ -10,12 +10,7 @@
   })
 
   const { habitsData, loading: habitsLoading, error: habitsError } = useHabits()
-  const {
-    loading: activitiesLoading,
-    error: activitiesError,
-    isActivityDone,
-    setActivityStatus,
-  } = useActivities()
+  const { loading: activitiesLoading, error: activitiesError, isActivityDone, setActivityStatus } = useActivities()
 
   const TIMEZONE = 'Europe/Bucharest'
   function getTodayKey() {
@@ -27,9 +22,7 @@
   }
   const todayKey = getTodayKey()
 
-  const fitnessHabits = computed(() =>
-    habitsData.value.habits.filter((habit) => habit.category === 'fitness')
-  )
+  const fitnessHabits = computed(() => habitsData.value.habits.filter((habit) => habit.category === 'fitness'))
 
   function toggleHabit(habitId) {
     const done = !isActivityDone(habitId, todayKey)
@@ -44,7 +37,7 @@
 
   <ArticleTemplate title="Workout Templates" meta="Aug 6, 2025 by G. D. Ungureanu">
     <p>Choose from our specialized workout templates to plan your training sessions.</p>
-    
+
     <h3>Available Workouts:</h3>
     <ul>
       <li>
@@ -65,11 +58,7 @@
       <ul v-if="fitnessHabits.length">
         <li v-for="habit in fitnessHabits" :key="habit.id">
           <label>
-            <input
-              type="checkbox"
-              :checked="isActivityDone(habit.id, todayKey)"
-              @change="toggleHabit(habit.id)"
-            />
+            <input type="checkbox" :checked="isActivityDone(habit.id, todayKey)" @change="toggleHabit(habit.id)" />
             {{ habit.name }}
           </label>
         </li>

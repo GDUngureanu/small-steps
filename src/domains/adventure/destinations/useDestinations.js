@@ -9,7 +9,6 @@ import destinationsData from './destinations.json'
  * Business logic for managing destination statuses and priorities
  */
 export function useDestinations() {
-  
   // =============================================================================
   // CONFIGURATION & CONSTANTS
   // =============================================================================
@@ -161,13 +160,13 @@ export function useDestinations() {
     countryColorsByStatus,
     statusLabels,
     statusBadgeClasses,
-    
+
     // Data
     processedDestinations,
     destinationsByStatus,
     countryColors,
-    
-    // Utilities  
+
+    // Utilities
     getCityStatus,
     getDestinationStatus,
     getDestinationPriority,

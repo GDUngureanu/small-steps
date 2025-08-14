@@ -12,14 +12,7 @@
   const DESTINATIONS_ACTIONS_LIST_ID = '23137b93-91c1-46cb-a479-253ef789d17d'
 
   // Use destinations composable for all business logic
-  const {
-    destinationsByStatus,
-    statusLabels,
-    statusBadgeClasses,
-    getPriorityStars,
-    getCountryColor,
-    findDestination,
-  } = useDestinations()
+  const { destinationsByStatus, statusLabels, statusBadgeClasses, getPriorityStars, getCountryColor, findDestination } = useDestinations()
 </script>
 
 <template>
@@ -29,17 +22,8 @@
   </ArticleTemplate>
 
   <!-- Destinations List -->
-  <DestinationsList 
-    :destinations-by-status="destinationsByStatus"
-    :status-labels="statusLabels"
-    :status-badge-classes="statusBadgeClasses"
-    :get-priority-stars="getPriorityStars"
-  />
+  <DestinationsList :destinations-by-status="destinationsByStatus" :status-labels="statusLabels" :status-badge-classes="statusBadgeClasses" :get-priority-stars="getPriorityStars" />
 
   <!-- Destinations Map -->
-  <DestinationsMap
-    :get-country-color="getCountryColor"
-    :find-destination="findDestination"
-    :status-labels="statusLabels"
-  />
+  <DestinationsMap :get-country-color="getCountryColor" :find-destination="findDestination" :status-labels="statusLabels" />
 </template>

@@ -14,10 +14,7 @@ import { authenticationEvents, AUTH_REQUIRED_EVENT } from '../auth/authenticatio
  * @param {Array<import('vue-router').RouteRecordRaw>} [routesConfig] route definitions
  * @returns {import('vue-router').Router} configured router
  */
-export function createAppRouter(
-  history = createWebHistory(import.meta.env.BASE_URL),
-  routesConfig = routes,
-) {
+export function createAppRouter(history = createWebHistory(import.meta.env.BASE_URL), routesConfig = routes) {
   const router = createRouter({
     history,
     routes: routesConfig,

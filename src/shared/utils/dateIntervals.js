@@ -188,14 +188,4 @@ function parsePeriodKey(scope, key) {
   return Number(key)
 }
 
-export {
-  floorToInterval,
-  shiftInterval,
-  isoWeekId,
-  formatPeriodKey,
-  humanLabel,
-  computeWindows,
-  isoWeekStartUTC,
-  parsePeriodKey,
-  MS_DAY,
-}
+export { floorToInterval, shiftInterval, isoWeekId, formatPeriodKey, humanLabel, computeWindows, isoWeekStartUTC, parsePeriodKey, MS_DAY }

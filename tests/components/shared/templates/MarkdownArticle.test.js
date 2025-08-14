@@ -5,9 +5,7 @@ import MarkdownArticle from '@/shared/components/ui/templates/MarkdownArticle.vu
 const originalFetch = global.fetch
 
 beforeEach(() => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({ text: () => Promise.resolve('# Sample Markdown') })
-  )
+  global.fetch = vi.fn(() => Promise.resolve({ text: () => Promise.resolve('# Sample Markdown') }))
 })
 
 afterEach(() => {

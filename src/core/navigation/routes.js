@@ -18,7 +18,7 @@ const Literature = () => import('@/domains/literature/Literature.vue')
 const Books = () => import('@/domains/literature/books/Books.vue')
 const Poems = () => import('@/domains/literature/poems/Poems.vue')
 
-// Entertainment Domain Routes  
+// Entertainment Domain Routes
 const Entertainment = () => import('@/domains/entertainment/Entertainment.vue')
 const Anime = () => import('@/domains/entertainment/anime/Anime.vue')
 const Movies = () => import('@/domains/entertainment/movies/Movies.vue')
@@ -125,7 +125,7 @@ export default [
   // {
   //   path: '/nutrition/meal-prep',
   //   component: MealPrep,
-  //   meta: { navLabel: 'Meal Prep', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-basket' }, 
+  //   meta: { navLabel: 'Meal Prep', navGroup: 'nutrition', requiresAuth: false, icon: 'bi-basket' },
   // }, // TODO: Create MealPrep component
 
   // Finance Domain Routes
