@@ -46,7 +46,7 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-test('offcanvas opens and hides on small screens and ignores large screens', async () => {
+test('offcanvas opens and hides on small screens and ignores medium and large screens', async () => {
   Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 500 })
 
   const wrapper = mount(AppNavigation, {
@@ -62,7 +62,7 @@ test('offcanvas opens and hides on small screens and ignores large screens', asy
   expect(hideSpy).toHaveBeenCalled()
 
   hideSpy.mockClear()
-  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 1200 })
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 800 })
   await wrapper.find('a').trigger('click')
   expect(hideSpy).not.toHaveBeenCalled()
 })
