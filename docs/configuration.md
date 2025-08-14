@@ -6,12 +6,12 @@ Centralised configuration and third\u2011party clients.
 
 ## Supabase
 
-`supabase.js` initialises the Supabase client using environment variables:
+`supabase.js` initialises a singleton Supabase client using environment variables:
 
 - `VITE_SUPABASE_URL` \u2013 project URL
 - `VITE_SUPABASE_ANON_KEY` \u2013 public anon key
 
-The exported `supabase` instance is used by composables for authentication and data management.
+The exported `supabase` instance is reused across the app for authentication and data management.
 
 ## Authentication
 
