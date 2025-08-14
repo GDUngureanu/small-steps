@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import { Popover } from 'bootstrap'
 import App from '@/App.vue'
-import { createAppRouter } from '@/configuration/router.js'
-import '@/scss/styles.scss'
+import { createAppRouter } from '@core/navigation/router.js'
+import '@/shared/styles/styles.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 // Create the router instance using centralized routes and auth guard

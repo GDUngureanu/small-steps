@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import ActionDeleteModal from '@/components/shared/templates/actions/ActionDeleteModal.vue'
+import ActionDeleteModal from '@/shared/components/ui/templates/actions/ActionDeleteModal.vue'
 
 const action = { description: 'Test action' }
 

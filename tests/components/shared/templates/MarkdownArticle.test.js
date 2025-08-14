@@ -1,6 +1,6 @@
 import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import MarkdownArticle from '@/components/shared/templates/MarkdownArticle.vue'
+import MarkdownArticle from '@/shared/components/ui/templates/MarkdownArticle.vue'
 
 const originalFetch = global.fetch
 

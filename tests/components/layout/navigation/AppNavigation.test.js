@@ -1,9 +1,9 @@
 import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import { usePrefetch } from '@/composables/usePrefetch.js'
+import { usePrefetch } from '@/shared/composables/usePrefetch.js'
 import { computed } from 'vue'
-import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
+import AppNavigation from '@/core/layout/navigation/AppNavigation.vue'
 
 let offcanvasInstance
 const showSpy = vi.fn()
@@ -22,7 +22,7 @@ vi.mock('bootstrap', () => ({
   },
 }))
 
-vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
+vi.mock('@/core/auth/useAuthentication.js', () => ({
   useAuthentication: () => ({
     isAuthenticated: computed(() => false),
     logout: vi.fn(),

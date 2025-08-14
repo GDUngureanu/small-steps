@@ -8,7 +8,12 @@ export default defineConfig({
     vue()
   ],
   resolve: {
-    alias: { '@': path.resolve(__dirname, 'src') }
+    alias: { 
+      '@': path.resolve(__dirname, 'src'),
+      '@shared': path.resolve(__dirname, 'src/shared'),
+      '@core': path.resolve(__dirname, 'src/core'),
+      '@domains': path.resolve(__dirname, 'src/domains'),
+    }
   },
   server: {
     port: 8080
@@ -25,9 +30,6 @@ export default defineConfig({
         ],
       },
     },
-  },
-  define: {
-    'process.env': process.env
   },
   test: {
     environment: 'jsdom'

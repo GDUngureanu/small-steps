@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { test, expect, vi, afterEach } from 'vitest'
 import { ref, computed, nextTick, readonly } from 'vue'
-import AppNavigation from '@/components/layout/navigation/AppNavigation.vue'
+import AppNavigation from '@/core/layout/navigation/AppNavigation.vue'
 
 // Mock router to observe prefetch calls
 const componentSpy = vi.fn()
@@ -21,7 +21,7 @@ vi.mock('vue-router', () => ({
 // Mock authentication composable with reactive auth state
 const isAuthenticated = ref(false)
 const logoutMock = vi.fn()
-vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
+vi.mock('@/core/auth/useAuthentication.js', () => ({
   useAuthentication: () => ({
     isAuthenticated: readonly(isAuthenticated),
     logout: logoutMock,

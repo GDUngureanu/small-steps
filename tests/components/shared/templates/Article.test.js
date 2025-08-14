@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import Article from '@/components/shared/templates/Article.vue'
+import Article from '@/shared/components/ui/templates/Article.vue'
 
 test('renders heading, meta text, and slot content', () => {
   const title = 'Sample Title'

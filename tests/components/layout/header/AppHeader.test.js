@@ -1,7 +1,7 @@
 import { test, expect, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
-import AppHeader from '@/components/layout/header/AppHeader.vue'
+import AppHeader from '@/core/layout/header/AppHeader.vue'
 
 async function mountHeader(path) {
   const router = createRouter({

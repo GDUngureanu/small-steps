@@ -7,7 +7,7 @@ vi.mock('@/configuration/supabase.js', () => ({
 
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import ActionsTemplate from '@/components/shared/templates/actions/Actions.vue'
+import ActionsTemplate from '@/shared/components/ui/templates/actions/Actions.vue'
 
 const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0))
 

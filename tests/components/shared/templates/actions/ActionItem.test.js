@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { vi, test, expect } from 'vitest'
-import ActionItem from '@/components/shared/templates/actions/ActionItem.vue'
-import { PRIORITY_LEVELS } from '@/components/shared/templates/actions/utils.js'
+import ActionItem from '@/shared/components/ui/templates/actions/ActionItem.vue'
+import { PRIORITY_LEVELS } from '@/shared/components/ui/templates/actions/utils.js'
 
 const baseAction = {
   id: 1,

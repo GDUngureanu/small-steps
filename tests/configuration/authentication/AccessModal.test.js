@@ -1,11 +1,11 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
-import AccessModal from '@/configuration/authentication/components/AccessModal.vue'
+import AccessModal from '@/core/auth/components/AccessModal.vue'
 
 // Hoisted mock to control authentication result per test
 let authenticateMock
-vi.mock('@/configuration/authentication/useAuthentication.js', () => ({
+vi.mock('@/core/auth/useAuthentication.js', () => ({
   useAuthentication: () => ({
     authenticate: (...args) => authenticateMock(...args),
   }),

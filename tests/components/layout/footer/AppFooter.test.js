@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import AppFooter from '@/components/layout/footer/AppFooter.vue'
+import AppFooter from '@/core/layout/footer/AppFooter.vue'
 
 test('AppFooter always renders copyright line and link', () => {
   const wrapper = mount(AppFooter)
