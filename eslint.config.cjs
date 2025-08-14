@@ -74,6 +74,15 @@ module.exports = [
       }
     }
   },
+  {
+    // Allow Node globals in env config file
+    files: ['src/core/config/env.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
   // Prettier integration - must be last to override conflicting rules
   prettier
 ]

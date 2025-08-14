@@ -1,7 +1,11 @@
 import { vi, test, expect, beforeEach } from 'vitest'
 
 const fromMock = vi.hoisted(() => vi.fn())
-vi.mock('@/configuration/supabase.js', () => ({
+// Mock the Supabase client used by the actions template to avoid
+// creating a real connection during tests. The component imports the
+// client from the core configuration directory so we mock that module
+// path.
+vi.mock('@/core/config/supabase.js', () => ({
   supabase: { from: fromMock },
 }))
 
