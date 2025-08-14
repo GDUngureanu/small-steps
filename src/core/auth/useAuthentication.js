@@ -1,6 +1,6 @@
 import { ref, watchEffect, readonly } from 'vue'
 import routes from '../navigation/routes.js'
-import { VITE_APP_PASSWORD } from '../config/env.js'
+import env from '../config/env.js'
 import {
   buildRouteMetaMap,
   isRouteRestricted as isRouteRestrictedUtil,
@@ -52,20 +52,13 @@ watchEffect(() => {
  * }} reactive auth helpers and route guards
  */
 export function useAuthentication() {
-  // Password from environment variable via getter
-  const CORRECT_PASSWORD = VITE_APP_PASSWORD
 
   const authenticate = (password) => {
-    if (!CORRECT_PASSWORD) {
-      // eslint-disable-next-line no-console
-      console.warn('VITE_APP_PASSWORD environment variable is not configured')
-      return false
-    }
-
-    if (password === CORRECT_PASSWORD) {
+    if (password === env.VITE_APP_PASSWORD) {
       isAuthenticated.value = true
       return true
     }
+
     return false
   }
 
