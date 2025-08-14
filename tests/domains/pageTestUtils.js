@@ -101,7 +101,7 @@ export async function resolveRoute(pathName, authenticated = false) {
 
   // Set up Pinia before creating the router
   setActivePinia(createPinia())
-  
+
   const { useAuthentication, resetAuth } = await import('../../src/core/auth/useAuthentication.js')
   resetAuth()
   if (authenticated) {
