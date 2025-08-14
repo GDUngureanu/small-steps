@@ -1,19 +1,7 @@
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import rawRoutes from '../../src/core/navigation/routes.js'
-import { vi } from 'vitest'
 import { h } from 'vue'
-
-vi.mock('../../src/core/config/env.js', () => ({
-  env: Object.freeze({
-    VITE_APP_PASSWORD: 'secret',
-    VITE_SUPABASE_URL: 'https://example.supabase.co',
-    VITE_SUPABASE_ANON_KEY: 'anon',
-  }),
-  VITE_APP_PASSWORD: 'secret',
-  VITE_SUPABASE_URL: 'https://example.supabase.co',
-  VITE_SUPABASE_ANON_KEY: 'anon',
-}))
 
 /**
  * Render a Vue component using Vue Test Utils with proper router and global setup.

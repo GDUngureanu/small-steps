@@ -85,7 +85,9 @@ test('map loads only when observed and observer disconnects', async () => {
     const wrapper = await renderComponent(file)
 
     expect(mapMock).not.toHaveBeenCalled()
-    expect(wrapper.vm.isLoading).toBe(true)
+    // The loading state lives inside the DestinationsMap child component
+    const mapComponent = wrapper.findComponent({ name: 'DestinationsMap' })
+    expect(mapComponent.vm.isLoading).toBe(true)
     expect(observeMock).toHaveBeenCalledTimes(1)
 
     // Simulate map entering viewport
@@ -95,7 +97,7 @@ test('map loads only when observed and observer disconnects', async () => {
     expect(mapMock).toHaveBeenCalledTimes(1)
     // Observer should disconnect after loading
     expect(disconnectMock).toHaveBeenCalledTimes(1)
-    expect(wrapper.vm.isLoading).toBe(false)
+    expect(mapComponent.vm.isLoading).toBe(false)
     expect(wrapper.find('.spinner-border').exists()).toBe(false)
 
     // Subsequent intersections should do nothing

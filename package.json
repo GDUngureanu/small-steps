@@ -18,10 +18,8 @@
     "format:check": "prettier --check .",
     "fix": "npm run lint:fix && npm run format",
     "test:components": "vitest run --dir tests/components",
-    "test:composables": "node --test --experimental-test-coverage tests/composables/**/*.js",
-    "test:router": "node --test --experimental-test-coverage tests/router/**/*.js",
-    "test:pages": "vitest run --dir tests/pages",
-    "test:unit": "npm run test:components && npm run test:composables && npm run test:router",
+    "test:pages": "vitest run --dir tests/domains",
+    "test:unit": "npm run test:components",
     "test": "npm run test:unit && npm run test:pages && npm run lint",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
