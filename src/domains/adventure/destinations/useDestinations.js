@@ -1,17 +1,6 @@
-// =====================================================
-// Destinations Composable - Adventure Domain Internal
-// =====================================================
-
-import { computed } from 'vue'
-import destinationsData from './destinations.json'
-
-/**
- * Business logic for managing destination statuses and priorities
- */
+import { ref, computed } from 'vue'
 export function useDestinations() {
-  // =============================================================================
   // CONFIGURATION & CONSTANTS
-  // =============================================================================
   const countryColorsByStatus = {
     'epic-adventure-done': '#22C55E', // mint-green (Done)
     'halfway-there': '#2DD4BF', // seafoam-green (Partial)
@@ -36,9 +25,28 @@ export function useDestinations() {
     'journey-postponed': 'badge-mist-gray',
   }
 
-  // =============================================================================
-  // BUSINESS LOGIC FUNCTIONS
-  // =============================================================================
+  const rawDestinations = ref([])
+  const isLoading = ref(false)
+  const error = ref(null)
+
+  const loadDestinations = async () => {
+    isLoading.value = true
+    error.value = null
+    try {
+      const response = await fetch(new URL('./destinations.json', import.meta.url))
+      if (!response.ok) throw new Error('Failed to load destinations')
+      const json = await response.json()
+      rawDestinations.value = json.destinations || []
+    } catch (err) {
+      error.value = err
+      rawDestinations.value = []
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  loadDestinations()
+
   const getCityStatus = (city) => {
     if (!city.attractions || city.attractions.length === 0) {
       return 'quest-for-fun' // Cities without attractions default to Fun Idea
@@ -83,7 +91,6 @@ export function useDestinations() {
     }
   }
 
-  // Calculate country priority based on attraction priorities
   const getDestinationPriority = (destination) => {
     if (!destination.cities || destination.cities.length === 0) {
       return 1
@@ -105,34 +112,33 @@ export function useDestinations() {
     return Math.round(Math.max(1, Math.min(5, averagePriority)))
   }
 
-  // Priority display helper - just stars
   const getPriorityStars = (priority) => {
     return '⭐'.repeat(Math.max(1, Math.min(5, priority || 1)))
   }
 
-  // =============================================================================
   // PROCESSED DATA
-  // =============================================================================
-  const processedDestinations = destinationsData.destinations.map((destination) => ({
-    ...destination,
-    status: getDestinationStatus(destination),
-    priority: getDestinationPriority(destination),
-    cities: destination.cities?.map((city) => ({
-      ...city,
-      status: getCityStatus(city),
-    })),
-  }))
+  const processedDestinations = computed(() =>
+    rawDestinations.value.map((destination) => ({
+      ...destination,
+      status: getDestinationStatus(destination),
+      priority: getDestinationPriority(destination),
+      cities: destination.cities?.map((city) => ({
+        ...city,
+        status: getCityStatus(city),
+      })),
+    }))
+  )
 
   // Generate country colors from destinations data with computed status
   const countryColors = computed(() => {
-    return Object.fromEntries(processedDestinations.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3']))
+    return Object.fromEntries(processedDestinations.value.map((destination) => [destination.iso, countryColorsByStatus[destination.status] || '#d3d3d3']))
   })
 
   const getCountryColor = (countryId) => countryColors.value[countryId] || '#d3d3d3'
 
   // Helper function to find destination data by ISO code with computed status
   const findDestination = (iso) => {
-    return processedDestinations.find((destination) => destination.iso === iso)
+    return processedDestinations.value.find((destination) => destination.iso === iso)
   }
 
   // Group destinations by computed status and sort by priority then alphabetically
@@ -147,11 +153,11 @@ export function useDestinations() {
     }
 
     return {
-      completed: processedDestinations.filter((destination) => destination.status === 'epic-adventure-done').sort(sortByPriorityThenAlpha),
-      inProgress: processedDestinations.filter((destination) => destination.status === 'halfway-there').sort(sortByPriorityThenAlpha),
-      adventureAwaits: processedDestinations.filter((destination) => destination.status === 'adventure-awaits').sort(sortByPriorityThenAlpha),
-      questForFun: processedDestinations.filter((destination) => destination.status === 'quest-for-fun').sort(sortByPriorityThenAlpha),
-      postponed: processedDestinations.filter((destination) => destination.status === 'journey-postponed').sort(sortByPriorityThenAlpha),
+      completed: processedDestinations.value.filter((destination) => destination.status === 'epic-adventure-done').sort(sortByPriorityThenAlpha),
+      inProgress: processedDestinations.value.filter((destination) => destination.status === 'halfway-there').sort(sortByPriorityThenAlpha),
+      adventureAwaits: processedDestinations.value.filter((destination) => destination.status === 'adventure-awaits').sort(sortByPriorityThenAlpha),
+      questForFun: processedDestinations.value.filter((destination) => destination.status === 'quest-for-fun').sort(sortByPriorityThenAlpha),
+      postponed: processedDestinations.value.filter((destination) => destination.status === 'journey-postponed').sort(sortByPriorityThenAlpha),
     }
   })
 
@@ -165,6 +171,8 @@ export function useDestinations() {
     processedDestinations,
     destinationsByStatus,
     countryColors,
+    isLoading,
+    error,
 
     // Utilities
     getCityStatus,
@@ -173,5 +181,6 @@ export function useDestinations() {
     getPriorityStars,
     getCountryColor,
     findDestination,
+    loadDestinations,
   }
 }

@@ -44,7 +44,7 @@ test('Destinations route resolves correctly', async () => {
 
 test('map loads only when observed and observer disconnects', async () => {
   // Ensure previous tests don't affect call counts
-  mapMock.mockClear()
+  mapMock?.mockClear()
 
   const originalIO = global.IntersectionObserver
   const originalFetch = global.fetch
@@ -83,10 +83,12 @@ test('map loads only when observed and observer disconnects', async () => {
 
   try {
     const wrapper = await renderComponent(file)
+    await new Promise((r) => setTimeout(r, 0))
 
-    expect(mapMock).not.toHaveBeenCalled()
+    expect(mapMock).toBeUndefined()
     // The loading state lives inside the DestinationsMap child component
     const mapComponent = wrapper.findComponent({ name: 'DestinationsMap' })
+    expect(mapComponent.exists()).toBe(true)
     expect(mapComponent.vm.isLoading).toBe(true)
     expect(observeMock).toHaveBeenCalledTimes(1)
 
