@@ -24,12 +24,14 @@ vi.mock('bootstrap', () => ({
 
 vi.mock('@/core/auth/useAuthentication.js', () => ({
   useAuthentication: () => ({
-    isAuthenticated: computed(() => false),
+    get isAuthenticated() {
+      return false
+    },
     logout: vi.fn(),
   }),
 }))
 
-vi.mock('@/composables/useNavigation.js', () => ({
+vi.mock('@/core/layout/navigation/useNavigation.js', () => ({
   useNavigation: () => ({
     navigationItems: computed(() => [{ path: '/test', label: 'Test', requiresAuth: false }]),
     dropdownSections: computed(() => ({})),

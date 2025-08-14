@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { defineStore } from 'pinia'
 
 /**
  * Build navigation structures from router route records.
@@ -11,7 +12,7 @@ import { useRouter } from 'vue-router'
  * - `navigationItems` for top-level links
  * - `dropdownSections` for grouped items keyed by group name
  */
-export function useNavigation() {
+export const useNavigation = defineStore('navigation', () => {
   const router = useRouter()
   const routes = router.getRoutes().filter((r) => r.meta && r.meta.navLabel)
 
@@ -54,4 +55,4 @@ export function useNavigation() {
     navigationItems,
     dropdownSections,
   }
-}
+})

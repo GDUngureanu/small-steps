@@ -11,16 +11,16 @@
    * Structural data comes from `useNavigation` while authentication state is
    * handled by `useAuthentication`.
    */
-  const { isAuthenticated, logout } = useAuthentication()
-  const { navigationItems: allNavigationItems, dropdownSections: allDropdownSections } = useNavigation()
+  const auth = useAuthentication()
+  const navigation = useNavigation()
   const { prefetch, cancelPrefetch } = usePrefetch()
 
-  const navigationItems = computed(() => allNavigationItems.value.filter((item) => !item.requiresAuth || isAuthenticated.value))
+  const navigationItems = computed(() => navigation.navigationItems.filter((item) => !item.requiresAuth || auth.isAuthenticated))
 
   const dropdownSections = computed(() => {
     const sections = {}
-    Object.entries(allDropdownSections.value).forEach(([key, section]) => {
-      const items = section.items.filter((item) => !item.requiresAuth || isAuthenticated.value)
+    Object.entries(navigation.dropdownSections).forEach(([key, section]) => {
+      const items = section.items.filter((item) => !item.requiresAuth || auth.isAuthenticated)
       if (items.length) {
         sections[key] = { ...section, items }
       }
@@ -90,14 +90,14 @@
 
         <!-- Auth controls -->
         <ul class="navbar-nav">
-          <li v-if="!isAuthenticated" class="nav-item px-2">
+          <li v-if="!auth.isAuthenticated" class="nav-item px-2">
             <button @click="showAuthenticationModal" class="btn btn-outline-primary btn-sm">
               <i class="bi bi-unlock"></i>
               Login
             </button>
           </li>
-          <li v-if="isAuthenticated" class="nav-item px-2">
-            <button @click="logout" class="btn btn-outline-secondary btn-sm">
+          <li v-if="auth.isAuthenticated" class="nav-item px-2">
+            <button @click="auth.logout" class="btn btn-outline-secondary btn-sm">
               <i class="bi bi-lock"></i>
               Logout
             </button>
@@ -141,14 +141,14 @@
 
       <!-- Auth controls -->
       <ul class="navbar-nav mt-3">
-        <li v-if="!isAuthenticated" class="nav-item px-2">
+        <li v-if="!auth.isAuthenticated" class="nav-item px-2">
           <button @click="showAuthenticationModal" class="btn btn-outline-primary btn-sm w-100">
             <i class="bi bi-unlock"></i>
             Login
           </button>
         </li>
-        <li v-if="isAuthenticated" class="nav-item px-2">
-          <button @click="logout" class="btn btn-outline-secondary btn-sm w-100">
+        <li v-if="auth.isAuthenticated" class="nav-item px-2">
+          <button @click="auth.logout" class="btn btn-outline-secondary btn-sm w-100">
             <i class="bi bi-lock"></i>
             Logout
           </button>
