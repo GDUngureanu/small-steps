@@ -3,7 +3,7 @@
   import ArticleTemplate from '@/shared/components/ui/templates/Article.vue'
   import { useHabits } from './useHabits.js'
   import { useActivities } from './useActivities.js'
-  import { computeWindows, parsePeriodKey } from '@/shared/utils/dateIntervals.js'
+  import { computeWindows } from '@/shared/utils/dateIntervals.js'
 
   defineOptions({
     name: 'HabitsTracker',
@@ -103,209 +103,301 @@
     formSuccess.value = false
   }
 
-  // Time update interval
-  let timeInterval
-  onMounted(() => {
-    timeInterval = setInterval(() => {
-      currentTime.value = new Date()
-    }, 60000) // Update every minute
-  })
-
-  onUnmounted(() => {
-    if (timeInterval) {
-      clearInterval(timeInterval)
-    }
-  })
-
-  // Computed properties for data processing
+  // Get all unique categories for dropdown
   const allCategories = computed(() => {
+    if (!habitsData.value?.habits) return []
     const categories = new Set()
-    habitsData.value.habits.filter((habit) => !habit.archived).forEach((habit) => categories.add(habit.category))
-    return ['All', ...Array.from(categories).sort()]
+    habitsData.value.habits.forEach(habit => {
+      if (habit.category) {
+        categories.add(habit.category)
+      }
+    })
+    return Array.from(categories).sort()
   })
 
-  function getHabitsForScope(scope) {
-    return habitsData.value.habits.filter((habit) => {
-      if (habit.archived) return false
-      if (habit.scope !== scope) return false
-      if (categoryFilters[scope] === 'All') return true
-      return habit.category === categoryFilters[scope]
-    })
-  }
-
-  function getCategoriesForScope(scope) {
-    const scopeCategories = new Set()
-    habitsData.value.habits.filter((habit) => !habit.archived && habit.scope === scope).forEach((habit) => scopeCategories.add(habit.category))
-    return ['All', ...Array.from(scopeCategories).sort()]
-  }
-
-  function computeStreakInfo(habitId, scope) {
-    const keys = getKeysForHabit(habitId)
-    if (keys.length === 0) return { current: 0, max: 0 }
-
-    const sortedKeys = keys.map((key) => parsePeriodKey(scope, key)).sort((a, b) => a - b)
-
-    // Current streak (from most recent period backwards)
-    let current = 0
-    const now = parsePeriodKey(scope, computeWindows(scope, currentTime.value).windows[10].intervalId)
-
-    // Start from current period and go backwards
-    let period = now
-    while (sortedKeys.includes(period)) {
-      current++
-      period--
+  // Get available categories for a scope
+  const getScopeCategories = (scope) => {
+    if (habitsLoading.value || !habitsData.value) {
+      return ['All']
     }
+    const categories = new Set()
+    habitsData.value.habits
+      .filter((habit) => habit.scope === scope && !habit.archived)
+      .forEach((habit) => categories.add(habit.category))
+    return ['All', ...Array.from(categories).sort()]
+  }
 
-    // Max streak
-    let max = 0
-    let temp = 0
-    let prev = null
+  // Computed properties for each scope
+  const scopeData = computed(() => {
+    const scopeDetails = {}
 
-    for (const key of sortedKeys) {
-      if (prev === null || key === prev + 1) {
-        temp++
-      } else {
-        max = Math.max(max, temp)
-        temp = 1
+    allScopes.forEach((scope) => {
+      // Return empty data while loading
+      if (habitsLoading.value || activitiesLoading.value || !habitsData.value) {
+        scopeDetails[scope] = {
+          habits: [],
+          windows: { windows: [], currentIndex: 10 },
+          streaks: {},
+          availableCategories: ['All']
+        }
+        return
       }
-      prev = key
-    }
-    max = Math.max(max, temp)
 
-    return { current, max }
+      let habits = habitsData.value.habits
+        .filter((habit) => habit.scope === scope && !habit.archived)
+
+      // Apply category filter
+      if (categoryFilters[scope] !== 'All') {
+        habits = habits.filter((habit) => habit.category === categoryFilters[scope])
+      }
+
+      habits = habits.sort((firstHabit, secondHabit) => (firstHabit.sort || 0) - (secondHabit.sort || 0))
+
+      const windows = computeWindows(scope, currentTime.value)
+      const availableCategories = getScopeCategories(scope)
+
+      const streaks = {}
+      habits.forEach((habit) => {
+        streaks[habit.id] = computeStreakStats(habit.id, scope)
+      })
+
+      scopeDetails[scope] = {
+        habits,
+        windows,
+        streaks,
+        availableCategories,
+      }
+    })
+
+    return scopeDetails
+  })
+
+  function computeStreakStats(habitId, scope) {
+    const periodKeys = getKeysForHabit(habitId)
+    return streakStats(scope, periodKeys, 3)
   }
 
-  // Lifecycle hooks for cleanup
-  onUnmounted(() => {
-    // Cleanup composables if needed
+  function getFireColor(streak) {
+    if (streak > 20) return 'text-primary' // Blue
+    if (streak > 10) return 'text-danger' // Red
+    if (streak > 5) return 'text-warning' // Yellow
+    return 'text-muted' // Gray for <= 5
+  }
+
+  const MS_DAY = 86_400_000
+
+  function isoWeekStartUTC(year, week) {
+    const jan4 = Date.UTC(year, 0, 4)
+    const jan4DowMon0 = (new Date(jan4).getUTCDay() + 6) % 7
+    const week1Mon = jan4 - jan4DowMon0 * MS_DAY
+    return week1Mon + (week - 1) * 7 * MS_DAY
+  }
+
+  function parsePeriodKeyLocal(scope, key) {
+    if (scope === 'day') {
+      const [y, m, d] = key.split('-').map(Number)
+      return Date.UTC(y, m - 1, d) / MS_DAY
+    }
+    if (scope === 'week') {
+      const [y, wRaw] = key.split('-W').map(Number)
+      return isoWeekStartUTC(y, wRaw) / MS_DAY / 7
+    }
+    if (scope === 'month') {
+      const [y, m] = key.split('-').map(Number)
+      return y * 12 + (m - 1)
+    }
+    return Number(key)
+  }
+
+  function streakStats(scope, periodKeys, gap = 3) {
+    if (!periodKeys || periodKeys.length === 0) return 0
+
+    const ords = [...new Set(periodKeys)]
+      .map((k) => parsePeriodKeyLocal(scope, k))
+      .filter(Number.isFinite)
+      .sort((a, b) => b - a)
+
+    if (ords.length === 0) return 0
+
+    let latest = 1
+    for (let i = 1; i < ords.length; i++) {
+      const step = ords[i - 1] - ords[i]
+      if (step <= gap + 1) latest++
+      else break
+    }
+
+    return latest
+  }
+
+  // Time update interval
+  let timerId = null
+  onMounted(() => {
+    timerId = setInterval(() => { currentTime.value = new Date() }, 60000)
+  })
+
+  onUnmounted(() => { 
+    if (timerId) clearInterval(timerId) 
   })
 </script>
 
 <template>
-  <ArticleTemplate title="Habit Tracker" meta="Powerful habit tracking and analytics">
-    <!-- Loading/Error States -->
-    <div v-if="habitsLoading || activitiesLoading" class="alert alert-info"><i class="bi bi-hourglass-split"></i> Loading habits and activities...</div>
-
-    <div v-if="habitsError || activitiesError" class="alert alert-danger">
-      <i class="bi bi-exclamation-triangle"></i>
-      Error: {{ habitsError || activitiesError }}
+  <!-- Add New Habit Section -->
+  <ArticleTemplate title="Add Habit Tracker" meta="Aug 6, 2025 by G. D. Ungureanu">
+    <!-- Success/Error Messages -->
+    <div v-if="formSuccess" class="alert alert-success mb-3" role="alert">
+      Habit created successfully!
+    </div>
+    <div v-if="formError" class="alert alert-danger mb-3" role="alert">
+      {{ formError }}
     </div>
 
-    <!-- Add Habit Tracker Form (Always Visible) -->
-    <div class="mb-4">
-      <h4>Add Habit Tracker</h4>
-
-      <div v-if="formSuccess" class="alert alert-success"><i class="bi bi-check-circle"></i> Habit tracker created successfully!</div>
-
-      <div v-if="formError" class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> {{ formError }}</div>
-
-      <div class="row g-3">
-        <div class="col-md-4">
-          <input v-model="newHabitForm.name" type="text" class="form-control" placeholder="Habit name" :disabled="formLoading" @keyup.enter="addNewHabit" />
-        </div>
-        <div class="col-md-3">
-          <select v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
-            <option value="day">Daily</option>
-            <option value="week">Weekly</option>
-            <option value="month">Monthly</option>
-            <option value="year">Yearly</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <input v-model="newHabitForm.category" type="text" class="form-control" placeholder="Category" list="category-suggestions" :disabled="formLoading" @keyup.enter="addNewHabit" />
-          <datalist id="category-suggestions">
-            <option v-for="category in allCategories.filter((c) => c !== 'All')" :key="category" :value="category">
-              {{ category }}
-            </option>
-          </datalist>
-        </div>
-        <div class="col-md-2">
-          <button type="button" class="btn btn-primary w-100" :disabled="formLoading" @click="addNewHabit">
-            <i v-if="formLoading" class="bi bi-hourglass-split"></i>
-            <i v-else class="bi bi-plus-lg"></i>
-            {{ formLoading ? 'Adding...' : 'Add' }}
-          </button>
-        </div>
+    <!-- Minimalist Form -->
+    <form @submit.prevent="addNewHabit" class="d-flex gap-2 align-items-end">
+      <div class="flex-grow-1">
+        <input v-model="newHabitForm.name" type="text" class="form-control" 
+               placeholder="Habit name" maxlength="100" required :disabled="formLoading">
       </div>
-    </div>
-
-    <!-- Habit Tracking Sections by Scope -->
-    <div v-for="scope in allScopes" :key="scope" class="habit-scope-section mb-5">
-      <h3>{{ scopeConfig[scope].title }}</h3>
-
-      <!-- Category Filter -->
-      <div class="mb-3">
-        <select v-model="categoryFilters[scope]" class="form-select" style="max-width: 200px">
-          <option v-for="category in getCategoriesForScope(scope)" :key="category" :value="category">
-            {{ category === 'All' ? 'All Categories' : category }}
-          </option>
+      <div>
+        <select v-model="newHabitForm.scope" class="form-select" :disabled="formLoading">
+          <option value="day">Daily</option>
+          <option value="week">Weekly</option>
+          <option value="month">Monthly</option>
+          <option value="year">Yearly</option>
         </select>
       </div>
-
-      <!-- Habits Table -->
-      <div v-if="getHabitsForScope(scope).length === 0" class="alert alert-secondary">
-        No {{ scopeConfig[scope].plural }} habits found.
-        {{ categoryFilters[scope] !== 'All' ? 'Try changing the category filter.' : '' }}
+      <div>
+        <input v-model="newHabitForm.category" type="text" class="form-control" 
+               placeholder="Category" maxlength="50" list="category-suggestions"
+               required :disabled="formLoading">
+        <datalist id="category-suggestions">
+          <option v-for="category in allCategories" :key="category" :value="category"></option>
+        </datalist>
       </div>
-
-      <div v-else class="table-responsive">
-        <table class="table table-sm table-hover">
-          <thead>
-            <tr>
-              <th>Habit</th>
-              <th>Category</th>
-              <th>Progress</th>
-              <th>Current Streak</th>
-              <th>Max Streak</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="habit in getHabitsForScope(scope)" :key="habit.id">
-              <td>
-                <strong>{{ habit.name }}</strong>
-              </td>
-              <td>
-                <span class="badge bg-secondary">{{ habit.category }}</span>
-              </td>
-              <td>
-                <!-- Progress Indicators -->
-                <div class="d-flex gap-1">
-                  <button v-for="window in computeWindows(scope, currentTime).windows" :key="window.intervalId" type="button" class="btn btn-sm" :class="isDone(habit.id, window.intervalId) ? 'btn-success' : 'btn-outline-secondary'" :title="window.label" @click="toggleHabit(habit.id, window.intervalId)">
-                    <i class="bi" :class="isDone(habit.id, window.intervalId) ? 'bi-check' : 'bi-dash'"></i>
-                  </button>
-                </div>
-              </td>
-              <td>
-                <span class="badge bg-info">{{ computeStreakInfo(habit.id, scope).current }}</span>
-              </td>
-              <td>
-                <span class="badge bg-warning text-dark">{{ computeStreakInfo(habit.id, scope).max }}</span>
-              </td>
-              <td>
-                <button type="button" class="btn btn-sm btn-outline-danger" title="Archive habit" @click="deleteHabit(habit.id)">
-                  <i class="bi bi-archive"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <button type="submit" class="btn btn-primary"
+              :disabled="formLoading || !newHabitForm.name.trim() || !newHabitForm.category.trim()">
+        <div v-if="formLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+        <i v-else class="bi bi-plus-lg"></i>
+      </button>
+    </form>
   </ArticleTemplate>
+
+  <!-- Existing Habits Sections -->
+  <div v-for="(scope, index) in allScopes" :key="scope">
+    <!-- Add separator between sections -->
+    <div v-if="index > 0" style="margin-top: 2rem; margin-bottom: 2rem">
+      <hr />
+    </div>
+
+    <ArticleTemplate :title="scopeConfig[scope].title" meta="Aug 6, 2025 by G. D. Ungureanu">
+      <!-- Loading State -->
+      <div v-if="habitsLoading || activitiesLoading" class="d-flex justify-content-center align-items-center py-4">
+        <div class="spinner-border spinner-border-sm text-primary me-2" role="status" aria-hidden="true"></div>
+        <span class="text-muted small">Loading {{ scopeConfig[scope].plural }} habits...</span>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="habitsError || activitiesError" class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Error loading data: {{ habitsError || activitiesError }}
+      </div>
+
+      <!-- Content -->
+      <div v-else-if="scopeData[scope].habits.length > 0 || categoryFilters[scope] !== 'All'" class="small">
+        <!-- Column Headers with Day/Week/Month/Year Labels -->
+        <div class="d-flex align-items-end pb-2 mb-3 border-bottom">
+          <div class="habit-name-column d-flex flex-column gap-1">
+            <!-- Category Filter Header -->
+            <div v-if="scopeData[scope].availableCategories.length > 2" class="d-flex flex-column gap-1">
+              <select :id="`category-filter-${scope}`" v-model="categoryFilters[scope]" class="form-select form-select-sm" style="font-size: 0.75rem">
+                <option v-for="category in scopeData[scope].availableCategories" :key="category" :value="category">
+                  {{ category }}
+                </option>
+              </select>
+              <span class="text-muted" style="font-size: 0.65rem" v-if="categoryFilters[scope] !== 'All'">
+                {{ scopeData[scope].habits.length }} of {{habitsData.value?.habits?.filter(h => h.scope === scope && !h.archived).length || 0}} habits
+              </span>
+            </div>
+            <div v-else class="text-secondary fw-medium text-center" style="font-size: 0.75rem; padding-top: 1rem">
+              Habits
+            </div>
+          </div>
+          <div class="d-flex flex-fill gap-2">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" :key="window.intervalId" class="flex-fill text-center p-1 fw-medium text-secondary"
+              :class="{ 'text-primary fw-semibold': windowIndex === scopeData[scope].windows.currentIndex }" style="min-width: 60px; font-size: 0.8rem">
+              <small>{{ window.label }}</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Habit Rows -->
+        <div v-for="habit in scopeData[scope].habits" :key="habit.id" class="d-flex align-items-center mb-3" role="row" :aria-label="habit.name">
+          <!-- Habit Name -->
+          <div class="d-flex align-items-center p-2 border rounded habit-name-column">
+            <div class="d-flex align-items-center gap-2 me-2">
+              <i class="bi bi-fire" :class="getFireColor(scopeData[scope].streaks[habit.id])"></i>
+              <span class="text-secondary fw-medium small">{{ scopeData[scope].streaks[habit.id] }}</span>
+            </div>
+            <div class="text-truncate fw-medium text-dark-emphasis small flex-grow-1">{{ habit.name }}</div>
+            <button @click="deleteHabit(habit.id)" class="btn btn-sm p-1 ms-2 text-danger opacity-75 hover-opacity-100" :aria-label="`Delete habit: ${habit.name}`"
+              title="Delete habit" style="border: none; background: none; font-size: 0.75rem; line-height: 1;">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <!-- Interval Cells -->
+          <div class="d-flex flex-fill gap-2">
+            <div v-for="(window, windowIndex) in scopeData[scope].windows.windows" :key="`${habit.id}-${window.intervalId}`"
+              class="flex-fill d-flex align-items-center justify-content-center p" :class="{
+                'bg-primary bg-opacity-10 rounded': windowIndex === scopeData[scope].windows.currentIndex,
+              }" style="min-width: 30px">
+              <div class="form-check d-flex justify-content-center">
+                <input :id="`${habit.id}-${window.intervalId}`" class="form-check-input" type="checkbox" role="switch" :aria-checked="isDone(habit.id, window.intervalId)"
+                  :checked="isDone(habit.id, window.intervalId)" @change="toggleHabit(habit.id, window.intervalId)"
+                  :aria-label="`${habit.name} — ${window.label} — ${isDone(habit.id, window.intervalId) ? 'Done' : 'Not done'}`" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="text-muted">
+        <p v-if="categoryFilters[scope] === 'All'">No {{ scopeConfig[scope].plural }} habits configured.</p>
+        <p v-else>No {{ scopeConfig[scope].plural }} habits found for category "{{ categoryFilters[scope] }}". <button @click="categoryFilters[scope] = 'All'"
+            class="btn btn-link btn-sm p-0 text-decoration-underline">Show all</button></p>
+      </div>
+    </ArticleTemplate>
+  </div>
 </template>
 
 <style scoped>
-  .habit-scope-section {
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 2rem;
-  }
+.habit-name-column {
+  width: 200px;
+  flex-shrink: 0;
+  min-height: 30px;
+}
 
-  .habit-scope-section:last-child {
-    border-bottom: none;
-  }
+/* Delete button hover effects */
+.hover-opacity-100:hover {
+  opacity: 1 !important;
+}
 
-  .btn-sm {
-    font-size: 0.75rem;
+/* Add habit form styling */
+.bg-light {
+  background-color: var(--bs-gray-50) !important;
+}
+
+/* Form validation styling */
+.form-control:invalid {
+  border-color: #dc3545;
+}
+
+.form-control:valid {
+  border-color: #198754;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .habit-name-column {
+    width: 180px;
   }
+}
 </style>

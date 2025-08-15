@@ -1,6 +1,6 @@
 <script setup>
   import ArticleTemplate from '@/shared/components/ui/templates/Article.vue'
-  import ActionsTemplate from '@/shared/components/ui/templates/Actions.vue'
+  import ActionsTemplate from '@/shared/components/ui/templates/actions/Actions.vue'
 
   defineOptions({
     name: 'IppoOverview',
