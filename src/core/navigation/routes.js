@@ -27,6 +27,7 @@ const Movies = () => import('@/domains/exploration/movies/Movies.vue')
 const Balance = () => import('@/domains/balance/Balance.vue')
 const Nutrition = () => import('@/domains/balance/nutrition/Nutrition.vue')
 const Fitness = () => import('@/domains/balance/fitness/Fitness.vue')
+const Health = () => import('@/domains/balance/health/Health.vue')
 // const MealPrep = () => import('@/domains/balance/MealPrep.vue') // TODO: Create MealPrep component
 
 // Stability Domain Routes
@@ -41,6 +42,7 @@ const Destinations = () => import('@/domains/exploration/destinations/Destinatio
 // Pisicuta Domain Routes
 const Pisicuta = () => import('@/domains/pisicuta/Pisicuta.vue')
 const Laptops = () => import('@/domains/pisicuta/laptops/Laptops.vue')
+const PisicutaHealth = () => import('@/domains/pisicuta/health/Health.vue')
 
 export default [
   // Core routes
@@ -123,6 +125,11 @@ export default [
     component: Fitness,
     meta: { navLabel: 'Fitness', navGroup: 'balance', requiresAuth: false, icon: 'bi-heart-pulse' },
   },
+  {
+    path: '/balance/health',
+    component: Health,
+    meta: { navLabel: 'Health', navGroup: 'balance', requiresAuth: false, icon: 'bi-plus-circle' },
+  },
   // {
   //   path: '/balance/meal-prep',
   //   component: MealPrep,
@@ -165,5 +172,10 @@ export default [
     path: '/pisicuta/laptops',
     component: Laptops,
     meta: { navLabel: 'Laptops', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-laptop' },
+  },
+  {
+    path: '/pisicuta/health',
+    component: PisicutaHealth,
+    meta: { navLabel: 'Health', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-heart' },
   },
 ]

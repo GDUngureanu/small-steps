@@ -1,8 +1,8 @@
 <script setup>
   import MarkdownArticleTemplate from '@/shared/components/ui/templates/MarkdownArticle.vue'
 
-  const markdownResearchUrl1 = new URL('../Research1.md', import.meta.url).href
-  const markdownResearchUrl2 = new URL('../Research2.md', import.meta.url).href
+  const markdownResearchUrl1 = `${import.meta.env.BASE_URL}research/laptops/Research1.md`
+  const markdownResearchUrl2 = `${import.meta.env.BASE_URL}research/laptops/Research2.md`
 
   defineOptions({
     name: 'LaptopsTemplate',
