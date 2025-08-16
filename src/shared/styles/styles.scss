@@ -1,14 +1,44 @@
 @use 'bootstrap/scss/bootstrap' with (
-  // Toggle global options
-  // $enable-gradients: true,
-  // $enable-shadows: true,
   $offcanvas-box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175),
+
   // Customize defaults
   $body-color: #333,
   $body-bg: #fff,
   $border-radius: 0.4rem,
   $success: #7952b3
 );
+
+// Custom Components for Articles
+.ss-cursor-pointer {
+  cursor: pointer;
+}
+
+.ss-article-toggle {
+  border: none !important;
+  background: none !important;
+  transition: transform 0.2s ease;
+}
+
+.ss-article-toggle:hover {
+  transform: scale(1.1);
+}
+
+.ss-article-content {
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
+  opacity: 1;
+}
+
+.ss-article-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.ss-markdown-content .table-responsive {
+  margin: 1rem 0;
+}
 
 // Custom Badge Classes for Destinations
 .badge-mint-green {
