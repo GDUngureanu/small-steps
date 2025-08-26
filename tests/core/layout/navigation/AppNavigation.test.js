@@ -2,7 +2,6 @@ import { test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import { usePrefetch } from '@/shared/composables/usePrefetch.js'
-import { computed } from 'vue'
 import AppNavigation from '@/core/layout/navigation/AppNavigation.vue'
 
 let offcanvasInstance
@@ -12,7 +11,7 @@ const hideSpy = vi.fn()
 const originalWidth = global.window.innerWidth
 
 vi.mock('bootstrap', () => ({
-  Offcanvas: class {
+  Collapse: class {
     constructor() {
       offcanvasInstance = this
     }
@@ -33,8 +32,8 @@ vi.mock('@/core/auth/useAuthentication.js', () => ({
 
 vi.mock('@/core/layout/navigation/useNavigation.js', () => ({
   useNavigation: () => ({
-    navigationItems: computed(() => [{ path: '/test', label: 'Test', requiresAuth: false }]),
-    dropdownSections: computed(() => ({})),
+    navigationItems: [{ path: '/test', label: 'Test', requiresAuth: false }],
+    dropdownSections: {},
   }),
 }))
 
@@ -51,9 +50,11 @@ afterEach(() => {
 test('offcanvas opens and hides on small screens and ignores medium and large screens', async () => {
   Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 500 })
 
+  const router = createRouter({ history: createMemoryHistory(), routes: [] })
   const wrapper = mount(AppNavigation, {
     global: {
       stubs: { RouterLink: { template: '<a><slot /></a>' } },
+      plugins: [router],
     },
   })
 
@@ -64,7 +65,7 @@ test('offcanvas opens and hides on small screens and ignores medium and large sc
   expect(hideSpy).toHaveBeenCalled()
 
   hideSpy.mockClear()
-  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 800 })
+  Object.defineProperty(global.window, 'innerWidth', { configurable: true, value: 1000 })
   await wrapper.find('a').trigger('click')
   expect(hideSpy).not.toHaveBeenCalled()
 })

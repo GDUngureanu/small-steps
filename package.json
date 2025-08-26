@@ -17,9 +17,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "fix": "npm run lint:fix && npm run format",
-    "test:components": "vitest run --dir tests/components",
+    "test:core": "vitest run --dir tests/core",
     "test:domains": "vitest run --dir tests/domains",
-    "test": "npm run test:components && npm run test:domains",
+    "test": "vitest run tests/domains tests/core",
     "test:e2e": "playwright test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"

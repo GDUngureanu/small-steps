@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { test, expect, vi, afterEach } from 'vitest'
-import { ref, computed, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import AppNavigation from '@/core/layout/navigation/AppNavigation.vue'
 
 // Mock router to observe prefetch calls
@@ -31,14 +31,14 @@ vi.mock('@/core/auth/useAuthentication.js', () => ({
 }))
 
 // Mock navigation composable to supply structural data
-const navigationItems = computed(() => [
+const navigationItems = [
   { path: '/public', label: 'Public', requiresAuth: false },
   { path: '/private', label: 'Private', requiresAuth: true },
-])
+]
 vi.mock('@/core/layout/navigation/useNavigation.js', () => ({
   useNavigation: () => ({
     navigationItems,
-    dropdownSections: computed(() => ({})),
+    dropdownSections: {},
   }),
 }))
 

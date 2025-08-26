@@ -2,50 +2,38 @@
 
 [\u2190 Back to documentation index](README.md)
 
-This project uses two different test runners. Components and pages run under
-[Vitest](https://vitest.dev) so they can mount Vue code in a browser-like
-environment. Composables and router logic rely on Node's built-in test runner,
-which provides lightweight coverage reporting via the
-`--experimental-test-coverage` flag.
+This project uses [Vitest](https://vitest.dev) for unit and component tests and [Playwright](https://playwright.dev) for end-to-end checks.
 
-## Test Structure
+## Structure
 
-- `tests/components` and `tests/pages` use Vitest with `@vue/test-utils`.
-- `tests/composables` and `tests/router` use the Node test runner.
+- `tests/domains` – domain-level units and composables.
+- `tests/core` – core components and configuration helpers.
+- `tests/e2e` – browser-driven scenarios with Playwright.
 
-The reason for splitting the test suites across two tools is not currently
-explained in the codebase. If you are unsure which runner to use for new tests,
-check with the project maintainers.
+## Running tests
 
-## Running Tests
-
-From the project root, run all tests and the linter:
+Run every suite:
 
 ```sh
 npm test
 ```
 
-You can run specific groups of tests:
+Run suites individually:
 
 ```sh
-npm run test:components   # Vue component tests
-npm run test:composables  # Composable logic via Node test runner
-npm run test:router       # Router tests via Node test runner
-npm run test:pages        # Page-level tests with Vitest
+npm run test:domains   # domain logic
+npm run test:core      # core components
+npm run test:e2e       # Playwright flows
 ```
+
+## Continuous integration
+
+GitHub Actions executes `npm run lint:check` and `npm test` on pull requests. See `.github/workflows/continuous-integration.yml` for details.
 
 ## Linting
 
-`npm test` automatically runs ESLint after the test suites. To run the linter
-by itself:
+Run ESLint separately with:
 
 ```sh
 npm run lint
 ```
-
-## Notes
-
-The documentation does not currently describe how Supabase or other external
-services are mocked during testing. If additional setup is required (e.g.
-seeding databases or providing environment variables), please update this guide
-accordingly.
