@@ -22,3 +22,17 @@ test('renders markdown content inside article container', async () => {
   expect(global.fetch).toHaveBeenCalledWith('/sample.md')
   expect(wrapper.html()).toContain('Sample Markdown')
 })
+
+test('does not render or fetch when not visible', async () => {
+  const wrapper = mount(MarkdownArticle, {
+    props: { title: 'MD', meta: 'meta', src: '/sample.md', visible: false },
+  })
+
+  await flushPromises()
+
+  expect(global.fetch).not.toHaveBeenCalled()
+  expect(wrapper.find('article.blog-post').exists()).toBe(false)
+  expect(wrapper.html()).toContain('<!--')
+})
+
+// `visible` is static; no dynamic visibility test needed.

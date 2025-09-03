@@ -19,5 +19,10 @@ npm start
 
 - `BaseArticle.vue` – shared article wrapper with header and toggle logic
 - `Article.vue` – basic article layout with title and metadata slots
+- `MarkdownArticle.vue` – article that loads Markdown content lazily
 - `Actions.vue` – interactive task management template with Supabase integration
 - `Suggestions.vue` – renders a checklist from JSON data
+
+## Common Props
+
+- `visible` (boolean, default `true`): When `false`, the template does not render and avoids loading any content (useful for gating articles).

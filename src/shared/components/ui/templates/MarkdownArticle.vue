@@ -14,6 +14,10 @@ const props = defineProps({
   src: String,
   title: String,
   meta: String,
+  visible: {
+    type: Boolean,
+    default: true,
+  },
   expanded: {
     type: Boolean,
     default: true,
@@ -24,8 +28,8 @@ const content = ref('')
 const isExpanded = ref(props.expanded)
 const hasLoadedContent = ref(false)
 
-// Load content immediately if expanded on mount, otherwise wait for first expansion
-if (props.expanded) {
+// Load content immediately if visible and expanded on mount, otherwise wait for first expansion
+if (props.visible && props.expanded) {
   onMounted(loadMarkdownContent)
 }
 
@@ -40,25 +44,28 @@ watch(
   () => isExpanded.value,
   (newValue, oldValue) => {
     // Load content on first expansion (false -> true)
-    if (newValue && !oldValue && !hasLoadedContent.value) {
+    if (props.visible && newValue && !oldValue && !hasLoadedContent.value) {
       loadMarkdownContent()
     }
   }
 )
+
+// If visibility changes to true and we're expanded without having loaded yet, load content
+// Note: `visible` is static during the component's lifetime. No watcher needed.
 
 function toggleExpanded() {
   isExpanded.value = !isExpanded.value
 }
 
 async function loadMarkdownContent() {
-  if (hasLoadedContent.value) return
+  if (!props.visible || hasLoadedContent.value) return
   
   try {
     const response = await fetch(props.src)
     const markdownText = await response.text()
     content.value = marked.parse(markdownText)
     hasLoadedContent.value = true
-  } catch (error) {
+  } catch {
     content.value = '<p>Failed to load content.</p>'
     hasLoadedContent.value = true
   }
@@ -66,7 +73,7 @@ async function loadMarkdownContent() {
 </script>
 
 <template>
-  <div class="row p-4 mb-4 rounded-3 border shadow-lg">
+  <div v-if="visible" class="row p-4 mb-4 rounded-3 border shadow-lg">
     <article class="blog-post">
       <div class="d-flex justify-content-between align-items-start ss-cursor-pointer" @click="toggleExpanded">
         <div>

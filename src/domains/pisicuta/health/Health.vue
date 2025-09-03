@@ -11,7 +11,9 @@
 <template>
   <MarkdownArticleTemplate
     :src="markdownResearchUrl1"
+    :visible="false"
     title="Hialurom Hondro Research"
     meta="August 16, 2025 by G. D. Ungureanu"
+    visible=""
   />
 </template>

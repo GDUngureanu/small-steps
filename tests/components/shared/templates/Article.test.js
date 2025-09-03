@@ -16,3 +16,12 @@ test('renders heading, meta text, and slot content', () => {
   expect(wrapper.get('.blog-post-meta em').text()).toBe(meta)
   expect(wrapper.get('.slot').text()).toBe('Slot Content')
 })
+
+test('does not render when not visible', () => {
+  const wrapper = mount(Article, {
+    props: { title: 'Hidden', meta: 'hidden', visible: false },
+  })
+
+  expect(wrapper.find('article.blog-post').exists()).toBe(false)
+  expect(wrapper.html()).toContain('<!--')
+})

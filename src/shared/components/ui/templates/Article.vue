@@ -4,6 +4,10 @@
   const props = defineProps({
     title: String,
     meta: String,
+    visible: {
+      type: Boolean,
+      default: true,
+    },
     expanded: {
       type: Boolean,
       default: true,
@@ -25,7 +29,7 @@
 </script>
 
 <template>
-  <div class="row p-4 mb-4 rounded-3 border shadow-lg">
+  <div v-if="visible" class="row p-4 mb-4 rounded-3 border shadow-lg">
     <article class="blog-post">
       <div class="d-flex justify-content-between align-items-start ss-cursor-pointer" @click="toggleExpanded">
         <div>
