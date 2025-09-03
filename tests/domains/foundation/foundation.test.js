@@ -1,16 +1,16 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../pageTestUtils.js'
 
-const file = 'src/domains/stability/Stability.vue'
-const path = '/stability'
+const file = 'src/domains/foundation/Foundation.vue'
+const path = '/foundation'
 
-test('Stability page renders without errors', async () => {
+test('Foundation page renders without errors', async () => {
   const wrapper = await renderComponent(file)
   expect(wrapper.exists()).toBe(true)
   expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Stability route resolves', async () => {
+test('Foundation route resolves', async () => {
   const resolved = await resolveRoute(path)
   expect(resolved).toBe(path)
 })

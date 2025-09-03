@@ -12,7 +12,7 @@
 - Growth: Books, Poems.
 - Curiosity: Anime, Movies, Destinations (map), Random, Experiments (private).
 - Health: Nutrition, Fitness, Habits.
-- Stability: Finance.
+- Foundation: Finance.
 - Pisicuta: Laptops, Health.
 - Home: Landing/overview.
 

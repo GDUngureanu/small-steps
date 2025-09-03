@@ -29,9 +29,9 @@ const Nutrition = () => import('@/domains/health/nutrition/Nutrition.vue')
 const Fitness = () => import('@/domains/health/fitness/Fitness.vue')
 // const MealPrep = () => import('@/domains/health/MealPrep.vue') // TODO: Create MealPrep component
 
-// Stability Domain Routes
-const Stability = () => import('@/domains/stability/Stability.vue')
-const Finance = () => import('@/domains/stability/finance/Finance.vue')
+// Foundation Domain Routes
+const Foundation = () => import('@/domains/foundation/Foundation.vue')
+const Finance = () => import('@/domains/foundation/finance/Finance.vue')
 
 // Curiosity Domain Routes
 const Curiosity = () => import('@/domains/curiosity/Curiosity.vue')
@@ -130,16 +130,16 @@ export default [
   //   meta: { navLabel: 'Meal Prep', navGroup: 'health', requiresAuth: false, icon: 'bi-basket' },
   // }, // TODO: Create MealPrep component
 
-  // Stability Domain Routes
+  // Foundation Domain Routes
   {
-    path: '/stability',
-    component: Stability,
-    meta: { navLabel: 'Overview', navGroup: 'stability', requiresAuth: false, icon: 'bi-shield-check' },
+    path: '/foundation',
+    component: Foundation,
+    meta: { navLabel: 'Overview', navGroup: 'foundation', requiresAuth: false, icon: 'bi-shield-check' },
   },
   {
-    path: '/stability/finance',
+    path: '/foundation/finance',
     component: Finance,
-    meta: { navLabel: 'Finance', navGroup: 'stability', requiresAuth: false, icon: 'bi-cash-coin' },
+    meta: { navLabel: 'Finance', navGroup: 'foundation', requiresAuth: false, icon: 'bi-cash-coin' },
   },
 
 

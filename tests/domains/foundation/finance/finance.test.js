@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
-const file = 'src/domains/stability/finance/Finance.vue'
-const path = '/stability/finance'
+const file = 'src/domains/foundation/finance/Finance.vue'
+const path = '/foundation/finance'
 
 test('Finance page renders without errors', async () => {
   const wrapper = await renderComponent(file)

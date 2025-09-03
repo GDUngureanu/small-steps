@@ -9,7 +9,7 @@ Personal growth and mindful living application focused on building sustainable h
 **Domain-First Structure** - Each life domain is self-contained:
 - `src/domains/vocation/` - Purpose exploration (Ikigai), goal setting (Ippo)
 - `src/domains/health/` - Nutrition, fitness, habits
-- `src/domains/stability/` - Financial planning, life foundations
+- `src/domains/foundation/` - Financial planning, life foundations
 - `src/domains/growth/` - Learning, books, poems, reflection
 - `src/domains/curiosity/` - Travel, entertainment, experiments
 - `src/domains/pisicuta/` - Personal tech tracking (protected)
