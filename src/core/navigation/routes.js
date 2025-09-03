@@ -4,7 +4,7 @@
 // This file aggregates routes from all domains and creates the final route configuration.
 
 // Import domain routes
-import { habitsRoutes } from '@/domains/balance/habits/routes.js'
+import { habitsRoutes } from '@/domains/health/habits/routes.js'
 
 // Core application routes (non-domain specific)
 const Home = () => import('@/domains/home/Home.vue')
@@ -23,12 +23,11 @@ const Poems = () => import('@/domains/growth/poems/Poems.vue')
 const Anime = () => import('@/domains/curiosity/anime/Anime.vue')
 const Movies = () => import('@/domains/curiosity/movies/Movies.vue')
 
-// Balance Domain Routes
-const Balance = () => import('@/domains/balance/Balance.vue')
-const Nutrition = () => import('@/domains/balance/nutrition/Nutrition.vue')
-const Fitness = () => import('@/domains/balance/fitness/Fitness.vue')
-const Health = () => import('@/domains/balance/health/Health.vue')
-// const MealPrep = () => import('@/domains/balance/MealPrep.vue') // TODO: Create MealPrep component
+// Health Domain Routes
+const Health = () => import('@/domains/health/Health.vue')
+const Nutrition = () => import('@/domains/health/nutrition/Nutrition.vue')
+const Fitness = () => import('@/domains/health/fitness/Fitness.vue')
+// const MealPrep = () => import('@/domains/health/MealPrep.vue') // TODO: Create MealPrep component
 
 // Stability Domain Routes
 const Stability = () => import('@/domains/stability/Stability.vue')
@@ -109,31 +108,26 @@ export default [
     meta: { navLabel: 'Movies', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-film' },
   },
 
-  // Balance Domain Routes
+  // Health Domain Routes
   {
-    path: '/balance',
-    component: Balance,
-    meta: { navLabel: 'Overview', navGroup: 'balance', requiresAuth: false, icon: 'bi-egg' },
-  },
-  {
-    path: '/balance/nutrition',
-    component: Nutrition,
-    meta: { navLabel: 'Nutrition', navGroup: 'balance', requiresAuth: false, icon: 'bi-list-ul' },
-  },
-  {
-    path: '/balance/fitness',
-    component: Fitness,
-    meta: { navLabel: 'Fitness', navGroup: 'balance', requiresAuth: false, icon: 'bi-heart-pulse' },
-  },
-  {
-    path: '/balance/health',
+    path: '/health',
     component: Health,
-    meta: { navLabel: 'Health', navGroup: 'balance', requiresAuth: false, icon: 'bi-plus-circle' },
+    meta: { navLabel: 'Overview', navGroup: 'health', requiresAuth: false, icon: 'bi-egg' },
+  },
+  {
+    path: '/health/nutrition',
+    component: Nutrition,
+    meta: { navLabel: 'Nutrition', navGroup: 'health', requiresAuth: false, icon: 'bi-list-ul' },
+  },
+  {
+    path: '/health/fitness',
+    component: Fitness,
+    meta: { navLabel: 'Fitness', navGroup: 'health', requiresAuth: false, icon: 'bi-heart-pulse' },
   },
   // {
-  //   path: '/balance/meal-prep',
+  //   path: '/health/meal-prep',
   //   component: MealPrep,
-  //   meta: { navLabel: 'Meal Prep', navGroup: 'balance', requiresAuth: false, icon: 'bi-basket' },
+  //   meta: { navLabel: 'Meal Prep', navGroup: 'health', requiresAuth: false, icon: 'bi-basket' },
   // }, // TODO: Create MealPrep component
 
   // Stability Domain Routes

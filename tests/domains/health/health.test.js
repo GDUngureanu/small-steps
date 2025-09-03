@@ -1,16 +1,16 @@
 import { test, expect } from 'vitest'
-import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
+import { renderComponent, resolveRoute } from '../pageTestUtils.js'
 
-const file = 'src/domains/balance/nutrition/Nutrition.vue'
-const path = '/balance/nutrition'
+const file = 'src/domains/health/Health.vue'
+const path = '/health'
 
-test('Nutrition page renders without errors', async () => {
+test('Health page renders without errors', async () => {
   const wrapper = await renderComponent(file)
   expect(wrapper.exists()).toBe(true)
   expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Nutrition route resolves correctly', async () => {
+test('Health route resolves', async () => {
   const resolved = await resolveRoute(path)
   expect(resolved).toBe(path)
 })

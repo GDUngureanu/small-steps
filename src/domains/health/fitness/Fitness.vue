@@ -2,8 +2,8 @@
   import { computed } from 'vue'
   import ArticleTemplate from '@/shared/components/ui/templates/Article.vue'
   import ActionsTemplate from '@/shared/components/ui/templates/actions/Actions.vue'
-  import { useHabits } from '@/domains/balance/habits/useHabits.js'
-  import { useActivities } from '@/domains/balance/habits/useActivities.js'
+  import { useHabits } from '@/domains/health/habits/useHabits.js'
+  import { useActivities } from '@/domains/health/habits/useActivities.js'
 
   defineOptions({
     name: 'Fitness',

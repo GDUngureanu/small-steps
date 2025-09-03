@@ -11,7 +11,7 @@
 - Vocation: Ikigai (purpose exploration), Ippo (small steps checklist).
 - Growth: Books, Poems.
 - Curiosity: Anime, Movies, Destinations (map), Random, Experiments (private).
-- Balance: Nutrition, Fitness, Health, Habits.
+- Health: Nutrition, Fitness, Habits.
 - Stability: Finance.
 - Pisicuta: Laptops, Health.
 - Home: Landing/overview.

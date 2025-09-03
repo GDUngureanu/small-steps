@@ -62,7 +62,7 @@
   <ArticleTemplate title="Available Domains" meta="Navigate through different aspects of life">
     <ul>
       <li><router-link to="/growth">Growth</router-link> - Personal development through books and poems</li>
-      <li><router-link to="/balance">Balance</router-link> - Health and wellness through nutrition, fitness, and habits</li>
+      <li><router-link to="/health">Health</router-link> - Health and wellness through nutrition, fitness, and habits</li>
       <li><router-link to="/curiosity">Curiosity</router-link> - Discover new territories through anime, movies, destinations, and experiments</li>
       <li><router-link to="/vocation">Vocation</router-link> - Align your purpose with ikigai and ippo goal tracking</li>
       <li><router-link to="/stability">Stability</router-link> - Build stability through financial planning and security measures</li>
