@@ -12,7 +12,7 @@ Personal growth and mindful living application focused on building sustainable h
 - `src/domains/foundation/` - Financial planning, life foundations
 - `src/domains/growth/` - Learning, books, poems, reflection
 - `src/domains/curiosity/` - Travel, entertainment, experiments
-- `src/domains/pisicuta/` - Personal tech tracking (protected)
+- `src/domains/inner-circle/` - Personal tech tracking (protected)
 
 ## Tech Stack
 - **Frontend**: Vue 3 Composition API, Vue Router 4

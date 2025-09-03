@@ -4,7 +4,7 @@
   const markdownResearchUrl1 = `${import.meta.env.BASE_URL}research/health/Research1.md`
 
   defineOptions({
-    name: 'PisicutaHealthTemplate',
+    name: 'InnerCircleHealthTemplate',
   })
 </script>
 

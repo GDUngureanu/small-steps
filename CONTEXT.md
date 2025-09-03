@@ -13,12 +13,12 @@
 - Curiosity: Anime, Movies, Destinations (map), Random, Experiments (private).
 - Health: Nutrition, Fitness, Habits.
 - Foundation: Finance.
-- Pisicuta: Laptops, Health.
+- Inner Circle: Laptops, Health.
 - Home: Landing/overview.
 
 ## Access & Security
 - Routes gate access using `meta.requiresAuth` in `src/core/navigation/routes.js`.
-- Protected examples: Vocation*, Experiments, Pisicuta* (and any route with `requiresAuth: true`).
+- Protected examples: Vocation*, Experiments, Inner Circle* (and any route with `requiresAuth: true`).
 - Auth mechanism: simple password check via Pinia store (`src/core/auth/useAuthentication.js`) using env var `VITE_APP_PASSWORD`.
 - Global event bus (`src/core/auth/authenticationEvents.js`) announces auth requirements.
 
