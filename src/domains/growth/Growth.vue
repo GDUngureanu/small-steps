@@ -20,10 +20,18 @@
     <h4>Available Growth Modules:</h4>
     <ul>
       <li>
-        <router-link to="/growth/books"><strong>Books</strong></router-link> - Reading list, progress tracking, and book notes including Atomic Habits insights
+        <router-link to="/growth/books">
+          <i class="bi bi-book me-1"></i>
+          <strong>Books</strong>
+        </router-link>
+        - Reading list, progress tracking, and book notes including Atomic Habits insights
       </li>
       <li>
-        <router-link to="/growth/poems"><strong>Poems</strong></router-link> - Collection of poetry including classic Romanian works by Mihai Eminescu
+        <router-link to="/growth/poems">
+          <i class="bi bi-pencil me-1"></i>
+          <strong>Poems</strong>
+        </router-link>
+        - Collection of poetry including classic Romanian works by Mihai Eminescu
       </li>
     </ul>
 

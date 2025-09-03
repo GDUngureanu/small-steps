@@ -68,7 +68,7 @@ export default [
   {
     path: '/curiosity/experiments',
     component: Experiments,
-    meta: { navLabel: 'Experiments', navGroup: 'curiosity', requiresAuth: true, icon: 'bi-gear' },
+    meta: { navLabel: 'Experiments', navGroup: 'curiosity', requiresAuth: true, icon: 'bi-beaker' },
   },
   {
     path: '/curiosity/random',
@@ -112,17 +112,17 @@ export default [
   {
     path: '/health',
     component: Health,
-    meta: { navLabel: 'Overview', navGroup: 'health', requiresAuth: false, icon: 'bi-egg' },
+    meta: { navLabel: 'Overview', navGroup: 'health', requiresAuth: false, icon: 'bi-heart-pulse' },
   },
   {
     path: '/health/nutrition',
     component: Nutrition,
-    meta: { navLabel: 'Nutrition', navGroup: 'health', requiresAuth: false, icon: 'bi-list-ul' },
+    meta: { navLabel: 'Nutrition', navGroup: 'health', requiresAuth: false, icon: 'bi-egg' },
   },
   {
     path: '/health/fitness',
     component: Fitness,
-    meta: { navLabel: 'Fitness', navGroup: 'health', requiresAuth: false, icon: 'bi-heart-pulse' },
+    meta: { navLabel: 'Fitness', navGroup: 'health', requiresAuth: false, icon: 'bi-bicycle' },
   },
   // {
   //   path: '/health/meal-prep',
@@ -147,7 +147,7 @@ export default [
   {
     path: '/curiosity',
     component: Curiosity,
-    meta: { navLabel: 'Overview', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-map' },
+    meta: { navLabel: 'Overview', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-compass' },
   },
   {
     path: '/curiosity/destinations',

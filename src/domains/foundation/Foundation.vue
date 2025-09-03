@@ -20,7 +20,10 @@
     <h3>Available Modules:</h3>
     <ul>
       <li>
-        <router-link to="/foundation/finance"><strong>Finance</strong></router-link>
+        <router-link to="/foundation/finance">
+          <i class="bi bi-cash-coin me-1"></i>
+          <strong>Finance</strong>
+        </router-link>
         - Financial planning and goal management for long-term security
       </li>
     </ul>
@@ -28,4 +31,3 @@
     <p><em>Create a stable foundation for your future through thoughtful planning and consistent effort.</em></p>
   </ArticleTemplate>
 </template>
-

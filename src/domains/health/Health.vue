@@ -20,15 +20,24 @@
     <h3>Available Modules:</h3>
     <ul>
       <li>
-        <router-link to="/health/nutrition"><strong>Nutrition</strong></router-link>
+        <router-link to="/health/nutrition">
+          <i class="bi bi-egg me-1"></i>
+          <strong>Nutrition</strong>
+        </router-link>
         - Advanced ingredient database with nutritional analysis and meal planning tools
       </li>
       <li>
-        <router-link to="/health/fitness"><strong>Fitness</strong></router-link>
+        <router-link to="/health/fitness">
+          <i class="bi bi-bicycle me-1"></i>
+          <strong>Fitness</strong>
+        </router-link>
         - Track your fitness journey and workout activities
       </li>
       <li>
-        <router-link to="/health/habits"><strong>Habits</strong></router-link>
+        <router-link to="/health/habits">
+          <i class="bi bi-graph-up me-1"></i>
+          <strong>Habits</strong>
+        </router-link>
         - Monitor daily, weekly, monthly, and yearly habits with streak analytics
       </li>
     </ul>
@@ -36,4 +45,3 @@
     <p><em>Care for your physical wellbeing through mindful nutrition, consistent fitness practices, and positive habit formation.</em></p>
   </ArticleTemplate>
 </template>
-

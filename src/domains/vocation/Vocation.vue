@@ -20,10 +20,18 @@
     <h4>Available Vocation Modules:</h4>
     <ul>
       <li>
-        <router-link to="/vocation/ikigai"><strong>Ikigai</strong></router-link> - Discover your life's purpose and direction through self-reflection
+        <router-link to="/vocation/ikigai">
+          <i class="bi bi-lightbulb me-1"></i>
+          <strong>Ikigai</strong>
+        </router-link>
+        - Discover your life's purpose and direction through self-reflection
       </li>
       <li>
-        <router-link to="/vocation/ippo"><strong>Ippo</strong></router-link> - Step-by-step progress tracking and milestone achievement system
+        <router-link to="/vocation/ippo">
+          <i class="bi bi-flag me-1"></i>
+          <strong>Ippo</strong>
+        </router-link>
+        - Step-by-step progress tracking and milestone achievement system
       </li>
     </ul>
 

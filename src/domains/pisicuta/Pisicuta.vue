@@ -18,10 +18,12 @@
     <h3>Available Sections:</h3>
     <ul>
       <li>
-        <router-link to="/pisicuta/laptops"><strong>Laptop Research</strong></router-link>
+        <router-link to="/pisicuta/laptops">
+          <i class="bi bi-laptop me-1"></i>
+          <strong>Laptop Research</strong>
+        </router-link>
         - Comprehensive research and analysis of laptop options from 2021-2025
       </li>
     </ul>
   </ArticleTemplate>
 </template>
-

@@ -20,23 +20,42 @@
     <h4>Available Curiosity Modules:</h4>
     <ul>
       <li>
-        <router-link to="/curiosity/destinations"><strong>Destinations</strong></router-link> - Interactive world map with travel planning and progress tracking
+        <router-link to="/curiosity/destinations">
+          <i class="bi bi-geo-alt me-1"></i>
+          <strong>Destinations</strong>
+        </router-link>
+        - Interactive world map with travel planning and progress tracking
       </li>
       <li>
-        <router-link to="/curiosity/anime"><strong>Anime</strong></router-link> - Discover and track anime series and explore Japanese storytelling
+        <router-link to="/curiosity/anime">
+          <i class="bi bi-emoji-smile me-1"></i>
+          <strong>Anime</strong>
+        </router-link>
+        - Discover and track anime series and explore Japanese storytelling
       </li>
       <li>
-        <router-link to="/curiosity/movies"><strong>Movies</strong></router-link> - Cinematic exploration and film discovery journey
+        <router-link to="/curiosity/movies">
+          <i class="bi bi-film me-1"></i>
+          <strong>Movies</strong>
+        </router-link>
+        - Cinematic exploration and film discovery journey
       </li>
       <li>
-        <router-link to="/curiosity/experiments"><strong>Experiments</strong></router-link> - Creative projects, learning experiments, and exploration of new ideas
+        <router-link to="/curiosity/experiments">
+          <i class="bi bi-beaker me-1"></i>
+          <strong>Experiments</strong>
+        </router-link>
+        - Creative projects, learning experiments, and exploration of new ideas
       </li>
       <li>
-        <router-link to="/curiosity/random"><strong>Random</strong></router-link> - Serendipitous discoveries and random exploration activities
+        <router-link to="/curiosity/random">
+          <i class="bi bi-shuffle me-1"></i>
+          <strong>Random</strong>
+        </router-link>
+        - Serendipitous discoveries and random exploration activities
       </li>
     </ul>
 
     <p><em>Explore new territories, both physical and intellectual through diverse media and experiences.</em></p>
   </ArticleTemplate>
 </template>
-
