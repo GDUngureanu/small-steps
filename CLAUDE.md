@@ -11,7 +11,7 @@ Personal growth and mindful living application focused on building sustainable h
 - `src/domains/balance/` - Health, nutrition, fitness, habits
 - `src/domains/stability/` - Financial planning, life foundations
 - `src/domains/growth/` - Learning, books, poems, reflection
-- `src/domains/exploration/` - Travel, entertainment, experiments
+- `src/domains/curiosity/` - Travel, entertainment, experiments
 - `src/domains/pisicuta/` - Personal tech tracking (protected)
 
 ## Tech Stack

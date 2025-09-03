@@ -1,8 +1,8 @@
 import { test, expect, vi } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
-const file = 'src/domains/exploration/destinations/Destinations.vue'
-const path = '/exploration/destinations'
+const file = 'src/domains/curiosity/destinations/Destinations.vue'
+const path = '/curiosity/destinations'
 
 // Expose mocks to tests for call count assertions
 let mapMock, tileLayerMock, geoJSONMock

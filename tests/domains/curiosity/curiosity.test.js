@@ -1,16 +1,16 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../pageTestUtils.js'
 
-const file = 'src/domains/exploration/Exploration.vue'
-const path = '/exploration'
+const file = 'src/domains/curiosity/Curiosity.vue'
+const path = '/curiosity'
 
-test('Exploration page renders without errors', async () => {
+test('Curiosity page renders without errors', async () => {
   const wrapper = await renderComponent(file)
   expect(wrapper.exists()).toBe(true)
   expect(wrapper.html()).toContain('article-template-stub') // Component renders properly
 })
 
-test('Exploration route resolves', async () => {
+test('Curiosity route resolves', async () => {
   const resolved = await resolveRoute(path)
   expect(resolved).toBe(path)
 })

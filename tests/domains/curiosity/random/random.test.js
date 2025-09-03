@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
-const file = 'src/domains/exploration/random/Random.vue'
-const path = '/exploration/random'
+const file = 'src/domains/curiosity/random/Random.vue'
+const path = '/curiosity/random'
 
 test('Random page renders without errors', async () => {
   const wrapper = await renderComponent(file)

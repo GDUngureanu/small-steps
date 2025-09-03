@@ -10,7 +10,7 @@
 ## Domains
 - Vocation: Ikigai (purpose exploration), Ippo (small steps checklist).
 - Growth: Books, Poems.
-- Exploration: Anime, Movies, Destinations (map), Random, Experiments (private).
+- Curiosity: Anime, Movies, Destinations (map), Random, Experiments (private).
 - Balance: Nutrition, Fitness, Health, Habits.
 - Stability: Finance.
 - Pisicuta: Laptops, Health.

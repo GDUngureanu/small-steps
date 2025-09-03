@@ -11,17 +11,17 @@ const Home = () => import('@/domains/home/Home.vue')
 const Ikigai = () => import('@/domains/vocation/ikigai/Ikigai.vue')
 const Vocation = () => import('@/domains/vocation/Vocation.vue')
 const Ippo = () => import('@/domains/vocation/ippo/Ippo.vue')
-const Experiments = () => import('@/domains/exploration/experiments/Experiments.vue')
-const Random = () => import('@/domains/exploration/random/Random.vue')
+const Experiments = () => import('@/domains/curiosity/experiments/Experiments.vue')
+const Random = () => import('@/domains/curiosity/random/Random.vue')
 
 // Growth Domain Routes
 const Growth = () => import('@/domains/growth/Growth.vue')
 const Books = () => import('@/domains/growth/books/Books.vue')
 const Poems = () => import('@/domains/growth/poems/Poems.vue')
 
-// Updated routes - anime and movies moved to exploration
-const Anime = () => import('@/domains/exploration/anime/Anime.vue')
-const Movies = () => import('@/domains/exploration/movies/Movies.vue')
+// Updated routes - anime and movies moved to curiosity
+const Anime = () => import('@/domains/curiosity/anime/Anime.vue')
+const Movies = () => import('@/domains/curiosity/movies/Movies.vue')
 
 // Balance Domain Routes
 const Balance = () => import('@/domains/balance/Balance.vue')
@@ -34,9 +34,9 @@ const Health = () => import('@/domains/balance/health/Health.vue')
 const Stability = () => import('@/domains/stability/Stability.vue')
 const Finance = () => import('@/domains/stability/finance/Finance.vue')
 
-// Exploration Domain Routes
-const Exploration = () => import('@/domains/exploration/Exploration.vue')
-const Destinations = () => import('@/domains/exploration/destinations/Destinations.vue')
+// Curiosity Domain Routes
+const Curiosity = () => import('@/domains/curiosity/Curiosity.vue')
+const Destinations = () => import('@/domains/curiosity/destinations/Destinations.vue')
 
 
 // Pisicuta Domain Routes
@@ -67,14 +67,14 @@ export default [
     meta: { navLabel: 'Ippo', navGroup: 'vocation', requiresAuth: true, icon: 'bi-flag' },
   },
   {
-    path: '/exploration/experiments',
+    path: '/curiosity/experiments',
     component: Experiments,
-    meta: { navLabel: 'Experiments', navGroup: 'exploration', requiresAuth: true, icon: 'bi-gear' },
+    meta: { navLabel: 'Experiments', navGroup: 'curiosity', requiresAuth: true, icon: 'bi-gear' },
   },
   {
-    path: '/exploration/random',
+    path: '/curiosity/random',
     component: Random,
-    meta: { navLabel: 'Random', navGroup: 'exploration', requiresAuth: true, icon: 'bi-shuffle' },
+    meta: { navLabel: 'Random', navGroup: 'curiosity', requiresAuth: true, icon: 'bi-shuffle' },
   },
 
   // Domain routes - imported from their respective domain modules
@@ -97,16 +97,16 @@ export default [
     meta: { navLabel: 'Poems', navGroup: 'growth', requiresAuth: false, icon: 'bi-pencil' },
   },
 
-  // Anime and Movies moved to Exploration Domain
+  // Anime and Movies under Curiosity Domain
   {
-    path: '/exploration/anime',
+    path: '/curiosity/anime',
     component: Anime,
-    meta: { navLabel: 'Anime', navGroup: 'exploration', requiresAuth: false, icon: 'bi-emoji-smile' },
+    meta: { navLabel: 'Anime', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-emoji-smile' },
   },
   {
-    path: '/exploration/movies',
+    path: '/curiosity/movies',
     component: Movies,
-    meta: { navLabel: 'Movies', navGroup: 'exploration', requiresAuth: false, icon: 'bi-film' },
+    meta: { navLabel: 'Movies', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-film' },
   },
 
   // Balance Domain Routes
@@ -149,16 +149,16 @@ export default [
   },
 
 
-  // Exploration Domain Routes
+  // Curiosity Domain Routes
   {
-    path: '/exploration',
-    component: Exploration,
-    meta: { navLabel: 'Overview', navGroup: 'exploration', requiresAuth: false, icon: 'bi-map' },
+    path: '/curiosity',
+    component: Curiosity,
+    meta: { navLabel: 'Overview', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-map' },
   },
   {
-    path: '/exploration/destinations',
+    path: '/curiosity/destinations',
     component: Destinations,
-    meta: { navLabel: 'Destinations', navGroup: 'exploration', requiresAuth: false, icon: 'bi-geo-alt' },
+    meta: { navLabel: 'Destinations', navGroup: 'curiosity', requiresAuth: false, icon: 'bi-geo-alt' },
   },
 
 
