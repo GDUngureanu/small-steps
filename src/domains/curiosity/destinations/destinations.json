@@ -1,687 +1,138 @@
 {
   "destinations": [
     {
-      "country": "Spain",
-      "iso": "ESP",
+      "country": "Romania",
+      "iso": "ROU",
       "cities": [
-        {
-          "name": "Madrid",
-          "attractions": [
-            {
-              "name": "La Oliva",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Barcelona",
-          "attractions": [
-            {
-              "name": "Playa de Ses Illetes",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Seville",
-          "attractions": [
-            {
-              "name": "Casa Batllo",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Tenerife",
-          "attractions": [
-            {
-              "name": "Port Aventura",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        }
+        { "name": "Craiova", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Bucharest", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Calarasi", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Constanta", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Brasov", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Cluj-Napoca", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Sibiu", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Iasi", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
-      "country": "England",
-      "iso": "GBR",
+      "country": "Greece",
+      "iso": "GRC",
       "cities": [
-        {
-          "name": "London",
-          "attractions": []
-        },
-        {
-          "name": "Edinburgh",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "America",
-      "iso": "USA",
-      "cities": [
-        {
-          "name": "New York",
-          "attractions": []
-        },
-        {
-          "name": "Washington",
-          "attractions": []
-        },
-        {
-          "name": "Philadelphia",
-          "attractions": []
-        },
-        {
-          "name": "San Francisco",
-          "attractions": []
-        },
-        {
-          "name": "San Jose",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Portugal",
-      "iso": "PRT",
-      "cities": [
-        {
-          "name": "Porto",
-          "attractions": [
-            {
-              "name": "Praia Dona Ana",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Lisbon",
-          "attractions": [
-            {
-              "name": "Praia da Falesia",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Funchal",
-          "attractions": [
-            {
-              "name": "Madeira Island",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Obidos",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Japan",
-      "iso": "JPN",
-      "cities": [
-        {
-          "name": "Tokyo",
-          "attractions": []
-        },
-        {
-          "name": "Kyoto",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Korea",
-      "iso": "KOR",
-      "cities": [
-        {
-          "name": "Seoul",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Italy",
-      "iso": "ITA",
-      "cities": [
-        {
-          "name": "Roman",
-          "attractions": []
-        },
-        {
-          "name": "Florence",
-          "attractions": [
-            {
-              "name": "Cala Rossa",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Venice",
-          "attractions": [
-            {
-              "name": "Colosseum",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Rome",
-          "attractions": [
-            {
-              "name": "Rabbit Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Milan",
-          "attractions": [
-            {
-              "name": "Pantheon",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Naples",
-          "attractions": []
-        },
-        {
-          "name": "Sicily",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Netherlands",
-      "iso": "NLD",
-      "cities": [
-        {
-          "name": "Amsterdam",
-          "attractions": [
-            {
-              "name": "Efteling",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "The Hague",
-          "attractions": []
-        },
-        {
-          "name": "Rotterdam",
-          "attractions": []
-        },
-        {
-          "name": "Leiden",
-          "attractions": []
-        }
+        { "name": "Santorini", "attractions": [{ "name": "Island visit", "visited": true, "priority": 3 }] },
+        { "name": "Crete", "attractions": [{ "name": "Island visit", "visited": true, "priority": 3 }] },
+        { "name": "Thasos", "attractions": [{ "name": "Island visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
       "country": "Czech Republic",
       "iso": "CZE",
       "cities": [
-        {
-          "name": "Prague",
-          "attractions": [
-            {
-              "name": "Charles Bridge",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Brno",
-          "attractions": []
-        },
-        {
-          "name": "Karlovy Vary",
-          "attractions": []
-        },
-        {
-          "name": "Cesky Krumlov",
-          "attractions": []
-        },
-        {
-          "name": "Kutna Hora",
-          "attractions": []
-        }
+        { "name": "Prague", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
-      "country": "United Kingdom",
-      "iso": "GBR",
+      "country": "Italy",
+      "iso": "ITA",
       "cities": [
-        {
-          "name": "London",
-          "attractions": [
-            {
-              "name": "Stonehenge",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Edinburgh",
-          "attractions": [
-            {
-              "name": "Jersey Island",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Cambridge",
-          "attractions": []
-        },
-        {
-          "name": "Windsor",
-          "attractions": []
-        }
+        { "name": "Milan", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Venice", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Naples", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Palermo", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
       "country": "France",
       "iso": "FRA",
       "cities": [
-        {
-          "name": "Paris",
-          "attractions": [
-            {
-              "name": "Eiffel Tower",
-              "visited": true,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Nice",
-          "attractions": [
-            {
-              "name": "Mont-Saint-Michel",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Corsica",
-          "attractions": [
-            {
-              "name": "Cote des Basques",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Lyon",
-          "attractions": []
-        },
-        {
-          "name": "Manche",
-          "attractions": []
-        }
+        { "name": "Paris", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Marseille", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
-      "country": "Switzerland",
-      "iso": "CHE",
+      "country": "Spain",
+      "iso": "ESP",
       "cities": [
-        {
-          "name": "Zermatt",
-          "attractions": []
-        },
-        {
-          "name": "Jungfrau Region",
-          "attractions": []
-        },
-        {
-          "name": "Neuhausen",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Turkey",
-      "iso": "TUR",
-      "cities": [
-        {
-          "name": "Istanbul",
-          "attractions": [
-            {
-              "name": "Iztuzu Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Marmaris",
-          "attractions": [
-            {
-              "name": "Kaputas Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Goreme",
-          "attractions": []
-        },
-        {
-          "name": "Cappadocia",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Germany",
-      "iso": "DEU",
-      "cities": [
-        {
-          "name": "Berlin",
-          "attractions": [
-            {
-              "name": "Neuschwanstein",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Cologne",
-          "attractions": [
-            {
-              "name": "Reichstag",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Munich",
-          "attractions": [
-            {
-              "name": "Europa-Park",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Frankfurt",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Austria",
-      "iso": "AUT",
-      "cities": [
-        {
-          "name": "Vienna",
-          "attractions": [
-            {
-              "name": "Zell am See",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Salzburg",
-          "attractions": [
-            {
-              "name": "Krimml Falls",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Innsbruck",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Ireland",
-      "iso": "IRL",
-      "cities": [
-        {
-          "name": "Dublin",
-          "attractions": [
-            {
-              "name": "Cliffs of Moher",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Killarney",
-          "attractions": [
-            {
-              "name": "Inch Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Galway",
-          "attractions": [
-            {
-              "name": "Aran Islands",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Dingle",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Sweden",
-      "iso": "SWE",
-      "cities": [
-        {
-          "name": "Stockholm",
-          "attractions": []
-        },
-        {
-          "name": "Gothenburg",
-          "attractions": []
-        }
-      ]
-    },
-    {
-      "country": "Monaco",
-      "iso": "MCO",
-      "cities": []
-    },
-    {
-      "country": "Greece",
-      "iso": "GRC",
-      "cities": [
-        {
-          "name": "Athens",
-          "attractions": [
-            {
-              "name": "Elafonissi Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Crete",
-          "attractions": [
-            {
-              "name": "Meteora",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Santorini",
-          "attractions": [
-            {
-              "name": "Acropolis",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Halkidiki",
-          "attractions": [
-            {
-              "name": "Eggremni Beach",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Thessaloniki",
-          "attractions": []
-        }
+        { "name": "Madrid", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Barcelona", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Valencia", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Bilbao", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "San Sebastian", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
       "country": "Belgium",
       "iso": "BEL",
       "cities": [
-        {
-          "name": "Brussels",
-          "attractions": [
-            {
-              "name": "Grand-Place",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Bruges",
-          "attractions": []
-        },
-        {
-          "name": "Dinant",
-          "attractions": []
-        },
-        {
-          "name": "Ypres",
-          "attractions": []
-        }
+        { "name": "Brussels", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Bruges", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
+      ]
+    },
+    {
+      "country": "Netherlands",
+      "iso": "NLD",
+      "cities": [
+        { "name": "Amsterdam", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Rotterdam", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "The Hague", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
+      ]
+    },
+    {
+      "country": "Germany",
+      "iso": "DEU",
+      "cities": [
+        { "name": "Berlin", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Frankfurt", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Munich", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
       "country": "Denmark",
       "iso": "DNK",
       "cities": [
-        {
-          "name": "Copenhagen",
-          "attractions": [
-            {
-              "name": "Tivoli Gardens",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Silkeborg",
-          "attractions": [
-            {
-              "name": "Kronborg Castle",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Esbjerg",
-          "attractions": []
-        },
-        {
-          "name": "Bornholm",
-          "attractions": []
-        }
+        { "name": "Copenhagen", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
-      "country": "Cyprus",
-      "iso": "CYP",
+      "country": "United Kingdom",
+      "iso": "GBR",
       "cities": [
-        {
-          "name": "Protaras",
-          "attractions": [
-            {
-              "name": "Fig Tree Bay",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Limassol",
-          "attractions": [
-            {
-              "name": "Tombs of the Kings",
-              "visited": false,
-              "priority": 3
-            }
-          ]
-        },
-        {
-          "name": "Kyrenia",
-          "attractions": []
-        },
-        {
-          "name": "Paphos",
-          "attractions": []
-        }
+        { "name": "London", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Southampton", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Brighton", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Isle of Skye", "attractions": [{ "name": "Island visit", "visited": true, "priority": 3 }] },
+        { "name": "Lake District", "attractions": [{ "name": "Park visit", "visited": true, "priority": 3 }] },
+        { "name": "Edinburgh", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Orkney", "attractions": [{ "name": "Island visit", "visited": true, "priority": 3 }] }
       ]
     },
     {
-      "country": "Croatia",
-      "iso": "HRV",
-      "cities": []
+      "country": "Ireland",
+      "iso": "IRL",
+      "cities": [
+        { "name": "Dublin", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Cliffs of Moher", "attractions": [{ "name": "Clifftop visit", "visited": true, "priority": 3 }] }
+      ]
     },
     {
-      "country": "Finland",
-      "iso": "FIN",
-      "cities": []
+      "country": "South Korea",
+      "iso": "KOR",
+      "cities": [
+        { "name": "Seoul", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
+      ]
+    },
+    {
+      "country": "Japan",
+      "iso": "JPN",
+      "cities": [
+        { "name": "Tokyo", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Osaka", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Kyoto", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Nara", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Himeji", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Hiroshima", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Kanazawa", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] },
+        { "name": "Kamakura", "attractions": [{ "name": "City visit", "visited": true, "priority": 3 }] }
+      ]
     }
   ]
 }
