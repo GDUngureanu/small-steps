@@ -55,3 +55,34 @@ You are a senior engineer. Keep it simple (KISS). Prefer small, composable units
 - New feature: create/extend a domain under `src/domains/<area>`; register in routes with `meta`; add tests; update docs.
 - Shared additions: add composables/utils in `src/shared` (framework‑free when possible) and document usage.
 - Avoid cross‑domain imports and unnecessary abstractions. Prefer simple, explicit code.
+
+## Additional Configuration
+
+### Development Workflow
+- **Always run tests first**: Execute `npm test` before making changes to understand current state
+- **Template-first approach**: Check `src/shared/components/ui/templates/` before creating new components
+- **Domain isolation**: Never create cross-domain dependencies; each domain should be self-contained
+- **Bootstrap utilities**: Use existing Bootstrap classes before writing custom CSS
+- **Atomic commits**: One logical change per commit; run `npm run fix` before committing
+
+### Code Quality Automation
+- **Pre-commit verification**: Always run `npm run fix && npm test` before suggesting changes
+- **Import path consistency**: Use `@core`, `@shared`, `@/domains` aliases consistently
+- **Error handling**: Wrap Supabase calls in try/catch; return meaningful error states
+- **Performance**: Lazy load route components; avoid unnecessary re-renders
+- **Accessibility**: Use semantic HTML; include Bootstrap's screen reader classes
+
+### Debugging & Analysis
+- **Context awareness**: Read related files in domain before making changes
+- **Pattern matching**: Follow existing patterns in similar components/composables
+- **Dependency analysis**: Check package.json before suggesting new libraries
+- **Test coverage**: Verify tests exist for core business logic before modifications
+- **Documentation sync**: Update inline comments when changing component interfaces
+
+### Anti-patterns to Avoid
+- **Global state abuse**: Don't use Pinia unless truly cross-route state needed
+- **Deep nesting**: Max 3 levels in component template structure
+- **Prop drilling**: Extract to composable if passing props through multiple levels
+- **Direct DOM manipulation**: Use Vue's reactivity instead of querySelector
+- **Magic numbers**: Extract to constants or computed properties
+- **Mixed concerns**: Keep business logic separate from UI rendering logic
