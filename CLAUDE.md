@@ -7,7 +7,7 @@ Personal growth and mindful living application focused on building sustainable h
 
 ## Architecture Overview
 **Domain-First Structure** - Each life domain is self-contained:
-- `src/domains/ambition/` - Purpose exploration (Ikigai), goal setting (Ippo)
+- `src/domains/vocation/` - Purpose exploration (Ikigai), goal setting (Ippo)
 - `src/domains/balance/` - Health, nutrition, fitness, habits
 - `src/domains/stability/` - Financial planning, life foundations
 - `src/domains/growth/` - Learning, books, poems, reflection
@@ -47,7 +47,7 @@ src/
 │   ├── navigation/       # Centralized routing
 │   └── config/           # Environment + service setup
 ├── domains/              # Feature domains (self-contained)
-│   ├── ambition/         # Purpose, goals, Ikigai
+│   ├── vocation/         # Purpose, goals, Ikigai
 │   ├── balance/          # Health, habits, nutrition
 │   ├── growth/           # Learning, books, reflection
 │   └── [domain]/         # Each domain: components + routes + logic

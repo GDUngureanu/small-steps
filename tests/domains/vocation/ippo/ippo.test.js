@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest'
 import { renderComponent, resolveRoute } from '../../pageTestUtils.js'
 
-const file = 'src/domains/ambition/ippo/Ippo.vue'
-const path = '/ambition/ippo'
+const file = 'src/domains/vocation/ippo/Ippo.vue'
+const path = '/vocation/ippo'
 
 test('Ippo page renders without errors', async () => {
   const wrapper = await renderComponent(file)

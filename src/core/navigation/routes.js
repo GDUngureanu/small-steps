@@ -8,9 +8,9 @@ import { habitsRoutes } from '@/domains/balance/habits/routes.js'
 
 // Core application routes (non-domain specific)
 const Home = () => import('@/domains/home/Home.vue')
-const Ikigai = () => import('@/domains/ambition/ikigai/Ikigai.vue')
-const Ambition = () => import('@/domains/ambition/Ambition.vue')
-const Ippo = () => import('@/domains/ambition/ippo/Ippo.vue')
+const Ikigai = () => import('@/domains/vocation/ikigai/Ikigai.vue')
+const Vocation = () => import('@/domains/vocation/Vocation.vue')
+const Ippo = () => import('@/domains/vocation/ippo/Ippo.vue')
 const Experiments = () => import('@/domains/exploration/experiments/Experiments.vue')
 const Random = () => import('@/domains/exploration/random/Random.vue')
 
@@ -52,19 +52,19 @@ export default [
     meta: { navLabel: 'Home', navGroup: null, requiresAuth: false, icon: 'bi-house' },
   },
   {
-    path: '/ambition/ikigai',
+    path: '/vocation/ikigai',
     component: Ikigai,
-    meta: { navLabel: 'Ikigai', navGroup: 'ambition', requiresAuth: true, icon: 'bi-lightbulb' },
+    meta: { navLabel: 'Ikigai', navGroup: 'vocation', requiresAuth: true, icon: 'bi-lightbulb' },
   },
   {
-    path: '/ambition',
-    component: Ambition,
-    meta: { navLabel: 'Overview', navGroup: 'ambition', requiresAuth: true, icon: 'bi-target' },
+    path: '/vocation',
+    component: Vocation,
+    meta: { navLabel: 'Overview', navGroup: 'vocation', requiresAuth: true, icon: 'bi-target' },
   },
   {
-    path: '/ambition/ippo',
+    path: '/vocation/ippo',
     component: Ippo,
-    meta: { navLabel: 'Ippo', navGroup: 'ambition', requiresAuth: true, icon: 'bi-flag' },
+    meta: { navLabel: 'Ippo', navGroup: 'vocation', requiresAuth: true, icon: 'bi-flag' },
   },
   {
     path: '/exploration/experiments',

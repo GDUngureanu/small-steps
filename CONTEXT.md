@@ -8,7 +8,7 @@
 - Secondary: public viewers for open sections.
 
 ## Domains
-- Ambition: Ikigai (purpose exploration), Ippo (small steps checklist).
+- Vocation: Ikigai (purpose exploration), Ippo (small steps checklist).
 - Growth: Books, Poems.
 - Exploration: Anime, Movies, Destinations (map), Random, Experiments (private).
 - Balance: Nutrition, Fitness, Health, Habits.
@@ -18,7 +18,7 @@
 
 ## Access & Security
 - Routes gate access using `meta.requiresAuth` in `src/core/navigation/routes.js`.
-- Protected examples: Ambition*, Experiments, Pisicuta* (and any route with `requiresAuth: true`).
+- Protected examples: Vocation*, Experiments, Pisicuta* (and any route with `requiresAuth: true`).
 - Auth mechanism: simple password check via Pinia store (`src/core/auth/useAuthentication.js`) using env var `VITE_APP_PASSWORD`.
 - Global event bus (`src/core/auth/authenticationEvents.js`) announces auth requirements.
 

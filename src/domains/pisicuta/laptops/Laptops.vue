@@ -12,15 +12,15 @@
 <template>
   <MarkdownArticleTemplate
     :src="markdownResearchUrl2"
+    :expanded="false"
     title="Laptops Research 2021-2025"
     meta="August 12, 2025 by G. D. Ungureanu"
-    :expanded="false"
   />
 
   <MarkdownArticleTemplate
     :src="markdownResearchUrl1"
+    :expanded="false"
     title="Laptops Research 2022-2023"
     meta="August 11, 2025 by G. D. Ungureanu"
-    :expanded="false"
   />
 </template>
