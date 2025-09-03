@@ -48,7 +48,32 @@ export const useNavigation = defineStore('navigation', () => {
           badge: route.meta.badge,
         })
       })
-    return sections
+
+    // Enforce custom group order and labels
+    const groupOrder = ['curiosity', 'foundation', 'health', 'vocation', 'growth', 'inner-circle']
+    const groupLabelMap = {
+      curiosity: 'Curiozity',
+      'inner-circle': 'Inner Circle',
+    }
+
+    const ordered = {}
+    const titleCase = (key) => key.charAt(0).toUpperCase() + key.slice(1)
+
+    groupOrder.forEach((key) => {
+      if (sections[key]) {
+        ordered[key] = {
+          ...sections[key],
+          label: groupLabelMap[key] || titleCase(key),
+        }
+      }
+    })
+    // Append any groups not explicitly ordered
+    Object.keys(sections).forEach((key) => {
+      if (!ordered[key]) {
+        ordered[key] = sections[key]
+      }
+    })
+    return ordered
   })
 
   return {
