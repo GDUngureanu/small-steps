@@ -66,7 +66,7 @@
       <li><router-link to="/curiosity">Curiosity</router-link> - Discover new territories through anime, movies, destinations, and experiments</li>
       <li><router-link to="/vocation">Vocation</router-link> - Align your purpose with ikigai and ippo goal tracking</li>
       <li><router-link to="/foundation">Foundation</router-link> - Build stability through financial planning and security measures</li>
-      <li><router-link to="/inner-circle">Inner Circle</router-link> - Technology and laptop research</li>
+      <li><router-link to="/pisicuta">Pisicuta</router-link> - Technology and laptop research</li>
     </ul>
 
     <p><em>Navigate through different aspects of life with purpose and intention.</em></p>

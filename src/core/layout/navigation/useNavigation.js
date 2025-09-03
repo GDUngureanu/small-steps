@@ -50,10 +50,10 @@ export const useNavigation = defineStore('navigation', () => {
       })
 
     // Enforce custom group order and labels
-    const groupOrder = ['curiosity', 'foundation', 'health', 'vocation', 'growth', 'inner-circle']
+    const groupOrder = ['curiosity', 'foundation', 'health', 'vocation', 'growth', 'pisicuta']
     const groupLabelMap = {
       curiosity: 'Curiozity',
-      'inner-circle': 'Inner Circle',
+      pisicuta: 'Pisicuta',
     }
 
     const ordered = {}

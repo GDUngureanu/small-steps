@@ -38,10 +38,10 @@ const Curiosity = () => import('@/domains/curiosity/Curiosity.vue')
 const Destinations = () => import('@/domains/curiosity/destinations/Destinations.vue')
 
 
-// Inner Circle Domain Routes
-const InnerCircle = () => import('@/domains/inner-circle/InnerCircle.vue')
-const Laptops = () => import('@/domains/inner-circle/laptops/Laptops.vue')
-const InnerCircleHealth = () => import('@/domains/inner-circle/health/Health.vue')
+// Pisicuta Domain Routes
+const Pisicuta = () => import('@/domains/pisicuta/Pisicuta.vue')
+const Laptops = () => import('@/domains/pisicuta/laptops/Laptops.vue')
+const PisicutaHealth = () => import('@/domains/pisicuta/health/Health.vue')
 
 export default [
   // Core routes
@@ -156,20 +156,20 @@ export default [
   },
 
 
-  // Inner Circle Domain Routes
+  // Pisicuta Domain Routes
   {
-    path: '/inner-circle',
-    component: InnerCircle,
-    meta: { navLabel: 'Overview', navGroup: 'inner-circle', requiresAuth: true, icon: 'bi-laptop' },
+    path: '/pisicuta',
+    component: Pisicuta,
+    meta: { navLabel: 'Overview', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-laptop' },
   },
   {
-    path: '/inner-circle/laptops',
+    path: '/pisicuta/laptops',
     component: Laptops,
-    meta: { navLabel: 'Laptops', navGroup: 'inner-circle', requiresAuth: true, icon: 'bi-laptop' },
+    meta: { navLabel: 'Laptops', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-laptop' },
   },
   {
-    path: '/inner-circle/health',
-    component: InnerCircleHealth,
-    meta: { navLabel: 'Health', navGroup: 'inner-circle', requiresAuth: true, icon: 'bi-heart' },
+    path: '/pisicuta/health',
+    component: PisicutaHealth,
+    meta: { navLabel: 'Health', navGroup: 'pisicuta', requiresAuth: true, icon: 'bi-heart' },
   },
 ]
