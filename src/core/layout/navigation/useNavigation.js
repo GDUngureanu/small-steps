@@ -49,9 +49,26 @@ export const useNavigation = defineStore('navigation', () => {
         })
       })
 
+    // Normalize each section: rename overview link to the domain name
+    // and ensure it appears first in the list
+    const toTitleCase = (key) => key.charAt(0).toUpperCase() + key.slice(1)
+    const groupLabelMap = {
+      curiosity: 'Curiozity',
+      'inner-circle': 'Inner Circle',
+      pisicuta: 'Pisicuta',
+    }
+
+    Object.keys(sections).forEach((group) => {
+      const overviewPath = `/${group}`
+      const overviewLabel = groupLabelMap[group] || toTitleCase(group)
+      sections[group].items = sections[group].items
+        .map((item) => (item.path === overviewPath ? { ...item, label: overviewLabel } : item))
+        .sort((a, b) => (a.path === overviewPath ? -1 : b.path === overviewPath ? 1 : 0))
+    })
+
     // Enforce custom group order and labels
     const groupOrder = ['curiosity', 'foundation', 'health', 'vocation', 'growth', 'pisicuta']
-    const groupLabelMap = {
+    const groupLabelMapOrder = {
       curiosity: 'Curiozity',
       pisicuta: 'Pisicuta',
     }
@@ -63,7 +80,7 @@ export const useNavigation = defineStore('navigation', () => {
       if (sections[key]) {
         ordered[key] = {
           ...sections[key],
-          label: groupLabelMap[key] || titleCase(key),
+          label: groupLabelMapOrder[key] || titleCase(key),
         }
       }
     })
